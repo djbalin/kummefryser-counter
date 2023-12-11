@@ -15,7 +15,7 @@ export default function Home() {
         />
       </div>
       <Link href={"/dashboard"}>
-        <div className="flex items-center rounded-[2rem] justify-center w-[300px] h-[300px] bg-orange-300">
+        <div className="flex items-center rounded-[2rem] justify-center w-full bg-orange-300">
           <span className="text-black text-3xl"> Kummefryser</span>
         </div>
       </Link>

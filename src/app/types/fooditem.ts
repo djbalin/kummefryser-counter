@@ -5,13 +5,15 @@ enum Category {
   COOKED_DISH = "Cooked dish",
 }
 
-type FoodItem = {
+type FoodItemType = {
   name: string;
   category: Category;
   freezeDate: Date;
+  expirationDate: Date;
   durationDays: number;
   volume: string;
   id: number;
+  // quantity: number;
 };
 
-export default FoodItem;
+export default FoodItemType;

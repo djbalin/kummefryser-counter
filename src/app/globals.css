@@ -25,3 +25,14 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.lower {
+  @apply text-xs opacity-70;
+}
+
+.minorColumn {
+  @apply w-[8%];
+}
+.majorColumn {
+  @apply w-[28%];
+}
