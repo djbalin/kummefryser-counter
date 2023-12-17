@@ -1,5 +1,5 @@
 import FoodItemType from "../types/fooditem";
-import FoodItem from "./fooditem";
+import FoodItem from "./food_item";
 
 export default function FoodItems({
   foodItems,
