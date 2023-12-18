@@ -13,7 +13,7 @@ type FoodItemType = {
   durationDays: number;
   volume: string;
   id: number;
-  // quantity: number;
+  quantity: number;
 };
 
 export default FoodItemType;

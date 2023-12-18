@@ -13,7 +13,6 @@ monthNames.set(10, "November");
 monthNames.set(11, "December");
 
 export function getDateDDMMYYYY(date: Date, verbose: boolean) {
-  console.log(date);
   const paddedDate: string =
     date.getDate() < 10 ? "0" + date.getDate() : `${date.getDate()}`;
   const paddedMonth: string =
@@ -27,11 +26,11 @@ export function getDateDDMMYYYY(date: Date, verbose: boolean) {
   }
 }
 
-export function formatLifespan(lifespan: number) {
-  if (lifespan > 60) {
-    return Math.round(lifespan / 30) + " months";
+export function formatLifespan(lifespanInDays: number) {
+  if (lifespanInDays > 60) {
+    return Math.round(lifespanInDays / 30) + " months";
   } else {
-    return lifespan + " days";
+    return lifespanInDays + " days";
   }
 }
 

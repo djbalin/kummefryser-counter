@@ -11,9 +11,12 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "clsx": "^2.0.0",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.3",
     "next": "14.0.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20",

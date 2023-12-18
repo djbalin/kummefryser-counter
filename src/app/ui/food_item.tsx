@@ -5,7 +5,7 @@ import {
   getDateDDMMYYYY,
   getRemainingTime,
 } from "../lib/datehelper";
-import FoodItemInfo from "./fooditeminfo";
+// import FoodItemInfo from "./fooditeminfo";
 
 import { PencilIcon, DocumentTextIcon } from "@heroicons/react/20/solid";
 
@@ -37,7 +37,7 @@ export default function FoodItem({ foodItem }: { foodItem: FoodItemType }) {
       {/* <div className="justify-around w-full"> */}
 
       <div className={listColumnStyle + " minorColumn"}>
-        <span className="">5x</span>
+        <span className="">{foodItem.quantity}</span>
       </div>
       <div className={listColumnStyle + " majorColumn"}>
         <span className="">{foodItem.name}</span>
