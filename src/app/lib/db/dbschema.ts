@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Category } from "@/app/types/fooditem";
+import mongoose, { InferSchemaType } from "mongoose";
+import { Category } from "@/app/types_schemas/typesAndSchemas";
 import { randomUUID } from "crypto";
 
 const { Schema } = mongoose;
@@ -9,23 +9,28 @@ const FreezerItemSchema = new Schema({
     type: "UUID",
     default: () => randomUUID(),
   },
-  name: String,
-  category: String,
-  freezeDate: Date,
-  expirationDate: Date,
-  durationDays: Number,
-  volume: String,
-  quantity: Number,
-  id: Number,
+  name: { type: String, required: true },
+  category: { type: String, required: true },
+  freezeDate: { type: Date, required: true },
+  expirationDate: { type: Date, required: true },
+  lifespanInDays: { type: Number, required: true },
+  volume: { type: String, required: true },
+  quantity: { type: Number, required: true },
 });
 
-const CategorySchema = new Schema({
+export const CategorySchema = new Schema({
+  _id: {
+    type: "UUID",
+    default: () => randomUUID(),
+  },
   category: {
     type: String,
     unique: true,
     index: true,
   },
 });
+
+export type CategorySchemaType = InferSchemaType<typeof CategorySchema>;
 
 CategorySchema.index({ category: 1 }, { unique: true, background: true });
 
@@ -34,5 +39,3 @@ export const FreezerItems =
   mongoose.model("freezeritems", FreezerItemSchema);
 export const Categories =
   mongoose.models.categories || mongoose.model("categories", CategorySchema);
-
-// export  FreezerItems;

@@ -5,52 +5,49 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createItem } from "../lib/actions";
+import { createItem } from "@/app/lib/actions";
+import { create } from "domain";
 
 // import { Category } from "../types/fooditem";
 
 // export function CreateForm({ categories }: { categories: Category[] }) {
+const dropdownNumbers = Array(14)
+  .fill(0)
+  .map((_, i) => i + 1);
+
+const invalidInputStyle = ["border-red-500", "border-2"];
 
 export function CreateForm() {
   const CATEGORYDATA = ["meat", "dairy", "fruit", "ice cream", "vegetables"];
+
+  const [inputName, setInputName] = useState("");
+  const [inputSize, setInputSize] = useState("");
+  const [inputQuantity, setInputQuantity] = useState("");
 
   const [categories, setCategories] = useState<string[]>(CATEGORYDATA);
   const [newCategory, setNewCategory] = useState<string>("");
 
   const [categoryHasBeenAdded, setCategoryHasBeenAdded] = useState(false);
 
-  const [selectedLifespanInteger, setSelectedLifespanInteger] = useState("1");
+  const [selectedLifespanInteger, setSelectedLifespanInteger] = useState("0");
   const currentDate = new Date();
   const [expirationDate, setExpirationDate] = useState(new Date());
-
+  const [selectedCategoryButton, setSelectedCategoryButton] =
+    useState<HTMLElement | null>(null);
   const [selectedLifespanQualifier, setSelectedLifespanQualifier] =
-    useState("months");
+    useState("30");
 
-  const [chosenDate, setChosenDate] = useState(
+  const [freezeDate, setFreezeDate] = useState(
     currentDate.toISOString().split("T")[0]
   );
+  const [freezeDateIsSet, setFreezeDateIsSet] = useState(false);
 
   function handleSelectLifespan(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
-    // console.log(e.target);
-    // console.log(e.target.value);
     setSelectedLifespanInteger(e.target.value);
-
-    // setSelectedLifespan(e);
   }
 
-  const [selectedCategoryButton, setSelectedCategoryButton] =
-    useState<HTMLElement | null>(null);
-
-  const dropdownNumbers = Array(14)
-    .fill(0)
-    .map((_, i) => i + 1);
-
-  // console.log("rerender");
-
-  //   const [showNewCategory, setShowNewCategory] = useState<boolean>(false);
-
-  function handleClick(e: React.MouseEvent<HTMLElement>) {
+  function handleSelectCategory(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
 
     const clickedButton: HTMLElement = e.currentTarget;
@@ -71,14 +68,41 @@ export function CreateForm() {
     }
   }
 
-  async function handleClickSubmit(formData: FormData) {
-    await createItem(formData);
+  function validateInputs(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    let inputsAreValid = true;
+    if (inputName.trim().length == 0) {
+      inputsAreValid = false;
+      document.getElementById("itemName")?.classList.add(...invalidInputStyle);
+    }
+    if (inputSize.trim().length == 0) {
+      inputsAreValid = false;
+      document.getElementById("itemSize")?.classList.add(...invalidInputStyle);
+    }
+    if (selectedCategoryButton === null) {
+      inputsAreValid = false;
+      document
+        .getElementById("categoriesContainer")
+        ?.classList.add(...invalidInputStyle);
+    }
+    if (freezeDateIsSet === false) {
+      inputsAreValid = false;
+      document
+        .getElementById("freezeDate")
+        ?.classList.add(...invalidInputStyle);
+    }
 
-    // const formData = new FormData(event.target);
-    // console.log(formData);
+    if (selectedLifespanInteger === "0") {
+      inputsAreValid = false;
+      document.getElementById("lifespan")?.classList.add(...invalidInputStyle);
+    }
 
-    // const selectedCategory = selectedCategoryButton!.innerHTML;
-    // formData.append("category", selectedCategory);
+    if (inputQuantity.trim().length === 0) {
+      inputsAreValid = false;
+      document.getElementById("quantity")?.classList.add(...invalidInputStyle);
+    }
+    if (inputsAreValid === false) {
+      e.preventDefault();
+    }
   }
 
   function handleTypeNewCategory(e: React.ChangeEvent<HTMLInputElement>) {
@@ -86,16 +110,7 @@ export function CreateForm() {
     // TODO:
     // Implement searching and validation to check if the inputted new cateogyr already exists
     // "Did you mean 'fruit'? Already exists"
-
-    // console.log(e.target.value);
   }
-
-  // function createItem(formData: FormData) {
-  //   const ob = Object.fromEntries(formData.entries());
-  //   console.log(ob);
-  //   // revalidatePath("/dashboard");
-  //   // redirect("/dashboard");
-  // }
 
   const inputStyle = "bg-slate-500 bg-opacity-40 pl-2 rounded-lg";
   const listStyle =
@@ -103,10 +118,26 @@ export function CreateForm() {
 
   return (
     <form
-      action={(e) => {
+      action={async (e) => {
+        e.delete("daysweeksmonths");
+        e.delete("lifespan");
         e.append("category", selectedCategoryButton!.innerHTML);
-        handleClickSubmit(e);
+        e.set(
+          "lifespanInDays",
+          (
+            parseInt(selectedLifespanInteger) *
+            parseInt(selectedLifespanQualifier)
+          ).toString()
+        );
+        createItem(e);
+        // handleClickSubmit(e);
       }}
+      // onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleClickSubmit(e)}
+      // action={createItem}
+      // action={async (e) => {
+      //   e.append("category", selectedCategoryButton!.innerHTML);
+      //   handleClickSubmit(e);
+      // }}
       // onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleClickSubmit(e)}
       className=" min-w-[40%] gap-y-8 border-2 p-4 bg-slate-800 bg-opacity-40 rounded-lg"
     >
@@ -121,12 +152,16 @@ export function CreateForm() {
             type="text"
             id="itemName"
             name="itemName"
+            onChange={(e) => {
+              e.target.classList.remove(...invalidInputStyle);
+              setInputName(e.target.value);
+            }}
           ></input>
         </div>
       </div>
 
       <div className="mb-4">
-        <label className="block mb-1" htmlFor="size">
+        <label className="block mb-1" htmlFor="itemSize">
           Size:
         </label>
         <div className="">
@@ -135,8 +170,12 @@ export function CreateForm() {
             // className="bg-slate-500 bg-opacity-40 h-10 pl-2 w-full rounded-lg placeholder:text-xs"
             placeholder="200 g, ca. 1 kg, 0.5 L ..."
             type="text"
-            id="size"
-            name="size"
+            id="itemSize"
+            name="itemSize"
+            onChange={(e) => {
+              e.target.classList.remove(...invalidInputStyle);
+              setInputSize(e.target.value);
+            }}
           ></input>
         </div>
       </div>
@@ -145,14 +184,17 @@ export function CreateForm() {
       <div id="categoryMenu" className="grid grid-cols-2 gap-x-2 gap-y-4 mb-8 ">
         <div
           id="categoriesContainer"
-          className="grid lg:grid-cols-3 grid-cols-2 gap-y-4"
+          className="grid p-1 rounded-lg lg:grid-cols-3 grid-cols-2 gap-y-4"
         >
           {categories.map((category) => {
             return (
               <button
                 key={category}
                 onClick={(e: React.MouseEvent<HTMLElement>) => {
-                  handleClick(e);
+                  e.currentTarget.parentElement!.classList.remove(
+                    ...invalidInputStyle
+                  );
+                  handleSelectCategory(e);
                 }}
                 className="text-sm rounded-lg w-20 h-10 bg-red-300 bg-opacity-40 break-words"
               >
@@ -178,6 +220,9 @@ export function CreateForm() {
             />
             <button
               onClick={(e: React.MouseEvent<HTMLElement>) => {
+                document;
+                // .getElementById("categoriesContainer")
+                // ?.classList.remove(...invalidInputStyle);
                 handleClickNewCategory(e);
               }}
               className="flex mr-4 items-center justify-center rounded-lg w-16 h-10 bg-green-400 bg-opacity-50"
@@ -204,12 +249,14 @@ export function CreateForm() {
           <div className="inline">
             <input
               className={`${inputStyle} h-10 placeholder:text-xs`}
-              value={chosenDate}
+              // value={"Choose"}
               type="date"
               id="freezeDate"
               name="freezeDate"
               onChange={(e) => {
-                setChosenDate(e.target.value);
+                e.target.classList.remove(...invalidInputStyle);
+                setFreezeDate(e.target.value);
+                setFreezeDateIsSet(true);
               }}
             ></input>
           </div>
@@ -224,11 +271,16 @@ export function CreateForm() {
                 id="lifespan"
                 name="lifespan"
                 className={`${inputStyle} h-full`}
-                value={selectedLifespanInteger}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  handleSelectLifespan(e)
-                }
+                defaultValue=""
+                // value={selectedLifespanInteger}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  e.target.classList.remove(...invalidInputStyle);
+                  handleSelectLifespan(e);
+                }}
               >
+                <option value="" disabled hidden>
+                  Select
+                </option>
                 {dropdownNumbers.map((num) => {
                   return (
                     <option key={num} value={`${num}`}>
@@ -243,20 +295,21 @@ export function CreateForm() {
                 className={`${inputStyle} h-full ml-2`}
                 value={selectedLifespanQualifier}
                 onChange={(e) => {
+                  e.target.classList.remove(...invalidInputStyle);
                   setSelectedLifespanQualifier(e.target.value);
                 }}
               >
                 {selectedLifespanInteger == "1" ? (
                   <>
-                    <option value="days">day</option>
-                    <option value="weeks">week</option>
-                    <option value="months">month</option>
+                    <option value="1">day</option>
+                    <option value="7">week</option>
+                    <option value="30">month</option>
                   </>
                 ) : (
                   <>
-                    <option value="days">days</option>
-                    <option value="weeks">weeks</option>
-                    <option value="months">months</option>
+                    <option value="1">days</option>
+                    <option value="7">weeks</option>
+                    <option value="30">months</option>
                   </>
                 )}
               </select>
@@ -273,16 +326,23 @@ export function CreateForm() {
         </label>
         <div className="">
           <input
-            className={`${inputStyle} h-10 w-[50%] placeholder:text-xs`}
-            placeholder="1"
+            className={`${inputStyle} h-10 w-[50%] placeholder:text-md`}
+            placeholder="..."
             type="text"
             id="quantity"
             name="quantity"
+            onChange={(e) => {
+              e.target.classList.remove(...invalidInputStyle);
+              setInputQuantity(e.target.value);
+            }}
           ></input>
         </div>
       </div>
       <Button
         type="submit"
+        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+          validateInputs(e);
+        }}
         // onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
         //   handleClickSubmit(e)
         // }

@@ -12,6 +12,12 @@ monthNames.set(9, "October");
 monthNames.set(10, "November");
 monthNames.set(11, "December");
 
+export function addDaysToDate(startDate: Date, lifespanInDays: number): Date {
+  const endDate = new Date(startDate.getTime());
+  endDate.setDate(endDate.getDate() + lifespanInDays);
+  return endDate;
+}
+
 export function getDateDDMMYYYY(date: Date, verbose: boolean) {
   const paddedDate: string =
     date.getDate() < 10 ? "0" + date.getDate() : `${date.getDate()}`;
@@ -26,7 +32,7 @@ export function getDateDDMMYYYY(date: Date, verbose: boolean) {
   }
 }
 
-export function formatLifespan(lifespanInDays: number) {
+export function formatDateToReadable(lifespanInDays: number) {
   if (lifespanInDays > 60) {
     return Math.round(lifespanInDays / 30) + " months";
   } else {
@@ -34,13 +40,18 @@ export function formatLifespan(lifespanInDays: number) {
   }
 }
 
-export function getRemainingTime(expirationDate: Date): [number, string] {
+export function getDaysLeftUntilDate(targetDate: Date) {
   const daysLeft = Math.ceil(
-    (expirationDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
+    (targetDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
   );
-  if (daysLeft > 60) {
-    return [daysLeft, Math.round(daysLeft / 30) + " months"];
-  } else {
-    return [daysLeft, daysLeft + " days"];
-  }
+  return daysLeft;
 }
+
+// export function getRemainingTime(expirationDate: Date): [number, string] {
+//   const daysLeft = getDaysLeftUntilDate(expirationDate);
+//   if (daysLeft > 60) {
+//     return [daysLeft, Math.round(daysLeft / 30) + " months"];
+//   } else {
+//     return [daysLeft, daysLeft + " days"];
+//   }
+// }

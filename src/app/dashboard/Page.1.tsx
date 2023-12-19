@@ -2,13 +2,12 @@
 import Link from "next/link";
 import ItemList from "../ui/itemlist";
 import { CategorySchemaType } from "../lib/db/dbschema";
-// import { Category } from "../types_schemas/typesAndSchemas";
-
 import { getAllCategories } from "../lib/db/dbhelper";
 import { useState } from "react";
-import ItemsAndCategories from "../ui/items_and_categories";
 
 export default async function Page() {
+  const [categoriesToShow, setCategoriesToShow] = useState<string[]>([]);
+
   const allCategories: CategorySchemaType[] = await getAllCategories();
   return (
     <div className="flex flex-col w-full items-center ">
@@ -20,9 +19,7 @@ export default async function Page() {
         <button className="w-28 h-16">NEW ITEM</button>
       </Link>
 
-      {/* <ItemsAndCategories allCategories={allCategories}></ItemsAndCategories> */}
-
-      {/* <div className="flex gap-x-8 mb-2">
+      <div className="flex gap-x-8 mb-2">
         {allCategories.map((cat) => {
           console.log("ID: " + cat._id);
 
@@ -33,7 +30,7 @@ export default async function Page() {
             </div>
           );
         })}
-      </div>*/}
+      </div>
       <ItemList categoriesToShow={[]}></ItemList>
     </div>
   );

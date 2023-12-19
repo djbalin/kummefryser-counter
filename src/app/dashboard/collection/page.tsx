@@ -1,13 +1,14 @@
 "use server";
 // "use client";
 
-import populateDB, { getAllSorted } from "@/app/lib/db/dbhelper";
-import FoodItemType from "@/app/types/fooditem";
+import wipeAndPopulateDB, { getAllSorted } from "@/app/lib/db/dbhelper";
+import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
 
 export default async function Page() {
   const all: FoodItemType[] = await getAllSorted();
+  // console.log(all);
 
-  await populateDB();
+  await wipeAndPopulateDB();
   //   async function handleClick() {
   //     await populateDB();
   //   }
@@ -19,7 +20,7 @@ export default async function Page() {
           <div key={some.name} className="">
             {some.name}
             {some.category}
-            {some.expirationDate.toString()}
+            {/* {some.lifespanInDays.toString()} */}
           </div>
         );
       })}

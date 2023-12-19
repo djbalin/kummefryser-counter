@@ -1,20 +1,25 @@
 "use client";
-import FoodItemType from "../types/fooditem";
+import { FoodItemType } from "../types_schemas/typesAndSchemas";
 import {
-  formatLifespan,
+  addDaysToDate,
+  formatDateToReadable,
   getDateDDMMYYYY,
-  getRemainingTime,
+  getDaysLeftUntilDate,
 } from "../lib/datehelper";
 // import FoodItemInfo from "./fooditeminfo";
 
-import { PencilIcon, DocumentTextIcon } from "@heroicons/react/20/solid";
+import { PencilIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
 
 export default function FoodItem({ foodItem }: { foodItem: FoodItemType }) {
-  const [daysLeft, timeLeft] = getRemainingTime(foodItem.expirationDate);
+  const rawDaysLeft = getDaysLeftUntilDate(foodItem.expirationDate);
+  const daysLeft = formatDateToReadable(rawDaysLeft);
+  const originalLifespan = formatDateToReadable(foodItem.lifespanInDays);
 
-  const originalLifespan = formatLifespan(foodItem.durationDays);
+  const [collapsed, setCollapsed] = useState<boolean>(true);
 
   function handleClickEdit(event: any) {
+    console.log("CLICKED EDIT");
     console.log(event);
   }
 
@@ -22,81 +27,87 @@ export default function FoodItem({ foodItem }: { foodItem: FoodItemType }) {
   let listColumnStyle = "flex flex-col h-full items-center justify-center ";
 
   let expiryStyle = listColumnStyle + " rounded-xl ";
-  if (daysLeft > 60) {
+  if (rawDaysLeft > 60) {
     expiryStyle += "bg-[hsla(119,74%,42%,1)]";
-  } else if (daysLeft > 30) {
+  } else if (rawDaysLeft > 30) {
     expiryStyle += "bg-[hsla(30,100%,46%,1)]";
   } else {
     expiryStyle += "bg-[hsla(0,100%,50%,1)]";
   }
 
-  //   const quantity = 5;
-
   return (
-    <div className="flex justify-center flex-row px-2 bg-orange-400 py-2 items-center w-full h-auto  bg-opacity-20 rounded-md">
-      {/* <div className="justify-around w-full"> */}
+    <div onClick={(e) => setCollapsed(!collapsed)} className="flex">
+      {collapsed ? (
+        <div className="flex justify-center flex-row px-2 bg-orange-400 py-2 items-center w-full h-auto  bg-opacity-20 rounded-md">
+          {/* <div className="justify-around w-full"> */}
 
-      <div className={listColumnStyle + " minorColumn"}>
-        <span className="">{foodItem.quantity}</span>
-      </div>
-      <div className={listColumnStyle + " majorColumn"}>
-        <span className="">{foodItem.name}</span>
-        <span className="lower">{`${foodItem.category} | ${foodItem.volume}`}</span>
-      </div>
-      <div className={listColumnStyle + " majorColumn"}>
-        <span className={expiryStyle + " w-32 bg-opacity-100"}>{timeLeft}</span>
-      </div>
-      <div className={listColumnStyle + " majorColumn"}>
-        <span className="">
-          {getDateDDMMYYYY(foodItem.expirationDate, true)}
-        </span>
-        <span className="lower">
-          {getDateDDMMYYYY(foodItem.freezeDate, true)}
-        </span>
-      </div>
-      <div className={listColumnStyle + " minorColumn"}>
-        {/* <span className=""> */}
-        <button
-          onClick={(e) => {
-            handleClickEdit(e);
-          }}
-          className="flex h-full w-[40%] items-center justify-center hover:scale-110 transition-all"
-        >
-          <PencilIcon></PencilIcon>
-        </button>
-        {/* </span> */}
-      </div>
+          <div className={listColumnStyle + "text-lg firstColumn"}>
+            <span className="">{foodItem.quantity}</span>
+          </div>
+          <div className={listColumnStyle + " secondColumn text-center px-2"}>
+            <span className="text-xl">{foodItem.name}</span>
+            <span className=" opacity-70">{`${foodItem.category} | ${foodItem.volume}`}</span>
+          </div>
+          <div className={listColumnStyle + " thirdColumn"}>
+            <span className={expiryStyle + " w-full bg-opacity-100 text-lg"}>
+              {daysLeft}
+            </span>
+          </div>
+          <div className={listColumnStyle + " fourthColumn"}>
+            <span className="text-lg">
+              {getDateDDMMYYYY(foodItem.expirationDate, true)}
+            </span>
+            <span className="opacity-70 text-sm">
+              {getDateDDMMYYYY(foodItem.freezeDate, true)}
+            </span>
+          </div>
+          <div className={listColumnStyle + " fifthColumn"}>
+            <button
+              onClick={(e) => {
+                handleClickEdit(e);
+              }}
+              className="flex h-full w-[40%] items-center justify-center hover:scale-110 transition-all"
+            >
+              <PencilIcon></PencilIcon>
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex justify-center flex-row px-2 bg-orange-400 py-2 items-center w-full h-32  bg-opacity-20 rounded-md">
+          {/* <div className="justify-around w-full"> */}
 
-      {/* <FoodItemInfo
-        upper={"5x"}
-        // lower={originalLifespan}
-        lower={null}
-      ></FoodItemInfo>
-      <FoodItemInfo
-        upper={foodItem.name}
-        lower={`${foodItem.category} | ${foodItem.volume}`}
-      ></FoodItemInfo>
-      <div className={style}>
-        <FoodItemInfo
-          upper={timeLeft}
-          // lower={originalLifespan}
-          lower={null}
-        ></FoodItemInfo>
-      </div>
-      <FoodItemInfo
-        upper={getDateDDMMYYYY(foodItem.expirationDate, true)}
-        lower={getDateDDMMYYYY(foodItem.freezeDate, true)}
-      ></FoodItemInfo>
-      {/* <DocumentTextIcon width={16}></DocumentTextIcon> */}
-      {/* </div> */}
-      {/* <button
-        onClick={(e) => {
-          handleClickEdit(e);
-        }}
-        className="flex h-full w-1/6 items-center border-2 justify-center hover:scale-110 transition-all"
-      >
-        <PencilIcon width={16}></PencilIcon>
-      </button>  */}
+          <div className={listColumnStyle + "text-lg slimColumn"}>
+            <span className="">{foodItem.quantity}</span>
+          </div>
+          <div className={listColumnStyle + " fatColumn"}>
+            <span className="text-xl">{foodItem.name}</span>
+            <span className=" opacity-70">{`${foodItem.category} | ${foodItem.volume}`}</span>
+          </div>
+          <div className={listColumnStyle + " fatColumn"}>
+            <span className={expiryStyle + " w-32 bg-opacity-100 text-lg"}>
+              {daysLeft}
+            </span>
+          </div>
+          <div className={listColumnStyle + " fatColumn"}>
+            <span className="text-lg">
+              {getDateDDMMYYYY(foodItem.expirationDate, true)}
+            </span>
+            <span className="opacity-70 text-sm">
+              {getDateDDMMYYYY(foodItem.freezeDate, true)}
+            </span>
+          </div>
+          <div className={listColumnStyle + " slimColumn"}>
+            <button
+              onClick={(e) => {
+                handleClickEdit(e);
+              }}
+              className="flex h-full w-[40%] items-center justify-center hover:scale-110 transition-all"
+            >
+              <PencilIcon></PencilIcon>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

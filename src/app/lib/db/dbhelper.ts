@@ -1,50 +1,58 @@
-import { MongoClient, ObjectId } from "mongodb";
-
-import { placeholderData } from "../placeholderData";
-import { z } from "zod";
+import { placeholderData } from "@/app/lib/placeholderData";
 import mongoose from "mongoose";
-import { FreezerItems, Categories } from "./dbschema";
-import FoodItemType, { Category } from "@/app/types/fooditem";
+import {
+  FreezerItems,
+  Categories,
+  CategorySchemaType,
+} from "@/app/lib/db/dbschema";
+import { CategorySchema } from "./dbschema";
+import {
+  FoodItemType,
+  NakedFoodItemType,
+} from "@/app/types_schemas/typesAndSchemas";
 
-const FreezerItemEntitySchema = z.object({
-  _id: z.instanceof(ObjectId),
-  name: z.string(),
-  category: z.nativeEnum(Category),
-  freezeDate: z.instanceof(Date),
-  expirationDate: z.instanceof(Date),
-  durationDays: z.number(),
-  volume: z.string(),
-});
+export async function getAllCategories(): Promise<CategorySchemaType[]> {
+  mongoose.connect(process.env.MONGODB_URI!);
+  const all: CategorySchemaType[] = await Categories.find();
+  return all;
+}
 
-async function connectDB() {
-  const client = new MongoClient(process.env.MONGODB_URI!);
-
-  const COLLECTION = "janfryser";
-
-  let coll;
-  try {
-    await client.connect();
-    console.log("connected");
-    const db = client.db(COLLECTION);
-    try {
-      coll = db.collection(COLLECTION);
-      console.log("Using collection: " + COLLECTION);
-    } catch (err) {
-      console.log(err);
-    }
-  } catch (err) {
-    console.log(err);
-  }
-  return coll;
+export async function tryAddCategory(item: NakedFoodItemType) {
+  mongoose.connect(process.env.MONGODB_URI!);
+  await Categories.updateOne(
+    { category: item.category },
+    { $setOnInsert: { category: item.category } },
+    { upsert: true }
+  );
 }
 
 export async function getAllSorted(): Promise<FoodItemType[]> {
   mongoose.connect(process.env.MONGODB_URI!);
-  const all = await FreezerItems.find().sort({ expirationDate: 1 });
+  const all: FoodItemType[] = await FreezerItems.find().sort({
+    expirationDate: 1,
+  });
   return all;
 }
 
-export default async function populateDB() {
+export async function getAllFilteredByCategory(
+  queryCategory: string
+): Promise<FoodItemType[]> {
+  mongoose.connect(process.env.MONGODB_URI!);
+  const filteredByCategory: FoodItemType[] = await FreezerItems.find({
+    category: queryCategory,
+  }).sort({
+    expirationDate: 1,
+  });
+  return filteredByCategory;
+}
+
+export async function addOne(newItem: NakedFoodItemType) {
+  mongoose.connect(process.env.MONGODB_URI!);
+  const result = await FreezerItems.create(newItem);
+  console.log("RESULT" + result);
+}
+
+export default async function wipeAndPopulateDB() {
   mongoose.connect(process.env.MONGODB_URI!);
   await mongoose.connection
     .collection("freezeritems")
@@ -59,10 +67,16 @@ export default async function populateDB() {
     console.log("already data inside, this many docs: " + numDocs);
   } else {
     console.log("Empty");
+    console.log("Inserting placeholder data: ");
+
+    for (const d of placeholderData) {
+      console.log(d);
+    }
+
     placeholderData.map(async (item) => {
-      console.log("adding item: " + item.name);
-      await FreezerItems.create(item);
+      console.log("adding item w lifespan " + item.lifespanInDays);
       try {
+        await FreezerItems.create(item);
         Categories.updateOne(
           { category: item.category },
           { $setOnInsert: { category: item.category } },

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  font-size: 20px;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -27,12 +31,23 @@ body {
 }
 
 .lower {
-  @apply text-xs opacity-70;
+  @apply text-lg opacity-70;
 }
 
-.minorColumn {
-  @apply w-[8%];
+.firstColumn {
+  @apply w-[15%];
 }
-.majorColumn {
-  @apply w-[28%];
+.secondColumn {
+  @apply w-[40%];
+}
+.thirdColumn {
+  @apply w-[15%];
+}
+
+.fourthColumn {
+  @apply w-[15%];
+}
+
+.fifthColumn {
+  @apply w-[15%];
 }
