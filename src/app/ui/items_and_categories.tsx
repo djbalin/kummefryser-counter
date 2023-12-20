@@ -1,21 +1,32 @@
 "use client";
-import { Suspense, useState } from "react";
+import { useState } from "react";
+// import { Suspense, useState } from "react";
 import { CategorySchemaType } from "../lib/db/dbschema";
-import ItemList from "./itemlist";
+// import ItemList from "./itemlist";
+import Categories from "./categories";
 // import { getAllCategories } from "../lib/db/dbhelper";
 
-function toggleSelection() {}
+// function toggleSelection() {}
 
+// export default function ItemsAndCategories() {
 export default function ItemsAndCategories({
+  children,
   allCategories,
 }: {
+  children: React.ReactNode;
   allCategories: CategorySchemaType[];
 }) {
   const [categoriesToShow, setCategoriesToShow] = useState<string[]>([]);
+  console.log("RENDER");
 
   return (
     <>
-      <div className="flex gap-x-8 mb-2">
+      <Categories allCategories={allCategories}></Categories>
+      {/* <ItemList categoriesToShow={[]}></ItemList> */}
+      {/* <ItemList></ItemList> */}
+      {children}
+
+      {/* <div className="flex gap-x-8 mb-2">
         {allCategories.map((cat) => {
           console.log("ID: " + cat._id);
 
@@ -32,10 +43,10 @@ export default function ItemsAndCategories({
             </div>
           );
         })}
-      </div>
-      <Suspense>
-        <ItemList categoriesToShow={[]}></ItemList>
-      </Suspense>
+      </div> */}
+      {/* <ItemList categoriesToShow={allCategories}></ItemList> */}
+      {/* <Suspense>
+      </Suspense> */}
     </>
   );
 }

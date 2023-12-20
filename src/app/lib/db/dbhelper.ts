@@ -1,3 +1,5 @@
+import "server-only";
+
 import { placeholderData } from "@/app/lib/placeholderData";
 import mongoose from "mongoose";
 import {
@@ -34,16 +36,16 @@ export async function getAllSorted(): Promise<FoodItemType[]> {
   return all;
 }
 
-export async function getAllFilteredByCategory(
-  queryCategory: string
+export async function getAllFilteredByCategories(
+  queryCategories: string[]
 ): Promise<FoodItemType[]> {
   mongoose.connect(process.env.MONGODB_URI!);
-  const filteredByCategory: FoodItemType[] = await FreezerItems.find({
-    category: queryCategory,
+  const filteredByCategories: FoodItemType[] = await FreezerItems.find({
+    category: queryCategories,
   }).sort({
     expirationDate: 1,
   });
-  return filteredByCategory;
+  return filteredByCategories;
 }
 
 export async function addOne(newItem: NakedFoodItemType) {
