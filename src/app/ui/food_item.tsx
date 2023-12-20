@@ -6,23 +6,49 @@ import {
   getDateDDMMYYYY,
   getDaysLeftUntilDate,
 } from "../lib/datehelper";
-
+import {
+  PlusIcon,
+  MinusIcon,
+  MinusCircleIcon,
+  PlusCircleIcon,
+} from "@heroicons/react/20/solid";
 import { PencilIcon } from "@heroicons/react/20/solid";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
+import { Button } from "./button";
+import ExpandedFoodItem from "./forms/expanded_item";
 
 export default function FoodItem({ foodItem }: { foodItem: FoodItemType }) {
-  const [collapsed, setCollapsed] = useState<boolean>(true);
+  console.log("RENDER FOODITEM");
+
+  const [expanded, setExpanded] = useState<boolean>(false);
   // function handleClickEdit(event: any) {
   //   console.log("CLICKED EDIT");
   //   console.log(event);
   // }
 
+  function handleCloseExpanded() {
+    console.log("CLOSING");
+
+    setExpanded(false);
+    console.log(expanded);
+  }
+
   return (
-    <div onClick={(e) => setCollapsed(!collapsed)} className="flex">
-      {collapsed ? (
-        <CollapsedFoodItem foodItem={foodItem}></CollapsedFoodItem>
+    <div
+      onClick={(e) => {
+        if (!expanded) {
+          setExpanded(true);
+        }
+      }}
+      className="flex"
+    >
+      {expanded ? (
+        <ExpandedFoodItem
+          foodItem={foodItem}
+          handleCloseExpanded={handleCloseExpanded}
+        ></ExpandedFoodItem>
       ) : (
-        <ExpandedFoodItem foodItem={foodItem}></ExpandedFoodItem>
+        <CollapsedFoodItem foodItem={foodItem}></CollapsedFoodItem>
       )}
     </div>
   );
@@ -89,62 +115,6 @@ function CollapsedFoodItem({ foodItem }: { foodItem: FoodItemType }) {
       {/* FREEZE DATE */}
       <div className={listColumnStyle + " fourthColumn text-justify "}>
         <span className="text-lg ">
-          {getDateDDMMYYYY(foodItem.expirationDate, true)}
-        </span>
-        <span className="opacity-70 text-sm">
-          {getDateDDMMYYYY(foodItem.freezeDate, true)}
-        </span>
-      </div>
-      <div className={listColumnStyle + " fifthColumn"}>
-        <button
-          // onClick={(e) => {
-          //   handleClickEdit(e);
-          // }}
-          className="flex h-full w-[40%] items-center justify-center hover:scale-110 transition-all"
-        >
-          <PencilIcon></PencilIcon>
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function ExpandedFoodItem({ foodItem }: { foodItem: FoodItemType }) {
-  const rawDaysLeft = getDaysLeftUntilDate(foodItem.expirationDate);
-  const daysLeft = formatDateToReadable(rawDaysLeft);
-  const originalLifespan = formatDateToReadable(foodItem.lifespanInDays);
-  let listColumnStyle = "flex flex-col h-full items-center justify-center ";
-
-  let expiryStyle = listColumnStyle + " rounded-xl ";
-
-  // OK
-  if (rawDaysLeft > 60) {
-    expiryStyle += "bg-[hsla(119,74%,42%,1)]";
-    // Warning
-  } else if (rawDaysLeft > 30) {
-    expiryStyle += "bg-[hsla(30,100%,46%,1)]";
-    // Danger!!
-  } else {
-    expiryStyle += "bg-[hsla(0,100%,50%,1)]";
-  }
-  return (
-    <div className="flex justify-center flex-row px-2 bg-orange-500 py-2 items-center w-full h-32  bg-opacity-20 rounded-md">
-      {/* <div className="justify-around w-full"> */}
-
-      <div className={listColumnStyle + "text-lg firstColumn"}>
-        <span className="">{foodItem.quantity}</span>
-      </div>
-      <div className={listColumnStyle + " secondColumn"}>
-        <span className="text-xl text-center">{foodItem.name}</span>
-        <span className=" opacity-70">{`${foodItem.category} | ${foodItem.volume}`}</span>
-      </div>
-      <div className={listColumnStyle + " thirdColumn"}>
-        <span className={expiryStyle + " w-32 bg-opacity-100 text-lg"}>
-          {daysLeft}
-        </span>
-      </div>
-      <div className={listColumnStyle + " fourthColumn"}>
-        <span className="text-lg">
           {getDateDDMMYYYY(foodItem.expirationDate, true)}
         </span>
         <span className="opacity-70 text-sm">

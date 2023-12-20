@@ -1,7 +1,8 @@
 import mongoose, { InferSchemaType, Types } from "mongoose";
+import { generateId } from "../tools";
 
 const { Schema } = mongoose;
-import { generateId } from "./dbhelper";
+// import { generateId } from "./dbhelper";
 
 // function generateId()
 
