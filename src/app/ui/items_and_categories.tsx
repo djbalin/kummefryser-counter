@@ -22,31 +22,7 @@ export default function ItemsAndCategories({
   return (
     <>
       <Categories allCategories={allCategories}></Categories>
-      {/* <ItemList categoriesToShow={[]}></ItemList> */}
-      {/* <ItemList></ItemList> */}
       {children}
-
-      {/* <div className="flex gap-x-8 mb-2">
-        {allCategories.map((cat) => {
-          console.log("ID: " + cat._id);
-
-          return (
-            // <div className="border-2 p-2" key={cat._id.toString()}>
-            <div
-              className="border-2 p-2"
-              key={cat.category}
-              onClick={(e) => {
-                console.log(e);
-              }}
-            >
-              {cat.category}
-            </div>
-          );
-        })}
-      </div> */}
-      {/* <ItemList categoriesToShow={allCategories}></ItemList> */}
-      {/* <Suspense>
-      </Suspense> */}
     </>
   );
 }

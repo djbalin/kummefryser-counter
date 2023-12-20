@@ -1,8 +1,11 @@
-import { NakedFoodItemType, Category } from "../types_schemas/typesAndSchemas";
+import { Category, FoodItemType } from "../types_schemas/typesAndSchemas";
 import { addDaysToDate } from "./datehelper";
 
-export const placeholderData: NakedFoodItemType[] = [
+import { generateId } from "./db/dbhelper";
+
+export const placeholderData: FoodItemType[] = [
   {
+    _id: generateId(10),
     name: "Kødsovs",
     category: Category.COOKED_DISH,
     freezeDate: new Date("2023-11-18"),
@@ -12,6 +15,7 @@ export const placeholderData: NakedFoodItemType[] = [
     quantity: 1,
   },
   {
+    _id: generateId(10),
     name: "Menneskehjerte",
     category: Category.COOKED_DISH,
     freezeDate: new Date("2023-10-18"),
@@ -21,6 +25,7 @@ export const placeholderData: NakedFoodItemType[] = [
     quantity: 1,
   },
   {
+    _id: generateId(10),
     name: "Mango  i tern",
     category: Category.FRUIT,
     freezeDate: new Date("2023-12-10"),
@@ -30,6 +35,7 @@ export const placeholderData: NakedFoodItemType[] = [
     quantity: 4,
   },
   {
+    _id: generateId(10),
     name: "Jordbær",
     category: Category.FRUIT,
     freezeDate: new Date("2023-12-10"),
@@ -39,6 +45,7 @@ export const placeholderData: NakedFoodItemType[] = [
     quantity: 1,
   },
   {
+    _id: generateId(10),
     name: "Smør",
     category: Category.DAIRY,
     freezeDate: new Date("2023-12-10"),
@@ -48,6 +55,7 @@ export const placeholderData: NakedFoodItemType[] = [
     quantity: 10,
   },
   {
+    _id: generateId(10),
     name: "Flæskesteg",
     category: Category.MEAT,
     freezeDate: new Date("2023-12-10"),

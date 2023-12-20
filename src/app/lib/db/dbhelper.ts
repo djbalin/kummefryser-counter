@@ -1,5 +1,18 @@
 import "server-only";
 
+export function generateId(length: number): string {
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+}
+
 import { placeholderData } from "@/app/lib/placeholderData";
 import mongoose from "mongoose";
 import {
@@ -8,10 +21,7 @@ import {
   CategorySchemaType,
 } from "@/app/lib/db/dbschema";
 import { CategorySchema } from "./dbschema";
-import {
-  FoodItemType,
-  NakedFoodItemType,
-} from "@/app/types_schemas/typesAndSchemas";
+import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
 
 export async function getAllCategories(): Promise<CategorySchemaType[]> {
   mongoose.connect(process.env.MONGODB_URI!);
@@ -19,7 +29,7 @@ export async function getAllCategories(): Promise<CategorySchemaType[]> {
   return all;
 }
 
-export async function tryAddCategory(item: NakedFoodItemType) {
+export async function tryAddCategory(item: FoodItemType) {
   mongoose.connect(process.env.MONGODB_URI!);
   await Categories.updateOne(
     { category: item.category },
@@ -48,7 +58,7 @@ export async function getAllFilteredByCategories(
   return filteredByCategories;
 }
 
-export async function addOne(newItem: NakedFoodItemType) {
+export async function addOne(newItem: FoodItemType) {
   mongoose.connect(process.env.MONGODB_URI!);
   const result = await FreezerItems.create(newItem);
   console.log("RESULT" + result);

@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { z } from "zod";
 
 export enum Category {
@@ -9,7 +8,7 @@ export enum Category {
 }
 
 const FoodItemSchema = z.object({
-  _id: z.instanceof(ObjectId),
+  _id: z.string(),
   name: z.string(),
   category: z.string(),
   // category: z.nativeEnum(Category),
@@ -21,9 +20,9 @@ const FoodItemSchema = z.object({
 });
 
 // const FreezerItemEntitySchema = z.object({ ...FoodItem, _id: z.instan });
-export const FoodItemSchemaNoId = FoodItemSchema.omit({ _id: true });
+// export const FoodItemSchemaNoId = FoodItemSchema.omit({ _id: true });
 export type FoodItemType = z.infer<typeof FoodItemSchema>;
-export type NakedFoodItemType = z.infer<typeof FoodItemSchemaNoId>;
+// export type NakedFoodItemType = z.infer<typeof FoodItemSchemaNoId>;
 
 // type FoodItemType = {
 //   name: string;

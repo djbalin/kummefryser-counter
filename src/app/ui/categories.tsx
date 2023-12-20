@@ -6,14 +6,11 @@ import clsx from "clsx";
 const selected = "bg-green-700";
 
 function toggleSelected(element: HTMLDivElement) {
-  console.log(element.classList);
-
   if (element.classList.contains(selected)) {
     element.classList.remove(selected);
   } else {
     element.classList.add(selected);
   }
-  console.log(element.classList);
 }
 
 export default function Categories({
@@ -35,8 +32,11 @@ export default function Categories({
     } else {
       params.append("category", categoryText);
     }
+    // event.currentTarget.blur();
     replace(`${pathname}?${params.toString()}`);
   }
+  //   console.log(allCategories);
+
   return (
     <>
       <div className="flex gap-x-8 mb-2">
@@ -48,7 +48,10 @@ export default function Categories({
                   .getAll("category")
                   .includes(cat.category as string),
               })}
-              key={cat.category}
+              //   key={cat._id}
+              // TODO: Remove this once locally-seeded db is no longer there
+              //   key={cat._id != null ? cat._id.toString() : parseInt(makeid(10))}
+              key={makeid(10)}
               onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                 handleClickCategory(e);
               }}
@@ -60,4 +63,19 @@ export default function Categories({
       </div>
     </>
   );
+}
+
+// TODO:
+// Can delete this. Its just to generate some key for locally-seeded database items (which do not have ._id field)
+function makeid(length: number) {
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
 }

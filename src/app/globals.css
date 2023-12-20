@@ -30,24 +30,36 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
 .lower {
   @apply text-lg opacity-70;
 }
 
 .firstColumn {
-  @apply w-[15%];
+  @apply w-[17%];
 }
 .secondColumn {
-  @apply w-[40%];
+  @apply w-[42%];
 }
 .thirdColumn {
-  @apply w-[15%];
+  @apply w-[17%];
 }
 
 .fourthColumn {
-  @apply w-[15%];
+  @apply w-[17%];
 }
 
 .fifthColumn {
-  @apply w-[15%];
+  @apply w-[7%];
 }

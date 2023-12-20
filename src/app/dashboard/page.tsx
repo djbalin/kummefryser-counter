@@ -27,6 +27,7 @@ export default async function Page({
   const allCategories: CategorySchemaType[] = await getAllCategories();
 
   // const [categoriesToShow, setCategoriesToShow] = useState<string[]>([]);
+  console.log("RENDER DASHBOARD");
 
   return (
     <div className="flex flex-col w-full items-center ">
@@ -39,23 +40,6 @@ export default async function Page({
       </Link>
       <Categories allCategories={allCategories}></Categories>
       <ItemList categoriesToShow={categories}></ItemList>
-
-      {/* <ItemsAndCategories allCategories={allCategories}>
-        <ItemList categoriesToShow={[]}></ItemList>
-      </ItemsAndCategories> */}
-
-      {/* <div className="flex gap-x-8 mb-2">
-        {allCategories.map((cat) => {
-          console.log("ID: " + cat._id);
-
-          return (
-            // <div className="border-2 p-2" key={cat._id.toString()}>
-            <div className="border-2 p-2" key={cat.category}>
-              {cat.category}
-            </div>
-          );
-        })}
-      </div> */}
     </div>
   );
 }
