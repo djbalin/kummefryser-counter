@@ -60,26 +60,35 @@ function CollapsedFoodItem({ foodItem }: { foodItem: FoodItemType }) {
     <div className="flex justify-center flex-row px-2 bg-orange-400 py-2 items-center w-full h-auto  bg-opacity-20 rounded-md">
       {/* <div className="justify-around w-full"> */}
 
+      {/* QUANTITY */}
       <div className={listColumnStyle + "text-lg firstColumn"}>
         <span className="border-2 border-white border-opacity-30 px-3">
           {foodItem.quantity}
         </span>
       </div>
 
+      {/* ITEM NAME */}
+      {/* VOLUME, CATEGORY */}
       <div
         id="nameContainer"
         className={listColumnStyle + " secondColumn text-center px-2"}
       >
         <span className="text-xl h-8 overflow-hidden">{foodItem.name}</span>
-        <span className="opacity-70">{`${foodItem.volume} | ${foodItem.category}`}</span>
+        <span className="opacity-70 italic">{`${foodItem.volume} | ${foodItem.category}`}</span>
       </div>
+
+      {/* TIME LEFT */}
       <div className={listColumnStyle + " thirdColumn"}>
-        <span className={expiryStyle + " w-full bg-opacity-100 text-lg"}>
-          {daysLeft}
-        </span>
+        <div className={expiryStyle + " w-full bg-opacity-100 "}>
+          <span className="text-xl drop-shadow-[0_1.5px_1.5px_rgba(0,0,0,1)]">
+            {daysLeft}
+          </span>
+        </div>
       </div>
-      <div className={listColumnStyle + " fourthColumn"}>
-        <span className="text-lg">
+      {/* EXPIRATION DATE */}
+      {/* FREEZE DATE */}
+      <div className={listColumnStyle + " fourthColumn text-justify "}>
+        <span className="text-lg ">
           {getDateDDMMYYYY(foodItem.expirationDate, true)}
         </span>
         <span className="opacity-70 text-sm">

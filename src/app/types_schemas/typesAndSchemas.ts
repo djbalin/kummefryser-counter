@@ -7,7 +7,7 @@ export enum Category {
   COOKED_DISH = "Cooked dish",
 }
 
-const FoodItemSchema = z.object({
+export const FoodItemSchema = z.object({
   _id: z.string(),
   name: z.string(),
   category: z.string(),

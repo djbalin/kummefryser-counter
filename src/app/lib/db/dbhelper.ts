@@ -1,18 +1,8 @@
+"use server";
 import "server-only";
 
-export function generateId(length: number): string {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
-}
-
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { placeholderData } from "@/app/lib/placeholderData";
 import mongoose from "mongoose";
 import {
@@ -24,22 +14,22 @@ import { CategorySchema } from "./dbschema";
 import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
 
 export async function getAllCategories(): Promise<CategorySchemaType[]> {
-  mongoose.connect(process.env.MONGODB_URI!);
+  await mongoose.connect(process.env.MONGODB_URI!);
   const all: CategorySchemaType[] = await Categories.find();
   return all;
 }
 
-export async function tryAddCategory(item: FoodItemType) {
-  mongoose.connect(process.env.MONGODB_URI!);
+export async function tryAddCategory(category: CategorySchemaType) {
+  await mongoose.connect(process.env.MONGODB_URI!);
   await Categories.updateOne(
-    { category: item.category },
-    { $setOnInsert: { category: item.category } },
+    { category: category.category },
+    { $setOnInsert: { category: category.category } },
     { upsert: true }
   );
 }
 
 export async function getAllSorted(): Promise<FoodItemType[]> {
-  mongoose.connect(process.env.MONGODB_URI!);
+  await mongoose.connect(process.env.MONGODB_URI!);
   const all: FoodItemType[] = await FreezerItems.find().sort({
     expirationDate: 1,
   });
@@ -49,7 +39,7 @@ export async function getAllSorted(): Promise<FoodItemType[]> {
 export async function getAllFilteredByCategories(
   queryCategories: string[]
 ): Promise<FoodItemType[]> {
-  mongoose.connect(process.env.MONGODB_URI!);
+  await mongoose.connect(process.env.MONGODB_URI!);
   const filteredByCategories: FoodItemType[] = await FreezerItems.find({
     category: queryCategories,
   }).sort({
@@ -59,7 +49,7 @@ export async function getAllFilteredByCategories(
 }
 
 export async function addOne(newItem: FoodItemType) {
-  mongoose.connect(process.env.MONGODB_URI!);
+  await mongoose.connect(process.env.MONGODB_URI!);
   const result = await FreezerItems.create(newItem);
   console.log("RESULT" + result);
 }
@@ -89,7 +79,7 @@ export default async function wipeAndPopulateDB() {
       console.log("adding item w lifespan " + item.lifespanInDays);
       try {
         await FreezerItems.create(item);
-        Categories.updateOne(
+        await Categories.updateOne(
           { category: item.category },
           { $setOnInsert: { category: item.category } },
           { upsert: true }
@@ -104,4 +94,15 @@ export default async function wipeAndPopulateDB() {
       }
     });
   }
+  console.log("END OF WIPING");
+}
+
+export async function wipeDBAndRefresh() {
+  console.log("b4 wipeandpop");
+  await wipeAndPopulateDB();
+  console.log("b4 revalid");
+
+  revalidatePath("/dashboard");
+  console.log("b4 redirect");
+  redirect("/dashboard");
 }

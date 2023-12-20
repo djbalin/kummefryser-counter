@@ -1,7 +1,7 @@
 import { Category, FoodItemType } from "../types_schemas/typesAndSchemas";
 import { addDaysToDate } from "./datehelper";
 
-import { generateId } from "./db/dbhelper";
+import { generateId } from "./tools";
 
 export const placeholderData: FoodItemType[] = [
   {

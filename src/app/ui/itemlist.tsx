@@ -1,6 +1,5 @@
 "use server";
 import { getAllSorted, getAllFilteredByCategories } from "../lib/db/dbhelper";
-import { FreezerItemSchemaType } from "../lib/db/dbschema";
 import { FoodItemType } from "../types_schemas/typesAndSchemas";
 import FoodItem from "./food_item";
 import ListHeader from "./listheader";
@@ -11,14 +10,14 @@ export default async function ItemList({
   categoriesToShow: string[];
 }) {
   // export default async function ItemList() {
-  let freezerItemsSchemaType: FreezerItemSchemaType[];
+  let foodItems: FoodItemType[];
   if (categoriesToShow.length == 0) {
-    freezerItemsSchemaType = await getAllSorted();
+    foodItems = await getAllSorted();
   } else {
-    freezerItemsSchemaType = await getAllFilteredByCategories(categoriesToShow);
+    foodItems = await getAllFilteredByCategories(categoriesToShow);
   }
 
-  const foodItemsSerialized = await JSON.stringify(freezerItemsSchemaType);
+  const foodItemsSerialized = await JSON.stringify(foodItems);
   const foodItemsParsed: FoodItemType[] = JSON.parse(
     foodItemsSerialized,
     (key, value) => {
@@ -29,16 +28,12 @@ export default async function ItemList({
       }
     }
   );
-  console.log("AFTER PARSING");
-  console.log("AFTER PARSING");
-  console.log("AFTER PARSING");
-  console.log(foodItemsParsed[0]);
-  console.log(foodItemsParsed[1]);
+  console.log(foodItemsParsed);
 
   return (
-    <div className="flex flex-col border-2 px-4 border-opacity-30 py-2 lg:min-w-[75%] gap-y-2">
+    <div className="flex flex-col border-2 px-4 border-opacity-30 py-2  lg:min-w-[75%] gap-y-2">
       <ListHeader></ListHeader>
-      {foodItemsParsed.map((foodItem, idx) => {
+      {foodItemsParsed.map((foodItem) => {
         // foodItem = JSON.parse(JSON.stringify(foodItem));
         // foodItem._id = foodItem._id.toString();
         // console.log("fooditem id");

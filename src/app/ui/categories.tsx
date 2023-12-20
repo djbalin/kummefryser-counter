@@ -3,15 +3,15 @@ import { CategorySchemaType } from "../lib/db/dbschema";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import clsx from "clsx";
 
-const selected = "bg-green-700";
+// const selected = "bg-green-700";
 
-function toggleSelected(element: HTMLDivElement) {
-  if (element.classList.contains(selected)) {
-    element.classList.remove(selected);
-  } else {
-    element.classList.add(selected);
-  }
-}
+// function toggleSelected(element: HTMLDivElement) {
+//   if (element.classList.contains(selected)) {
+//     element.classList.remove(selected);
+//   } else {
+//     element.classList.add(selected);
+//   }
+// }
 
 export default function Categories({
   allCategories,
@@ -24,7 +24,7 @@ export default function Categories({
   console.log("RENDER CATEGORIES");
 
   function handleClickCategory(event: React.MouseEvent<HTMLDivElement>) {
-    toggleSelected(event.currentTarget);
+    // toggleSelected(event.currentTarget);
     const categoryText = event.currentTarget.innerHTML;
     const params = new URLSearchParams(searchParams);
     if (params.has("category", categoryText)) {
@@ -39,27 +39,31 @@ export default function Categories({
 
   return (
     <>
-      <div className="flex gap-x-8 mb-2">
-        {allCategories.map((cat) => {
-          return (
-            <div
-              className={clsx("border-2 rounded-xl p-2 cursor-pointer", {
-                "bg-green-500": searchParams
-                  .getAll("category")
-                  .includes(cat.category as string),
-              })}
-              //   key={cat._id}
-              // TODO: Remove this once locally-seeded db is no longer there
-              //   key={cat._id != null ? cat._id.toString() : parseInt(makeid(10))}
-              key={makeid(10)}
-              onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                handleClickCategory(e);
-              }}
-            >
-              {cat.category}
-            </div>
-          );
-        })}
+      <div className="flex gap-x-8 min-w-[75%] items-center mb-2">
+        <span className="text-2xl w-[30%]">Filter by categories:</span>
+        <div className="flex gap-x-2 w-[70%]">
+          {allCategories.map((cat) => {
+            return (
+              <div
+                className={clsx("border-2 rounded-xl p-2 cursor-pointer", {
+                  "bg-purple-600": searchParams
+                    .getAll("category")
+                    .includes(cat.category as string),
+                })}
+                //   key={cat._id}
+                // TODO: Remove this once locally-seeded db is no longer there
+                //   key={cat._id != null ? cat._id.toString() : parseInt(makeid(10))}
+                // key={makeid(10)}
+                key={cat._id}
+                onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                  handleClickCategory(e);
+                }}
+              >
+                {cat.category}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );

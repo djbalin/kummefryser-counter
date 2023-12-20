@@ -3,10 +3,9 @@ import { Button } from "@/app/ui/button";
 import { useRef, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { createItem } from "@/app/lib/actions";
-import { create } from "domain";
+import { CategorySchemaType } from "../lib/db/dbschema";
+import { generateId } from "../lib/tools";
 
 // import { Category } from "../types/fooditem";
 
@@ -17,20 +16,37 @@ const dropdownNumbers = Array(14)
 
 const invalidInputStyle = ["border-red-500", "border-2"];
 
-export function CreateForm() {
-  const CATEGORYDATA = ["meat", "dairy", "fruit", "ice cream", "vegetables"];
+// export default function CreateForm({
+//   getAllCategories,
+//   handleAddNewCategory,
+// }: {
+//   getAllCategories(): Promise<CategorySchemaType[]>;
+//   handleAddNewCategory(categoryName: string): Promise<void>;
+// }) {
+
+export default function CreateForm({
+  categories,
+  handleAddNewCategory,
+}: {
+  categories: CategorySchemaType[];
+  handleAddNewCategory(categoryName: string): Promise<void>;
+}) {
+  // export default function CreateForm({
+  //   categories,
+  // }: {
+  //   categories: CategorySchemaType[];
+  // }) {
+
+  const currentDate = new Date();
+  console.log("FORM RENDERED");
 
   const [inputName, setInputName] = useState("");
   const [inputSize, setInputSize] = useState("");
   const [inputQuantity, setInputQuantity] = useState("");
-
-  const [categories, setCategories] = useState<string[]>(CATEGORYDATA);
+  // const [categories, setCategories] = useState<string[]>(CATEGORYDATA);
   const [newCategory, setNewCategory] = useState<string>("");
-
   const [categoryHasBeenAdded, setCategoryHasBeenAdded] = useState(false);
-
   const [selectedLifespanInteger, setSelectedLifespanInteger] = useState("0");
-  const currentDate = new Date();
   const [expirationDate, setExpirationDate] = useState(new Date());
   const [selectedCategoryButton, setSelectedCategoryButton] =
     useState<HTMLElement | null>(null);
@@ -60,12 +76,15 @@ export function CreateForm() {
     setSelectedCategoryButton(clickedButton);
   }
 
-  function handleClickNewCategory(e: React.MouseEvent<HTMLElement>) {
+  async function handleClickNewCategory(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    setCategories((cat) => [...cat, newCategory]);
+    console.log("in click new cat");
+    await handleAddNewCategory(newCategory);
     if (categoryHasBeenAdded == false) {
       setCategoryHasBeenAdded(true);
     }
+    categories.push({ _id: "abc", category: newCategory });
+    setNewCategory("");
   }
 
   function validateInputs(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -129,6 +148,7 @@ export function CreateForm() {
             parseInt(selectedLifespanQualifier)
           ).toString()
         );
+        e.append("_id", generateId(16));
         createItem(e);
         // handleClickSubmit(e);
       }}
@@ -190,7 +210,7 @@ export function CreateForm() {
             return (
               <button
                 // key={category}
-                key={makeid(10)}
+                key={category._id}
                 onClick={(e: React.MouseEvent<HTMLElement>) => {
                   e.currentTarget.parentElement!.classList.remove(
                     ...invalidInputStyle
@@ -199,7 +219,7 @@ export function CreateForm() {
                 }}
                 className="text-sm rounded-lg w-20 h-10 bg-red-300 bg-opacity-40 break-words"
               >
-                {category}
+                {category.category}
               </button>
             );
           })}
@@ -226,6 +246,7 @@ export function CreateForm() {
                 // ?.classList.remove(...invalidInputStyle);
                 handleClickNewCategory(e);
               }}
+              // onClick={(e) => e.preventDefault()}
               className="flex mr-4 items-center justify-center rounded-lg w-16 h-10 bg-green-400 bg-opacity-50"
             >
               <PlusIcon width={40} />
@@ -233,7 +254,7 @@ export function CreateForm() {
           </div>
           {categoryHasBeenAdded && (
             <p className="text-xs pl-2 pt-1 text-slate-500 w-48">
-              New categories are only saved when you click Submit
+              New categories are only saved when you Submit below
             </p>
           )}
         </div>

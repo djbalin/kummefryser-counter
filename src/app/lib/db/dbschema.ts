@@ -1,13 +1,12 @@
 import mongoose, { InferSchemaType, Types } from "mongoose";
-import { Category } from "@/app/types_schemas/typesAndSchemas";
-import { randomUUID } from "crypto";
 
 const { Schema } = mongoose;
+import { generateId } from "./dbhelper";
 
 // function generateId()
 
 const FreezerItemSchema = new Schema({
-  _id: { type: String, required: true },
+  _id: { type: String, required: true, default: generateId },
   name: { type: String, required: true },
   category: { type: String, required: true },
   freezeDate: { type: Date, required: true },
@@ -18,14 +17,15 @@ const FreezerItemSchema = new Schema({
 });
 
 export const CategorySchema = new Schema({
-  _id: {
-    type: "UUID",
-    default: () => randomUUID(),
-  },
   category: {
     type: String,
     unique: true,
-    index: true,
+    index: { unique: true },
+    required: true,
+  },
+  _id: {
+    type: String,
+    required: true,
   },
 });
 
