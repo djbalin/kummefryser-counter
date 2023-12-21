@@ -78,7 +78,6 @@ export default function CreateForm({
 
   async function handleClickNewCategory(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    console.log("in click new cat");
     await handleAddNewCategory(newCategory);
     if (categoryHasBeenAdded == false) {
       setCategoryHasBeenAdded(true);

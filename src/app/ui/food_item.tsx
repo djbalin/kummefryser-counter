@@ -27,10 +27,7 @@ export default function FoodItem({ foodItem }: { foodItem: FoodItemType }) {
   // }
 
   function handleCloseExpanded() {
-    console.log("CLOSING");
-
     setExpanded(false);
-    console.log(expanded);
   }
 
   return (

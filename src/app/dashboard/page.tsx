@@ -27,11 +27,6 @@ export default async function Page({
   // console.log("query: " + query);
 
   const allCategories: CategorySchemaType[] = await getAllCategories();
-  console.log(allCategories);
-  console.log(typeof allCategories[0]);
-
-  // const [categoriesToShow, setCategoriesToShow] = useState<string[]>([]);
-  console.log("RENDER DASHBOARD");
 
   return (
     <div className="flex flex-col w-full items-center ">

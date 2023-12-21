@@ -1,27 +1,20 @@
 "use client";
-// import { FoodItemType } from "../types_schemas/typesAndSchemas";
 import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
-// import ArrowPathIcon from "@heroicons/react/20/solid";
 import {
-  addDaysToDate,
   formatDateToReadable,
   getDateDDMMYYYY,
   getDaysLeftUntilDate,
 } from "../../lib/datehelper";
 import {
-  PlusIcon,
-  MinusIcon,
   MinusCircleIcon,
   PlusCircleIcon,
   ArrowPathIcon,
 } from "@heroicons/react/20/solid";
-import { PencilIcon } from "@heroicons/react/20/solid";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { Button } from "../button";
-import clsx from "clsx";
-import Categories from "../categories";
 import { CategorySchemaType } from "@/app/lib/db/dbschema";
 import React from "react";
+
 function createRegex(query: string): RegExp {
   const charArr: string[] = Array.from(query.toLowerCase());
   return new RegExp(".*" + charArr.join(".*") + ".*");
@@ -64,7 +57,8 @@ export default function ExpandedFoodItem({
     foodItem.category
   );
 
-  const [dropdownWidth, setDropdownWidth] = useState("0px");
+  // const [dropdownWidth, setDropdownWidth] = useState("0px");
+
   const [categoryInputIsFocused, setCategoryInputIsFocused] = useState(false);
   const [categoriesToShow, setCategoriesToShow] =
     useState<CategorySchemaType[]>(categories);
@@ -82,37 +76,20 @@ export default function ExpandedFoodItem({
   } else {
     expiryStyle += "bg-[hsla(0,100%,50%,1)]";
   }
-  // console.log("RENDER EXPANDED ITEM");
-
-  // function setFoodItemName(value: string) {
-  //   throw new Error("Function not implemented.");
-  // }
-
-  // function setFoodItemVolume(value: string) {
-  //   throw new Error("Function not implemented.");
-  // }
-  // function setFoodItemCategory(value: string) {
-  //   throw new Error("Function not implemented.");
-  // }
 
   const textInputStyle =
     "text-xl text-left w-[75%] py-1 bg-inherit rounded-md border-2 border-orange-800 border-opacity-50 px-2";
 
   function handleFocusCategory(event: React.FocusEvent) {
-    // setDropdownWidth(getDropdownWidthInPx());
     setCategoryInputIsFocused(true);
-    // showCategoryDropdown();
-    // getDropdownWidthInPx();
-    // console.log("FOCUS cateogyr input");
   }
   function handleBlurCategory(event: React.FocusEvent) {
     setCategoryInputIsFocused(false);
-    // console.log("FOCUS cateogyr input");
   }
 
   function getDropdownWidthInPx(): string {
     const width: number = getWidthOfElement("categoryInput");
-    // console.log("WIDTH: " + width);
+    console.log(width);
 
     return width.toString() + "px";
   }
@@ -127,28 +104,15 @@ export default function ExpandedFoodItem({
     setCategoriesToShow(getMatchingCategories(categories, value));
   }
 
-  function handleClickCategory(event: string) {
-    setFoodItemCategory(event);
-  }
-
-  function handleLiClick() {
-    console.log("LI CLICKED");
-    console.log("LI CLICKED");
-    console.log("LI CLICKED");
-  }
-
-  // function getFilteredCategories(): CategorySchemaType[] {}
-
   return (
-    <div
-      className="flex flex-col py-4 justify-center bg-orange-500 items-center w-full h-48  bg-opacity-20 rounded-md"
-      onClick={(e) => {
-        console.log("Onclik master div");
-      }}
-    >
-      <form className="w-full flex border-2 h-full items-center justify-center">
-        {/* <div className=""> */}
-        {/* <div className="justify-around w-full"> */}
+    <div className="flex flex-col py-4 justify-center bg-orange-500 items-center w-full h-48  bg-opacity-20 rounded-md">
+      <form
+        className="w-full flex  h-full items-center justify-center"
+        action={async (formData: FormData) => {
+          const ob = Object.fromEntries(formData);
+          console.log(ob);
+        }}
+      >
         <div
           className={
             "flex flex-row h-full items-center justify-center text-lg firstColumn"
@@ -159,11 +123,12 @@ export default function ExpandedFoodItem({
 
             <div className="flex flex-row">
               <input
+                id="itemQuantity"
+                name="itemQuantity"
                 className="flex mr-2 w-12 h-12 text-center bg-orange-500 border-opacity-30 px-2"
                 type="text"
                 value={quantityValue}
                 onChange={(e) => setQuantityValue(e.target.value)}
-                // defaultValue={foodItem.quantity}
               ></input>
 
               <div className="flex flex-col w-7">
@@ -210,8 +175,8 @@ export default function ExpandedFoodItem({
               Item name:
             </label>
             <input
+              name="itemName"
               className={`${textInputStyle}`}
-              // className="text-xl text-left w-[75%] bg-inherit"
               type="text"
               id="nameInput"
               value={foodItemName}
@@ -226,6 +191,7 @@ export default function ExpandedFoodItem({
               Volume:
             </label>
             <input
+              name="itemVolume"
               id="volumeInput"
               className={`${textInputStyle}`}
               // className="text-xl w-[75%] text-left bg-inherit"
@@ -248,6 +214,7 @@ export default function ExpandedFoodItem({
 
               <input
                 id="categoryInput"
+                name="itemCategory"
                 className={`${textInputStyle}`}
                 // className="text-xl px-2 w-[75%] border-2 bg-inherit text-left"
                 type="text"
@@ -264,50 +231,37 @@ export default function ExpandedFoodItem({
                 }}
               />
             </div>
-            {/* {categoryInputIsFocused ? (
-              <Dropdown
-                categoriesToShow={categoriesToShow}
-                getDropdownWidthInPx={getDropdownWidthInPx}
-              ></Dropdown>
-            ) : (
-              <></>
-            )} */}
 
             {categoryInputIsFocused ? (
-              <>
-                <div
-                  id="dropdownContainer"
-                  className={`pl-[25%] w-full z-10 items-left pointer-events-auto`}
+              <div
+                id="dropdownContainer"
+                className={`pl-[25%] w-full z-10 items-left`}
+              >
+                <ul
+                  id="dropdownList"
+                  className={`z-10 cursor-pointer absolute flex flex-col rounded-md  
+                   border-orange-800 bg-orange-500`}
+                  style={{ width: getDropdownWidthInPx() }}
+                  // className={`${
+                  //   categoryInputIsFocused ? "absolute" : "hidden"
+                  // } px-2 rounded-md border-orange-800 bg-orange-500 border-2`}
                 >
-                  <ul
-                    id="dropdownList"
-                    className={` z-10 cursor-pointer absolute  pointer-events-auto flex flex-col rounded-md w-[${getDropdownWidthInPx()}]  border-orange-800 bg-orange-500`}
-                    // className={`${
-                    //   categoryInputIsFocused ? "absolute" : "hidden"
-                    // } px-2 rounded-md border-orange-800 bg-orange-500 border-2`}
-                  >
-                    {categoriesToShow.map((cat) => {
-                      return (
-                        <li
-                          key={cat._id}
-                          value={cat.category}
-                          className="flex px-2 z-10 pointer-events-auto rounded-sm hover:bg-orange-700 text-center "
-                          // onMouseOver={(e) => {
-                          //   console.log(e.currentTarget.innerHTML);
-                          // }}
-                          onMouseDown={(e) => {
-                            console.log("MOUSEDOWN");
-                            console.log(e.currentTarget.innerHTML);
-                            setFoodItemCategory(e.currentTarget.innerHTML);
-                          }}
-                        >
-                          {cat.category}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              </>
+                  {categoriesToShow.map((cat) => {
+                    return (
+                      <li
+                        key={cat._id}
+                        value={cat.category}
+                        className="flex px-2 z-10 rounded-sm hover:bg-orange-700 text-center "
+                        onMouseDown={(e) => {
+                          setFoodItemCategory(e.currentTarget.innerHTML);
+                        }}
+                      >
+                        {cat.category}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             ) : (
               <></>
             )}
@@ -337,7 +291,8 @@ export default function ExpandedFoodItem({
           <Button className="w-full" onClick={(e) => handleCloseExpanded()}>
             Close
           </Button>
-          <Button className="w-full" onClick={(e) => handleCloseExpanded()}>
+          <button type="submit">SUBMIT</button>
+          <Button type="submit" className="w-full">
             Submit
           </Button>
         </div>
