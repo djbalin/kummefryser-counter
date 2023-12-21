@@ -18,7 +18,7 @@ import { Button } from "./button";
 import ExpandedFoodItem from "./forms/expanded_item";
 
 export default function FoodItem({ foodItem }: { foodItem: FoodItemType }) {
-  console.log("RENDER FOODITEM");
+  // console.log("RENDER FOODITEM");
 
   const [expanded, setExpanded] = useState<boolean>(false);
   // function handleClickEdit(event: any) {
