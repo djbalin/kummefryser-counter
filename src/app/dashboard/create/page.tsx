@@ -1,7 +1,7 @@
 "use server";
 import { getAllCategories, tryAddCategory } from "@/app/lib/db/dbhelper";
 import { CategorySchemaType } from "@/app/lib/db/dbschema";
-import CreateForm from "@/app/ui/create_form";
+import { CreateForm } from "@/app/ui/create_form";
 import { addCategory } from "@/app/lib/actions";
 import Link from "next/link";
 import { Button } from "@/app/ui/button";
@@ -20,7 +20,7 @@ export default async function Page() {
         <Button>Go back</Button>
       </Link>
       <CreateForm
-        categories={allCategories}
+        // categories={allCategories}
         handleAddNewCategory={addCategory}
         // getAllCategories={getAllCategories}
       ></CreateForm>
