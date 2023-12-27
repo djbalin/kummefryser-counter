@@ -10,52 +10,103 @@ import {
   Categories,
   CategorySchemaType,
 } from "@/app/lib/db/dbschema";
-import { CategorySchema } from "./dbschema";
 import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
 
+async function connectToDB() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI!);
+  } catch (error) {
+    console.error("Error connecting to database: ", error);
+    throw new Error("Failed to connect to database.");
+  }
+}
+
+export async function updateOne(updatedItem: FoodItemType) {
+  await connectToDB();
+  try {
+    await FreezerItems.findByIdAndUpdate(updatedItem._id, updatedItem);
+  } catch (error) {
+    console.error("Following error thrown while updating item: ", error);
+  }
+}
+
 export async function getAllCategories(): Promise<CategorySchemaType[]> {
-  await mongoose.connect(process.env.MONGODB_URI!);
-  const all: CategorySchemaType[] = await Categories.find();
-  return all;
+  await connectToDB();
+  console.log("call get all categories");
+
+  try {
+    const all: CategorySchemaType[] = await Categories.find();
+    return all;
+  } catch (error) {
+    console.error("Error fetching all categories: ", error);
+    throw new Error("Failed to connect to database.");
+  }
 }
 
 export async function tryAddCategory(category: CategorySchemaType) {
-  await mongoose.connect(process.env.MONGODB_URI!);
-  await Categories.updateOne(
-    { category: category.category },
-    { $setOnInsert: { category: category.category } },
-    { upsert: true }
-  );
+  await connectToDB();
+  try {
+    await Categories.updateOne(
+      { category: category.category },
+      { $setOnInsert: { category: category.category } },
+      { upsert: true }
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Database error. Could not update category: ${category}`);
+  }
 }
 
 export async function getAllSorted(): Promise<FoodItemType[]> {
-  await mongoose.connect(process.env.MONGODB_URI!);
-  const all: FoodItemType[] = await FreezerItems.find().sort({
-    expirationDate: 1,
-  });
-  return all;
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
+  await connectToDB();
+
+  try {
+    const all: FoodItemType[] = await FreezerItems.find().sort({
+      expirationDate: 1,
+    });
+    return all;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Database error while trying to retrieve all items");
+  }
 }
 
 export async function getAllFilteredByCategories(
   queryCategories: string[]
 ): Promise<FoodItemType[]> {
-  await mongoose.connect(process.env.MONGODB_URI!);
-  const filteredByCategories: FoodItemType[] = await FreezerItems.find({
-    category: queryCategories,
-  }).sort({
-    expirationDate: 1,
-  });
-  return filteredByCategories;
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
+  console.log("Call get al lfiltered by cats");
+
+  await connectToDB();
+  try {
+    const filteredByCategories: FoodItemType[] = await FreezerItems.find({
+      category: queryCategories,
+    }).sort({
+      expirationDate: 1,
+    });
+    return filteredByCategories;
+  } catch (error) {
+    console.log(error);
+
+    throw new Error("Failed to fetch items.");
+  }
 }
 
 export async function addOne(newItem: FoodItemType) {
-  await mongoose.connect(process.env.MONGODB_URI!);
-  const result = await FreezerItems.create(newItem);
-  console.log("RESULT" + result);
+  try {
+    await connectToDB();
+    const result = await FreezerItems.create(newItem);
+    console.log("RESULT" + result);
+  } catch (error) {
+    return {
+      message: `Database error. Failed to connect or to create this new item: ${newItem}`,
+    };
+  }
 }
 
 export default async function wipeAndPopulateDB() {
-  mongoose.connect(process.env.MONGODB_URI!);
+  await connectToDB();
   await mongoose.connection
     .collection("freezeritems")
     .drop()

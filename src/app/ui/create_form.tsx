@@ -47,12 +47,12 @@ export default function CreateForm({
   const [newCategory, setNewCategory] = useState<string>("");
   const [categoryHasBeenAdded, setCategoryHasBeenAdded] = useState(false);
   const [selectedLifespanInteger, setSelectedLifespanInteger] = useState("0");
-  const [expirationDate, setExpirationDate] = useState(new Date());
   const [selectedCategoryButton, setSelectedCategoryButton] =
     useState<HTMLElement | null>(null);
   const [selectedLifespanQualifier, setSelectedLifespanQualifier] =
     useState("30");
 
+  const [expirationDate, setExpirationDate] = useState(new Date());
   const [freezeDate, setFreezeDate] = useState(
     currentDate.toISOString().split("T")[0]
   );
@@ -130,6 +130,7 @@ export default function CreateForm({
     // "Did you mean 'fruit'? Already exists"
   }
 
+  const labelStyle = "block mb-1 text-xl";
   const inputStyle = "bg-slate-500 bg-opacity-40 pl-2 rounded-lg";
   const listStyle =
     "flex p-[0.1rem] w-full justify-center bg-slate-800 rounded-lg";
@@ -161,7 +162,7 @@ export default function CreateForm({
       className=" min-w-[40%] gap-y-8 border-2 p-4 bg-slate-800 bg-opacity-40 rounded-lg"
     >
       <div className="mb-4">
-        <label className="block mb-1" htmlFor="itemName">
+        <label className={`${labelStyle}`} htmlFor="itemName">
           Item name:
         </label>
         <div className="">
@@ -180,7 +181,7 @@ export default function CreateForm({
       </div>
 
       <div className="mb-4">
-        <label className="block mb-1" htmlFor="itemSize">
+        <label className={`${labelStyle}`} htmlFor="itemSize">
           Size:
         </label>
         <div className="">
@@ -199,7 +200,7 @@ export default function CreateForm({
         </div>
       </div>
 
-      <span className="block mb-1">Category:</span>
+      <span className={`${labelStyle}`}>Category:</span>
       <div id="categoryMenu" className="grid grid-cols-2 gap-x-2 gap-y-4 mb-8 ">
         <div
           id="categoriesContainer"
@@ -259,32 +260,27 @@ export default function CreateForm({
         </div>
       </div>
 
-      <div
-        id="dateContainer"
-        className="flex items-center justify-between mb-4"
-      >
-        <div className="flex items-center gap-x-4">
-          <label className="mb-1" htmlFor="freezeDate">
+      <div id="dateContainer" className="flex justify-between mb-4">
+        <div className="flex h-min items-center gap-x-4">
+          <label className={`${labelStyle} flex`} htmlFor="freezeDate">
             Freeze date:
           </label>
-          <div className="inline">
-            <input
-              className={`${inputStyle} h-10 placeholder:text-xs`}
-              // value={"Choose"}
-              type="date"
-              id="freezeDate"
-              name="freezeDate"
-              onChange={(e) => {
-                e.target.classList.remove(...invalidInputStyle);
-                setFreezeDate(e.target.value);
-                setFreezeDateIsSet(true);
-              }}
-            ></input>
-          </div>
+          <input
+            className={`${inputStyle} h-10 placeholder:text-xs`}
+            // value={"Choose"}
+            type="date"
+            id="freezeDate"
+            name="freezeDate"
+            onChange={(e) => {
+              e.target.classList.remove(...invalidInputStyle);
+              setFreezeDate(e.target.value);
+              setFreezeDateIsSet(true);
+            }}
+          ></input>
         </div>
         <div className="flex flex-col h-auto">
           <div className="flex items-center justify-center gap-x-4">
-            <label className="mb-1" htmlFor="lifespan">
+            <label className={`${labelStyle}`} htmlFor="lifespan">
               Lifespan:
             </label>
             <div className="flex h-10 ">
@@ -342,7 +338,7 @@ export default function CreateForm({
         </div>
       </div>
       <div className="block mb-4">
-        <label className="block mb-1" htmlFor="quantity">
+        <label className={`${labelStyle}`} htmlFor="quantity">
           Quantity:
         </label>
         <div className="">

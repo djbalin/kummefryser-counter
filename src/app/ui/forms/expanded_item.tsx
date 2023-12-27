@@ -3,17 +3,21 @@ import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
 import {
   formatDateToReadable,
   getDateDDMMYYYY,
+  getDateYYYYMMDD,
   getDaysLeftUntilDate,
 } from "../../lib/datehelper";
 import {
   MinusCircleIcon,
   PlusCircleIcon,
   ArrowPathIcon,
+  XMarkIcon,
+  XCircleIcon,
 } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { Button } from "../button";
 import { CategorySchemaType } from "@/app/lib/db/dbschema";
 import React from "react";
+import { updateItem } from "@/app/lib/actions";
 
 function createRegex(query: string): RegExp {
   const charArr: string[] = Array.from(query.toLowerCase());
@@ -44,8 +48,6 @@ export default function ExpandedFoodItem({
   foodItem: FoodItemType;
   handleCloseExpanded(): void;
 }) {
-  const rawDaysLeft = getDaysLeftUntilDate(foodItem.expirationDate);
-  const daysLeft = formatDateToReadable(rawDaysLeft);
   const originalLifespan = formatDateToReadable(foodItem.lifespanInDays);
 
   const [quantityValue, setQuantityValue] = useState(
@@ -56,15 +58,21 @@ export default function ExpandedFoodItem({
   const [foodItemCategory, setFoodItemCategory] = useState<string>(
     foodItem.category
   );
-
-  // const [dropdownWidth, setDropdownWidth] = useState("0px");
+  const [expirationDate, setExpirationDate] = useState(
+    getDateYYYYMMDD(foodItem.expirationDate)
+  );
+  const [freezeDate, setFreezeDate] = useState(
+    getDateYYYYMMDD(foodItem.freezeDate)
+  );
+  const rawDaysLeft = getDaysLeftUntilDate(new Date(expirationDate));
+  const daysLeft = formatDateToReadable(rawDaysLeft);
 
   const [categoryInputIsFocused, setCategoryInputIsFocused] = useState(false);
   const [categoriesToShow, setCategoriesToShow] =
     useState<CategorySchemaType[]>(categories);
-  let listColumnStyle = "flex flex-col h-full items-center justify-center ";
+  let listColumnStyle = "flex flex-col h-full ";
 
-  let expiryStyle = listColumnStyle + " rounded-xl ";
+  let expiryStyle = "flex flex-col items-center justify-center rounded-xl ";
 
   // OK
   if (rawDaysLeft > 60) {
@@ -77,6 +85,7 @@ export default function ExpandedFoodItem({
     expiryStyle += "bg-[hsla(0,100%,50%,1)]";
   }
 
+  const inputStyle = "bg-slate-500 bg-opacity-40 pl-2 rounded-lg";
   const textInputStyle =
     "text-xl text-left w-[75%] py-1 bg-inherit rounded-md border-2 border-orange-800 border-opacity-50 px-2";
 
@@ -105,199 +114,258 @@ export default function ExpandedFoodItem({
   }
 
   return (
-    <div className="flex flex-col py-4 justify-center bg-orange-500 items-center w-full h-48  bg-opacity-20 rounded-md">
+    <div className="flex flex-col p-4 justify-center bg-orange-500 items-center w-full h-64  bg-opacity-20 rounded-md">
+      <div className="flex w-full justify-end">
+        {" "}
+        <button
+          className="w-10 h-10 text-red-500 bg-black rounded-xl"
+          onClick={handleCloseExpanded}
+        >
+          <XMarkIcon className=""></XMarkIcon>
+        </button>
+        {/* <Button className="w-auto" onClick={(e) => handleCloseExpanded()}>
+          X
+        </Button> */}
+      </div>
       <form
-        className="w-full flex  h-full items-center justify-center"
+        className="w-full flex flex-col h-full items-center justify-center"
         action={async (formData: FormData) => {
           const ob = Object.fromEntries(formData);
           console.log(ob);
+          await updateItem(formData);
         }}
       >
-        <div
-          className={
-            "flex flex-row h-full items-center justify-center text-lg firstColumn"
-          }
-        >
-          <div className="flex flex-col gap-y-2">
-            <span className="">Quantity:</span>
+        <div className="flex flex-row w-full">
+          <div
+            className={
+              "flex flex-row h-full items-center justify-center text-lg w-[23%]"
+            }
+          >
+            <div className="flex flex-col gap-y-2">
+              <span className="">Quantity:</span>
 
-            <div className="flex flex-row">
-              <input
-                id="itemQuantity"
-                name="itemQuantity"
-                className="flex mr-2 w-12 h-12 text-center bg-orange-500 border-opacity-30 px-2"
-                type="text"
-                value={quantityValue}
-                onChange={(e) => setQuantityValue(e.target.value)}
-              ></input>
+              <div className="flex flex-row">
+                <input
+                  id="itemQuantity"
+                  name="itemQuantity"
+                  className="flex mr-2 w-12 h-12 text-center bg-orange-500 border-opacity-30"
+                  type="text"
+                  value={quantityValue}
+                  onChange={(e) => setQuantityValue(e.target.value)}
+                ></input>
 
-              <div className="flex flex-col w-7">
+                <div className="flex flex-col w-7">
+                  <button
+                    className=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setQuantityValue((old) => (parseInt(old) + 1).toString());
+                    }}
+                  >
+                    <PlusCircleIcon />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      console.log("clicked minus");
+
+                      setQuantityValue((old) => (parseInt(old) - 1).toString());
+                    }}
+                  >
+                    <MinusCircleIcon></MinusCircleIcon>
+                  </button>
+                </div>
                 <button
-                  className=""
+                  className="w-6"
                   onClick={(e) => {
                     e.preventDefault();
-                    setQuantityValue((old) => (parseInt(old) + 1).toString());
+                    setQuantityValue(foodItem.quantity.toString());
                   }}
                 >
-                  <PlusCircleIcon />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    console.log("clicked minus");
-
-                    setQuantityValue((old) => (parseInt(old) - 1).toString());
-                  }}
-                >
-                  <MinusCircleIcon></MinusCircleIcon>
+                  <ArrowPathIcon />
                 </button>
               </div>
-              <button
-                className="w-6"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setQuantityValue(foodItem.quantity.toString());
-                }}
-              >
-                <ArrowPathIcon />
-              </button>
             </div>
           </div>
-        </div>
-        <div
-          className={
-            listColumnStyle +
-            " secondColumn items-center gap-y-2 bg-inherit justify-center"
-          }
-        >
-          <div className="flex w-full px-8 items-center justify-center flex-row">
-            <label className="w-[25%] text-sm" htmlFor="nameInput">
-              Item name:
-            </label>
-            <input
-              name="itemName"
-              className={`${textInputStyle}`}
-              type="text"
-              id="nameInput"
-              value={foodItemName}
-              onChange={(e) => {
-                setFoodItemName(e.target.value);
-              }}
-            />
-          </div>
-
-          <div className="flex items-center justify-center w-full px-8">
-            <label className="w-[25%] text-sm" htmlFor="volumeInput">
-              Volume:
-            </label>
-            <input
-              name="itemVolume"
-              id="volumeInput"
-              className={`${textInputStyle}`}
-              // className="text-xl w-[75%] text-left bg-inherit"
-              type="text"
-              value={foodItemVolume}
-              onChange={(e) => {
-                setFoodItemVolume(e.target.value);
-              }}
-            />
-          </div>
           <div
-            id="parentOfDropdown"
-            className="flex flex-col items-center justify-center w-full px-8"
+            className={
+              listColumnStyle +
+              " w-[34%] items-center gap-y-2 bg-inherit justify-center"
+            }
           >
-            <div className="flex w-full flex-row">
-              <label className="w-[25%] text-sm" htmlFor="categoryInput">
-                Category:
+            <div className="flex w-full items-center justify-center flex-row">
+              <label
+                className="w-[25%] text-sm text-right pr-4"
+                htmlFor="nameInput"
+              >
+                Item name:
               </label>
-              {/* <select className={`${textInputStyle} appearance-none`}> */}
-
               <input
-                id="categoryInput"
-                name="itemCategory"
+                name="itemName"
                 className={`${textInputStyle}`}
-                // className="text-xl px-2 w-[75%] border-2 bg-inherit text-left"
                 type="text"
-                onFocus={(e: React.FocusEvent) => {
-                  handleFocusCategory(e);
-                  // setCategoryIsFocused(true);
-                }}
-                onBlur={(e: React.FocusEvent) => {
-                  handleBlurCategory(e);
-                }}
-                value={foodItemCategory}
+                id="nameInput"
+                value={foodItemName}
                 onChange={(e) => {
-                  handleTypeCategory(e.target.value);
+                  setFoodItemName(e.target.value);
                 }}
               />
             </div>
 
-            {categoryInputIsFocused ? (
-              <div
-                id="dropdownContainer"
-                className={`pl-[25%] w-full z-10 items-left`}
+            <div className="flex items-center justify-center w-full">
+              <label
+                className="w-[25%] text-sm text-right pr-4"
+                htmlFor="volumeInput"
               >
-                <ul
-                  id="dropdownList"
-                  className={`z-10 cursor-pointer absolute flex flex-col rounded-md  
-                   border-orange-800 bg-orange-500`}
-                  style={{ width: getDropdownWidthInPx() }}
-                  // className={`${
-                  //   categoryInputIsFocused ? "absolute" : "hidden"
-                  // } px-2 rounded-md border-orange-800 bg-orange-500 border-2`}
+                Volume:
+              </label>
+              <input
+                name="itemVolume"
+                id="volumeInput"
+                className={`${textInputStyle}`}
+                // className="text-xl w-[75%] text-left bg-inherit"
+                type="text"
+                value={foodItemVolume}
+                onChange={(e) => {
+                  setFoodItemVolume(e.target.value);
+                }}
+              />
+            </div>
+            <div
+              id="parentOfDropdown"
+              className="flex flex-col items-center justify-center w-full"
+            >
+              <div className="flex w-full items-center flex-row">
+                <label
+                  className="w-[25%] text-sm text-right pr-4"
+                  htmlFor="categoryInput"
                 >
-                  {categoriesToShow.map((cat) => {
-                    return (
-                      <li
-                        key={cat._id}
-                        value={cat.category}
-                        className="flex px-2 z-10 rounded-sm hover:bg-orange-700 text-center "
-                        onMouseDown={(e) => {
-                          setFoodItemCategory(e.currentTarget.innerHTML);
-                        }}
-                      >
-                        {cat.category}
-                      </li>
-                    );
-                  })}
-                </ul>
+                  Category:
+                </label>
+                {/* <select className={`${textInputStyle} appearance-none`}> */}
+
+                <input
+                  id="categoryInput"
+                  name="itemCategory"
+                  className={`${textInputStyle}`}
+                  // className="text-xl px-2 w-[75%] border-2 bg-inherit text-left"
+                  type="text"
+                  onFocus={(e: React.FocusEvent) => {
+                    handleFocusCategory(e);
+                    // setCategoryIsFocused(true);
+                  }}
+                  onBlur={(e: React.FocusEvent) => {
+                    handleBlurCategory(e);
+                  }}
+                  value={foodItemCategory}
+                  onChange={(e) => {
+                    handleTypeCategory(e.target.value);
+                  }}
+                />
               </div>
-            ) : (
-              <></>
-            )}
+
+              {categoryInputIsFocused ? (
+                <div
+                  id="dropdownContainer"
+                  className={`pl-[25%] w-full z-10 items-left`}
+                >
+                  <ul
+                    id="dropdownList"
+                    className={`z-10 cursor-pointer absolute flex flex-col rounded-md  
+                   border-orange-800 bg-orange-500`}
+                    style={{ width: getDropdownWidthInPx() }}
+                    // className={`${
+                    //   categoryInputIsFocused ? "absolute" : "hidden"
+                    // } px-2 rounded-md border-orange-800 bg-orange-500 border-2`}
+                  >
+                    {categoriesToShow.map((cat) => {
+                      return (
+                        <li
+                          key={cat._id}
+                          value={cat.category}
+                          className="flex px-2 z-10 rounded-sm hover:bg-orange-700 text-center "
+                          onMouseDown={(e) => {
+                            setFoodItemCategory(e.currentTarget.innerHTML);
+                          }}
+                        >
+                          {cat.category}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
-        </div>
-        <div className={listColumnStyle + " thirdColumn"}>
-          <span
-            className={expiryStyle + " w-32 h-[50%] bg-opacity-100 text-lg"}
+          <div
+            className={listColumnStyle + "items-center justify-center w-[23%]"}
           >
-            {daysLeft}
-          </span>
-        </div>
-        <div className={listColumnStyle + " fourthColumn"}>
-          <span className="text-lg">
-            {getDateDDMMYYYY(foodItem.expirationDate, true)}
-          </span>
-          <span className="opacity-70 text-sm">
-            {getDateDDMMYYYY(foodItem.freezeDate, true)}
-          </span>
+            <span
+              className={expiryStyle + " w-32 h-[50%] bg-opacity-100 text-lg"}
+            >
+              {daysLeft}
+            </span>
+          </div>
+          <div
+            className={
+              listColumnStyle + " justify-center items-end w-[23%]  gap-y-4"
+            }
+          >
+            <div className="flex flex-row w-full items-center">
+              <label
+                className=" text-sm text-right pr-4"
+                htmlFor="expirationDate"
+              >
+                Expires:
+              </label>
+              <input
+                className={`${inputStyle} h-10 border-2 w-min border-white border-opacity-50 placeholder:text-xs`}
+                // value={"Choose"}
+                type="date"
+                id="expirationDate"
+                name="expirationDate"
+                // value={foodItem.expirationDate.toString()}
+                value={expirationDate}
+                onChange={(e) => {
+                  // e.target.classList.remove(...invalidInputStyle);
+                  setExpirationDate(e.target.value);
+                  // setFreezeDateIsSet(true);
+                }}
+              />
+            </div>
+            <div className="flex flex-row w-full items-center">
+              <label className=" text-sm text-right pr-4" htmlFor="freezeDate">
+                Frozen:
+              </label>
+              <input
+                className={`${inputStyle} h-10 w-min border-2 border-white border-opacity-50 placeholder:text-xs`}
+                // value={"Choose"}
+                type="date"
+                id="freezeDate"
+                name="freezeDate"
+                // value={foodItem.expirationDate.toString()}
+                value={freezeDate}
+                onChange={(e) => {
+                  // e.target.classList.remove(...invalidInputStyle);
+                  setFreezeDate(e.target.value);
+                  // setFreezeDateIsSet(true);
+                }}
+              />
+            </div>
+          </div>
         </div>
         <div
           className={
-            listColumnStyle +
-            " fifthColumn flex gap-y-2 items-center align-center border-2 border-opacity-20 border-white"
+            "flex flex-row justify-end w-full gap-y-2 items-center mt-4 gap-x-10 align-center border-2 border-opacity-5 border-white"
           }
         >
-          <Button className="w-full" onClick={(e) => handleCloseExpanded()}>
-            Close
-          </Button>
-          <button type="submit">SUBMIT</button>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-48">
             Submit
           </Button>
         </div>
       </form>
-      {/* <button onClick={(e) => handleCloseExpanded()}>Close</button> */}
     </div>
   );
 }

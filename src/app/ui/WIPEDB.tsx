@@ -6,16 +6,14 @@ export default function WipeDB({
   wipeDBAndRefresh(): Promise<void>;
 }) {
   async function handleClick() {
-    console.log("WIPING :)");
-
     await wipeDBAndRefresh();
   }
   return (
     <button
       onClick={(e) => handleClick()}
-      className="border-4 items-center justify-center px-4 flex my-4 rounded-md border-purple-500 border-opacity-70"
+      className="border-4 items-center h-16 w-auto justify-center px-4 flex my-4 rounded-md border-purple-500 border-opacity-70"
     >
-      RESTART DB
+      RESET DB
     </button>
   );
 }

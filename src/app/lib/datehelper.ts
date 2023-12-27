@@ -31,6 +31,9 @@ export function getDateDDMMYYYY(date: Date, verbose: boolean) {
     return `${paddedDate}-${paddedMonth}-${date.getFullYear()}`;
   }
 }
+export function getDateYYYYMMDD(date: Date) {
+  return date.toISOString().split("T")[0];
+}
 
 export function formatDateToReadable(lifespanInDays: number) {
   if (lifespanInDays > 60) {

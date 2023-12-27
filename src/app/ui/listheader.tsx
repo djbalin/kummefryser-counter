@@ -11,7 +11,7 @@ export default function ListHeader() {
       </div>
       <div className="flex thirdColumn justify-center">Time left</div>
       {/* <div className="flex fatColumn justify-center">Date</div> */}
-      <div className="flex flex-col fourthColumn items-center">
+      <div className="flex flex-col justify-center fourthColumn items-center">
         <span>Expiration date</span>
         <span className="lower">Freeze date</span>
       </div>

@@ -30,7 +30,7 @@ export default async function ItemList({
   );
 
   return (
-    <div className="flex flex-col border-2 px-4 border-opacity-30 py-2  lg:min-w-[75%] gap-y-2">
+    <div className="flex flex-col border-2 sm:px-4 border-opacity-30 sm:py-2 w-full gap-y-2">
       <ListHeader></ListHeader>
       {foodItemsParsed.map((foodItem) => {
         // foodItem = JSON.parse(JSON.stringify(foodItem));

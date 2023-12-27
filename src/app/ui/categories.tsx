@@ -1,7 +1,9 @@
 "use client";
-import { CategorySchemaType } from "../lib/db/dbschema";
+// import { CategorySchemaType } from "../lib/db/dbschema";
+import { CategorySchemaType } from "@/app/lib/db/dbschema";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import clsx from "clsx";
+import { useState } from "react";
 
 // const selected = "bg-green-700";
 
@@ -21,12 +23,29 @@ export default function Categories({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  // const [selectedCategories,setSelectedCategories] = useState<string[]>([])
+  // const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
+  //   new Set(["b", "a"])
+  // );
   console.log("RENDER CATEGORIES");
 
   function handleClickCategory(event: React.MouseEvent<HTMLDivElement>) {
     // toggleSelected(event.currentTarget);
+    console.log("Category click");
+
     const categoryText = event.currentTarget.innerHTML;
     const params = new URLSearchParams(searchParams);
+
+    // if (selectedCategories.has(categoryText)) {
+    //   // setSelectedCategories((prev) => new Set(prev.delete(categoryText)));
+    //   selectedCategories.delete(categoryText);
+    //   params.delete("category", categoryText);
+    // } else {
+    //   // setSelectedCategories((prev) => new Set(prev.add(categoryText)));
+    //   selectedCategories.add(categoryText);
+    //   params.append("category", categoryText);
+    // }
+
     if (params.has("category", categoryText)) {
       params.delete("category", categoryText);
     } else {
@@ -39,9 +58,13 @@ export default function Categories({
 
   return (
     <>
-      <div className="flex gap-x-8 min-w-[75%] items-center mb-2">
+      <div className="flex  gap-x-8 items-center mb-2">
+        {/* {Array.from(selectedCategories).map((cat) => {
+          return <p key={cat}>{cat}</p>;
+        })} */}
+        {/* {selectedCategories.forEach(cat => {return <p>{cat}</p>})} */}
         <span className="text-2xl w-[30%]">Filter by categories:</span>
-        <div className="flex gap-x-2 w-[70%]">
+        <div className="flex flex-grow gap-x-2 w-full">
           {allCategories.map((cat) => {
             return (
               <div
