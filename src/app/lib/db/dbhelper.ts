@@ -105,7 +105,7 @@ export async function addOne(newItem: FoodItemType) {
   }
 }
 
-export default async function wipeAndPopulateDB() {
+export async function wipeAndPopulateDB() {
   await connectToDB();
   await mongoose.connection
     .collection("freezeritems")
@@ -142,18 +142,13 @@ export default async function wipeAndPopulateDB() {
       } catch (error) {
         console.log("Error");
         console.log(error);
+      } finally {
       }
     });
   }
   console.log("END OF WIPING");
-}
-
-export async function wipeDBAndRefresh() {
-  console.log("b4 wipeandpop");
-  await wipeAndPopulateDB();
-  console.log("b4 revalid");
-
+  // Ghetto solution for now: To attempt to ensure that database population has occurred successfully before redirecting to the dashboard.
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   revalidatePath("/dashboard");
-  console.log("b4 redirect");
   redirect("/dashboard");
 }

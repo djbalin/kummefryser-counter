@@ -56,6 +56,10 @@ export function CreateForm({
   const [selectedLifespanQualifier, setSelectedLifespanQualifier] =
     useState("30");
 
+  const [manuallyAddedCategories, setManuallyAddedCatgories] = useState<
+    string[]
+  >([]);
+
   const [expirationDate, setExpirationDate] = useState(new Date());
   const [freezeDate, setFreezeDate] = useState(
     currentDate.toISOString().split("T")[0]
@@ -80,13 +84,22 @@ export function CreateForm({
     setSelectedCategoryButton(clickedButton);
   }
 
+  // async function handleClickNewCategory(e: React.MouseEvent<HTMLElement>) {
+  //   e.preventDefault();
+  //   await handleAddNewCategory(newCategory);
+  //   if (categoryHasBeenAdded == false) {
+  //     setCategoryHasBeenAdded(true);
+  //   }
+  //   categories.push({ _id: generateId(10), category: newCategory });
+  //   setNewCategory("");
+  // }
   async function handleClickNewCategory(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
     await handleAddNewCategory(newCategory);
     if (categoryHasBeenAdded == false) {
       setCategoryHasBeenAdded(true);
     }
-    categories.push({ _id: "abc", category: newCategory });
+    categories.push({ _id: generateId(10), category: newCategory });
     setNewCategory("");
   }
 
@@ -172,7 +185,7 @@ export function CreateForm({
         <div className="">
           <input
             className={`${inputStyle} h-10 w-full placeholder:text-xs`}
-            placeholder="smør, flæskesteg, ærter ..."
+            placeholder="tomato sauce, dhal, rye bread ..."
             type="text"
             id="itemName"
             name="itemName"

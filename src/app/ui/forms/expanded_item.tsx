@@ -11,7 +11,6 @@ import {
   PlusCircleIcon,
   ArrowPathIcon,
   XMarkIcon,
-  XCircleIcon,
 } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { Button } from "../button";
@@ -94,6 +93,9 @@ export default function ExpandedFoodItem({
   }
   function handleBlurCategory(event: React.FocusEvent) {
     setCategoryInputIsFocused(false);
+    if (foodItemCategory.length === 0) {
+      setFoodItemCategory(foodItem.category);
+    }
   }
 
   function getDropdownWidthInPx(): string {
@@ -362,7 +364,7 @@ export default function ExpandedFoodItem({
           }
         >
           <Button type="submit" className="w-48">
-            Submit
+            Submit (SOON)
           </Button>
         </div>
       </form>

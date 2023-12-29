@@ -5,25 +5,26 @@ import { CategorySchemaType } from "../lib/db/dbschema";
 import { getAllCategories } from "../lib/db/dbhelper";
 import Categories from "../ui/categories";
 import WipeDB from "../ui/WIPEDB";
-import wipeDBAndRefresh from "../lib/db/dbhelper";
+import { wipeAndPopulateDB } from "../lib/db/dbhelper";
 import { Button } from "../ui/button";
 import { Suspense } from "react";
 
 export default async function Page({
   searchParams,
-}: // allCategories,
-{
+}: {
   searchParams?: {
     category?: string[];
   };
-  // allCategories: CategorySchemaType[];
 }) {
   const categories: string[] = searchParams?.category || [];
   const allCategories: CategorySchemaType[] = await getAllCategories();
   console.log("DASHBOARD render");
+  console.log("Got the following categories:");
+  console.log(allCategories);
 
   return (
     <div className="flex flex-col sm:min-w-[95%] md:min-w-[90%] lg:min-w-[75%] items-center ">
+      {/* <Suspense fallback={<p>Loading...</p>}> */}
       <span className="text-3xl">Hvad har jeg i fryseren :)</span>
       <div className="flex flex-row justify-between">
         <Categories
@@ -42,7 +43,8 @@ export default async function Page({
       <Suspense fallback={<p>Loading...</p>}>
         <ItemList categoriesToShow={categories}></ItemList>
       </Suspense>
-      <WipeDB wipeDBAndRefresh={wipeDBAndRefresh}></WipeDB>
+      <WipeDB wipeDBAndRefresh={wipeAndPopulateDB}></WipeDB>
+      {/* </Suspense> */}
     </div>
   );
 }
