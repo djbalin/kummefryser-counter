@@ -1,12 +1,11 @@
 "use server";
 import Link from "next/link";
-import ItemList from "../ui/itemlist";
+import ItemList from "@/app/ui/item_list";
 import { CategorySchemaType } from "../lib/db/dbschema";
 import { getAllCategories } from "../lib/db/dbhelper";
 import Categories from "../ui/categories";
 import WipeDB from "../ui/WIPEDB";
 import { wipeAndPopulateDB } from "../lib/db/dbhelper";
-import { Button } from "../ui/button";
 import { Suspense } from "react";
 
 export default async function Page({

@@ -3,7 +3,7 @@ import { getAllSorted, getAllFilteredByCategories } from "../lib/db/dbhelper";
 import { CategorySchemaType } from "../lib/db/dbschema";
 import { FoodItemType } from "../types_schemas/typesAndSchemas";
 import FoodItem from "./food_item";
-import ListHeader from "./listheader";
+import ListHeader from "./list_header";
 
 export default async function ItemList({
   categoriesToShow,
