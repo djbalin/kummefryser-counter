@@ -17,9 +17,10 @@ export default async function Page({
   };
 }) {
   const categories: string[] = searchParams?.category || [];
-  let allCategories: CategorySchemaType[] = [];
-  await getAllCategories().then((res) => (allCategories = res.toSorted()));
+  // let allCategories: CategorySchemaType[] = [];
+  // await getAllCategories().then((res) => (allCategories = res.toSorted()));
 
+  const allCategories: CategorySchemaType[] = await getAllCategories();
   if (allCategories.length === 0) {
     console.log("Database is empty. Populating with placeholder data");
     await wipeAndPopulateDB();
