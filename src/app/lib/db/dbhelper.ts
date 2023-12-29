@@ -1,6 +1,6 @@
 "use server";
 import "server-only";
-
+import { unstable_noStore as noStore } from "next/cache";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { placeholderData } from "@/app/lib/placeholderData";
@@ -31,6 +31,7 @@ export async function updateOne(updatedItem: FoodItemType) {
 }
 
 export async function getAllCategories(): Promise<CategorySchemaType[]> {
+  noStore();
   await connectToDB();
   console.log("call get all categories");
 
@@ -58,6 +59,7 @@ export async function tryAddCategory(category: CategorySchemaType) {
 }
 
 export async function getAllSorted(): Promise<FoodItemType[]> {
+  noStore();
   // await new Promise((resolve) => setTimeout(resolve, 3000));
   await connectToDB();
 
@@ -75,6 +77,7 @@ export async function getAllSorted(): Promise<FoodItemType[]> {
 export async function getAllFilteredByCategories(
   queryCategories: string[]
 ): Promise<FoodItemType[]> {
+  noStore();
   // await new Promise((resolve) => setTimeout(resolve, 3000));
   console.log("Call get al lfiltered by cats");
 
