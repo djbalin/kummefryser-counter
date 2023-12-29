@@ -26,13 +26,13 @@ export const placeholderData: FoodItemType[] = [
   },
   {
     _id: generateId(10),
-    name: "Menneskehjerte",
+    name: "Tomatsuppe",
     category: Category.COOKED_DISH,
     freezeDate: new Date("2023-10-18"),
     expirationDate: addDaysToDate(new Date("2023-11-18"), 90),
     lifespanInDays: 90,
-    volume: "ca. 1kg",
-    quantity: 1,
+    volume: "plastikbeholder",
+    quantity: 2,
   },
   {
     _id: generateId(10),
