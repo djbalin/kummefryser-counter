@@ -18,9 +18,12 @@ export default async function Page({
 }) {
   const categories: string[] = searchParams?.category || [];
   const allCategories: CategorySchemaType[] = await getAllCategories();
+  if (allCategories.length === 0) {
+    console.log("Database is empty. Populating with placeholder data");
+
+    await wipeAndPopulateDB();
+  }
   console.log("DASHBOARD render");
-  console.log("Got the following categories:");
-  console.log(allCategories);
 
   return (
     <div className="flex flex-col sm:min-w-[95%] md:min-w-[90%] lg:min-w-[75%] items-center ">

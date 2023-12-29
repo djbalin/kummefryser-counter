@@ -107,14 +107,22 @@ export async function addOne(newItem: FoodItemType) {
 
 export async function wipeAndPopulateDB() {
   await connectToDB();
-  await mongoose.connection
-    .collection("freezeritems")
-    .drop()
-    .then((res) => console.log("REMOVED FREEZERITEMS: " + res));
-  await mongoose.connection
-    .collection("categories")
-    .drop()
-    .then((res) => console.log("REMOVED CATEGORIES: " + res));
+  try {
+    const itemRes = await mongoose.connection
+      .collection("freezeritems")
+      .deleteMany({});
+    console.log("REMOVED FREEZERITEMS: ");
+    console.log(itemRes);
+
+    const catRes = await mongoose.connection
+      .collection("categories")
+      .deleteMany({});
+    console.log("REMOVED categories: ");
+    console.log(catRes);
+  } catch (error) {
+    console.error("Error deleting contents of database");
+    console.error(error);
+  }
   let numDocs: number = await FreezerItems.countDocuments();
   if (numDocs > 0) {
     console.log("already data inside, this many docs: " + numDocs);
@@ -125,30 +133,31 @@ export async function wipeAndPopulateDB() {
     for (const d of placeholderData) {
       console.log(d);
     }
-
-    placeholderData.map(async (item) => {
-      console.log("adding item w lifespan " + item.lifespanInDays);
-      try {
-        await FreezerItems.create(item);
-        await Categories.updateOne(
-          { category: item.category },
-          { $setOnInsert: { category: item.category } },
-          { upsert: true }
-        ).then((upsert) =>
-          console.log(
-            `Inserted ${upsert.upsertedCount} new categories for category ${item.category}`
-          )
-        );
-      } catch (error) {
-        console.log("Error");
-        console.log(error);
-      } finally {
-      }
-    });
+    await Promise.all(
+      placeholderData.map(async (item) => {
+        console.log("adding item w lifespan " + item.lifespanInDays);
+        try {
+          await FreezerItems.create(item);
+          await Categories.updateOne(
+            { category: item.category },
+            { $setOnInsert: { category: item.category } },
+            { upsert: true }
+          ).then((upsert) =>
+            console.log(
+              `Inserted ${upsert.upsertedCount} new categories for category ${item.category}`
+            )
+          );
+        } catch (error) {
+          console.log("Error");
+          console.log(error);
+        } finally {
+        }
+      })
+    );
   }
   console.log("END OF WIPING");
   // Ghetto solution for now: To attempt to ensure that database population has occurred successfully before redirecting to the dashboard.
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
   revalidatePath("/dashboard");
   redirect("/dashboard");
 }

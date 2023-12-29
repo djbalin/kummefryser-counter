@@ -16,8 +16,8 @@ export default async function ItemList({
   } else {
     foodItems = await getAllFilteredByCategories(categoriesToShow);
   }
-  console.log("Got the following fooditems in itemlist:");
-  console.log(foodItems);
+  console.log("No. of fooditems in foodlist:" + foodItems.length);
+  // console.log(foodItems);
 
   const foodItemsSerialized = await JSON.stringify(foodItems);
   const foodItemsParsed: FoodItemType[] = JSON.parse(
