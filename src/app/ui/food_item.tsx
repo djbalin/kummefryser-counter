@@ -16,8 +16,15 @@ import { PencilIcon } from "@heroicons/react/20/solid";
 import { SetStateAction, useState } from "react";
 import { Button } from "./button";
 import ExpandedFoodItem from "./forms/expanded_item";
+import { CategorySchemaType } from "../lib/db/dbschema";
 
-export default function FoodItem({ foodItem }: { foodItem: FoodItemType }) {
+export default function FoodItem({
+  foodItem,
+  allCategories,
+}: {
+  foodItem: FoodItemType;
+  allCategories: CategorySchemaType[];
+}) {
   // console.log("RENDER FOODITEM");
 
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -43,6 +50,7 @@ export default function FoodItem({ foodItem }: { foodItem: FoodItemType }) {
         <ExpandedFoodItem
           foodItem={foodItem}
           handleCloseExpanded={handleCloseExpanded}
+          allCategories={allCategories}
         ></ExpandedFoodItem>
       ) : (
         <CollapsedFoodItem foodItem={foodItem}></CollapsedFoodItem>

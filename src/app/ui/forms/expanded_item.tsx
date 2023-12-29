@@ -23,15 +23,6 @@ function createRegex(query: string): RegExp {
   return new RegExp(".*" + charArr.join(".*") + ".*");
 }
 
-const categories: CategorySchemaType[] = [
-  { category: "fruit", _id: "absbd" },
-  { category: "meat", _id: "ase" },
-  { category: "dairy", _id: "abdsbd" },
-  { category: "cooked dish", _id: "abswewbd" },
-  { category: "meaty dish", _id: "abeswaweewbd" },
-  { category: "vegetables", _id: "abaweswewbd" },
-  { category: "frozen fruit", _id: "absweweewewbd" },
-];
 function getMatchingCategories(
   categories: CategorySchemaType[],
   query: string
@@ -43,9 +34,11 @@ function getMatchingCategories(
 export default function ExpandedFoodItem({
   foodItem,
   handleCloseExpanded,
+  allCategories,
 }: {
   foodItem: FoodItemType;
   handleCloseExpanded(): void;
+  allCategories: CategorySchemaType[];
 }) {
   const originalLifespan = formatDateToReadable(foodItem.lifespanInDays);
 
@@ -68,7 +61,7 @@ export default function ExpandedFoodItem({
 
   const [categoryInputIsFocused, setCategoryInputIsFocused] = useState(false);
   const [categoriesToShow, setCategoriesToShow] =
-    useState<CategorySchemaType[]>(categories);
+    useState<CategorySchemaType[]>(allCategories);
   let listColumnStyle = "flex flex-col h-full ";
 
   let expiryStyle = "flex flex-col items-center justify-center rounded-xl ";
@@ -112,7 +105,7 @@ export default function ExpandedFoodItem({
   function handleTypeCategory(value: string) {
     setFoodItemCategory(value);
 
-    setCategoriesToShow(getMatchingCategories(categories, value));
+    setCategoriesToShow(getMatchingCategories(allCategories, value));
   }
 
   return (
@@ -150,7 +143,7 @@ export default function ExpandedFoodItem({
                 <input
                   id="itemQuantity"
                   name="itemQuantity"
-                  className="flex mr-2 w-12 h-12 text-center bg-orange-500 border-opacity-30"
+                  className="flex mr-2 w-12 h-12 text-center bg-orange-500 "
                   type="text"
                   value={quantityValue}
                   onChange={(e) => setQuantityValue(e.target.value)}
@@ -305,7 +298,9 @@ export default function ExpandedFoodItem({
             className={listColumnStyle + "items-center justify-center w-[23%]"}
           >
             <span
-              className={expiryStyle + " w-32 h-[50%] bg-opacity-100 text-lg"}
+              className={
+                expiryStyle + " w-[70%] h-[50%] bg-opacity-100 text-lg"
+              }
             >
               {daysLeft}
             </span>
@@ -360,7 +355,7 @@ export default function ExpandedFoodItem({
         </div>
         <div
           className={
-            "flex flex-row justify-end w-full gap-y-2 items-center mt-4 gap-x-10 align-center border-2 border-opacity-5 border-white"
+            "flex flex-row justify-end w-full gap-y-2 items-center mt-4 gap-x-10 align-center"
           }
         >
           <Button type="submit" className="w-48">

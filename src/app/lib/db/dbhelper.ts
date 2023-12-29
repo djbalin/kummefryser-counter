@@ -32,6 +32,7 @@ export async function updateOne(updatedItem: FoodItemType) {
 
 export async function getAllCategories(): Promise<CategorySchemaType[]> {
   noStore();
+  // await new Promise((resolve) => setTimeout(resolve, 1500));
   await connectToDB();
   console.log("call get all categories");
 
@@ -60,7 +61,8 @@ export async function tryAddCategory(category: CategorySchemaType) {
 
 export async function getAllSorted(): Promise<FoodItemType[]> {
   noStore();
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+
   await connectToDB();
 
   try {

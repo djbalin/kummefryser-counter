@@ -1,13 +1,16 @@
 "use server";
 import { getAllSorted, getAllFilteredByCategories } from "../lib/db/dbhelper";
+import { CategorySchemaType } from "../lib/db/dbschema";
 import { FoodItemType } from "../types_schemas/typesAndSchemas";
 import FoodItem from "./food_item";
 import ListHeader from "./listheader";
 
 export default async function ItemList({
   categoriesToShow,
+  allCategories,
 }: {
   categoriesToShow: string[];
+  allCategories: CategorySchemaType[];
 }) {
   // export default async function ItemList() {
   let foodItems: FoodItemType[];
@@ -47,6 +50,7 @@ export default async function ItemList({
             key={foodItem._id}
             // key={idx}
             foodItem={foodItem}
+            allCategories={allCategories}
           ></FoodItem>
         );
       })}

@@ -58,13 +58,9 @@ export default function Categories({
 
   return (
     <>
-      <div className="flex  gap-x-8 items-center mb-2">
-        {/* {Array.from(selectedCategories).map((cat) => {
-          return <p key={cat}>{cat}</p>;
-        })} */}
-        {/* {selectedCategories.forEach(cat => {return <p>{cat}</p>})} */}
+      <div className="flex w-full items-center mb-2">
         <span className="text-2xl w-[30%]">Filter by categories:</span>
-        <div className="flex flex-grow gap-x-2 w-full">
+        <div className="flex flex-grow w-[70%] items-center justify-center pr-16 gap-x-2">
           {allCategories.map((cat) => {
             return (
               <div
@@ -73,10 +69,6 @@ export default function Categories({
                     .getAll("category")
                     .includes(cat.category as string),
                 })}
-                //   key={cat._id}
-                // TODO: Remove this once locally-seeded db is no longer there
-                //   key={cat._id != null ? cat._id.toString() : parseInt(makeid(10))}
-                // key={makeid(10)}
                 key={cat._id}
                 onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                   handleClickCategory(e);
@@ -90,19 +82,4 @@ export default function Categories({
       </div>
     </>
   );
-}
-
-// TODO:
-// Can delete this. Its just to generate some key for locally-seeded database items (which do not have ._id field)
-function makeid(length: number) {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
 }
