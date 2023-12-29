@@ -1,7 +1,7 @@
 "use server";
 // "use client";
 
-import wipeAndPopulateDB, { getAllSorted } from "@/app/lib/db/dbhelper";
+import { wipeAndPopulateDB, getAllSorted } from "@/app/lib/db/dbhelper";
 import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
 
 export default async function Page() {
