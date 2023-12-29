@@ -20,7 +20,7 @@ export default async function Page() {
         <Button>Go back</Button>
       </Link>
       <CreateForm
-        // categories={allCategories}
+        categories={JSON.parse(JSON.stringify(allCategories))}
         handleAddNewCategory={addCategory}
         // getAllCategories={getAllCategories}
       ></CreateForm>

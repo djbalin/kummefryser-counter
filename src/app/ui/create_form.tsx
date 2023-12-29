@@ -6,7 +6,8 @@ import React from "react";
 import { createItem } from "@/app/lib/actions";
 import { CategorySchemaType } from "../lib/db/dbschema";
 import { generateId } from "../lib/tools";
-import { getAllCategories } from "../lib/db/dbhelper";
+// import { getAllCategories } from "../lib/db/dbhelper";
+import { getAllCategories } from "../lib/db/dbhelptest";
 
 // import { Category } from "../types/fooditem";
 
@@ -25,11 +26,11 @@ const invalidInputStyle = ["border-red-500", "border-2"];
 //   handleAddNewCategory(categoryName: string): Promise<void>;
 // }) {
 
-export async function CreateForm({
-  // categories,
+export function CreateForm({
+  categories,
   handleAddNewCategory,
 }: {
-  // categories: CategorySchemaType[];
+  categories: CategorySchemaType[];
   handleAddNewCategory(categoryName: string): Promise<void>;
 }) {
   // export default function CreateForm({
@@ -38,7 +39,7 @@ export async function CreateForm({
   //   categories: CategorySchemaType[];
   // }) {
 
-  const categories: CategorySchemaType[] = await getAllCategories();
+  // const categories: CategorySchemaType[] = await getAllCategories();
 
   const currentDate = new Date();
   console.log("FORM RENDERED");
