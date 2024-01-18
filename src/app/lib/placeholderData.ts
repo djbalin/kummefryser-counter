@@ -17,7 +17,7 @@ export const placeholderData: FoodItemType[] = [
   {
     _id: generateId(10),
     name: "Ærter",
-    category: Category.VEGETABLES,
+    category: Category.VEGETABLE,
     freezeDate: new Date("2023-12-05"),
     expirationDate: addDaysToDate(new Date("2023-12-05"), 150),
     lifespanInDays: 150,

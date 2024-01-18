@@ -32,16 +32,16 @@ export async function updateOne(updatedItem: FoodItemType) {
 
 export async function getAllCategories(): Promise<CategorySchemaType[]> {
   noStore();
-  // await new Promise((resolve) => setTimeout(resolve, 1500));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   await connectToDB();
-  console.log("call get all categories");
+  console.log("call get all ee categories");
 
   try {
     const all: CategorySchemaType[] = await Categories.find();
     return all;
   } catch (error) {
     console.error("Error fetching all categories: ", error);
-    throw new Error("Failed to connect to database.");
+    throw new Error("Error fetching all categories.");
   }
 }
 

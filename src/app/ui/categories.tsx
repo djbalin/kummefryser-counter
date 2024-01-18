@@ -1,9 +1,7 @@
 "use client";
-// import { CategorySchemaType } from "../lib/db/dbschema";
 import { CategorySchemaType } from "@/app/lib/db/dbschema";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import clsx from "clsx";
-import { useState } from "react";
 
 // const selected = "bg-green-700";
 
@@ -20,6 +18,7 @@ export default function Categories({
 }: {
   allCategories: CategorySchemaType[];
 }) {
+  // unstable_noStore();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -30,7 +29,6 @@ export default function Categories({
   console.log("RENDER CATEGORIES");
 
   function handleClickCategory(event: React.MouseEvent<HTMLDivElement>) {
-    // toggleSelected(event.currentTarget);
     console.log("Category click");
 
     const categoryText = event.currentTarget.innerHTML;

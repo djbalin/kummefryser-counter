@@ -5,7 +5,7 @@ export enum Category {
   DAIRY = "Dairy",
   FRUIT = "Fruit",
   COOKED_DISH = "Cooked dish",
-  VEGETABLES = "Vegetables",
+  VEGETABLE = "Vegetable",
 }
 
 export const FoodItemSchema = z.object({
