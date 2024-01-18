@@ -22,7 +22,7 @@ export default function WipeDB({
     <div className="">
       {loading && (
         <div className="absolute flex items-center cursor-not-allowed justify-center top-0 left-0 w-full h-[150vh] bg-[rgba(255,255,255,0.5)]">
-          <p className="absolute flex text-2xl rounded-[10rem] justify-center items-center py-auto  w-[20%] h-[20%] bg-black opacity-100">
+          <p className="absolute flex text-2xl rounded-[10rem] justify-center items-center py-auto  w-[20%] h-[10%] bg-black opacity-100">
             Resetting database...
           </p>
         </div>

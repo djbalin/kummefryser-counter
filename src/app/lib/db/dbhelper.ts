@@ -31,7 +31,7 @@ export async function updateOne(updatedItem: FoodItemType) {
 }
 
 export async function getAllCategories(): Promise<CategorySchemaType[]> {
-  noStore();
+  // noStore();
   await new Promise((resolve) => setTimeout(resolve, 1000));
   await connectToDB();
   console.log("call get all ee categories");
@@ -60,7 +60,7 @@ export async function tryAddCategory(category: CategorySchemaType) {
 }
 
 export async function getAllSorted(): Promise<FoodItemType[]> {
-  noStore();
+  // noStore();
   // await new Promise((resolve) => setTimeout(resolve, 1000));
 
   await connectToDB();
@@ -79,7 +79,7 @@ export async function getAllSorted(): Promise<FoodItemType[]> {
 export async function getAllFilteredByCategories(
   queryCategories: string[]
 ): Promise<FoodItemType[]> {
-  noStore();
+  // noStore();
   // await new Promise((resolve) => setTimeout(resolve, 3000));
   console.log("Call get al lfiltered by cats");
 

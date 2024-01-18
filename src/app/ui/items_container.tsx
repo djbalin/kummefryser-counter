@@ -1,9 +1,9 @@
 "use server";
-import { Suspense, useContext } from "react";
 import {
   getAllSorted,
   getAllFilteredByCategories,
   getAllCategories,
+  wipeAndPopulateDB,
 } from "../lib/db/dbhelper";
 import { FoodItemType } from "../types_schemas/typesAndSchemas";
 import FoodItem from "./food_item";
@@ -11,6 +11,7 @@ import ListHeader from "./list_header";
 import CategoriesHolder from "./categories_holder";
 import CategoriesContextProvider from "../contexts/categories-context";
 import ItemList from "./item_list";
+import WipeDB from "./WIPEDB";
 //
 // URL SEARCH PARAM APPROACH
 //
@@ -61,6 +62,7 @@ export default async function ItemsContainer() {
         foodItemsParsed={foodItemsParsed}
         allCategories={JSON.parse(JSON.stringify(allCategories))}
       ></ItemList>
+      <WipeDB wipeDBAndRefresh={wipeAndPopulateDB}></WipeDB>
     </>
   );
 }
