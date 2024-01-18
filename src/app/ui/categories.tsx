@@ -2,57 +2,66 @@
 import { CategorySchemaType } from "@/app/lib/db/dbschema";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import clsx from "clsx";
+import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { useCategoryContext } from "../contexts/categories-context";
+const selected = "bg-green-700";
 
-// const selected = "bg-green-700";
+function toggleSelected(element: HTMLDivElement) {
+  if (element.classList.contains(selected)) {
+    element.classList.remove(selected);
+  } else {
+    element.classList.add(selected);
+  }
+}
 
-// function toggleSelected(element: HTMLDivElement) {
-//   if (element.classList.contains(selected)) {
-//     element.classList.remove(selected);
-//   } else {
-//     element.classList.add(selected);
-//   }
-// }
+// const selectedCategoriesContext = createContext();
 
 export default function Categories({
   allCategories,
-}: {
+}: // setCategoriesToShow,
+{
   allCategories: CategorySchemaType[];
 }) {
-  // unstable_noStore();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
-  // const [selectedCategories,setSelectedCategories] = useState<string[]>([])
-  // const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
-  //   new Set(["b", "a"])
-  // );
-  console.log("RENDER CATEGORIES");
+  //
+  //
+  // SEARCH PARAMS APPROACH
+  //
+  //
+  // const searchParams = useSearchParams();
+  // const pathname = usePathname();
+  // const { replace } = useRouter();
+
+  const { categoryContext, setCategoryContext } = useCategoryContext();
+
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  // console.log("RENDER CATEGORIES");
 
   function handleClickCategory(event: React.MouseEvent<HTMLDivElement>) {
-    console.log("Category click");
+    // console.log("Category click");
 
     const categoryText = event.currentTarget.innerHTML;
-    const params = new URLSearchParams(searchParams);
 
-    // if (selectedCategories.has(categoryText)) {
-    //   // setSelectedCategories((prev) => new Set(prev.delete(categoryText)));
-    //   selectedCategories.delete(categoryText);
+    if (selectedCategories.includes(categoryText)) {
+      setSelectedCategories((prev) =>
+        prev.filter((element) => element !== categoryText)
+      );
+    } else {
+      setSelectedCategories((prev) => [...prev, categoryText]);
+    }
+
+    // const params = new URLSearchParams(searchParams);
+    // if (params.has("category", categoryText)) {
     //   params.delete("category", categoryText);
     // } else {
-    //   // setSelectedCategories((prev) => new Set(prev.add(categoryText)));
-    //   selectedCategories.add(categoryText);
     //   params.append("category", categoryText);
     // }
-
-    if (params.has("category", categoryText)) {
-      params.delete("category", categoryText);
-    } else {
-      params.append("category", categoryText);
-    }
-    // event.currentTarget.blur();
-    replace(`${pathname}?${params.toString()}`);
+    // replace(`${pathname}?${params.toString()}`);
   }
-  //   console.log(allCategories);
+
+  useEffect(() => {
+    setCategoryContext(selectedCategories);
+  }, [selectedCategories, setCategoryContext]);
 
   return (
     <>
@@ -61,11 +70,25 @@ export default function Categories({
         <div className="flex flex-grow w-[70%] items-center justify-center pr-16 gap-x-2">
           {allCategories.map((cat) => {
             return (
+              // SEARCHPARAMS APPROACH
+              // SEARCHPARAMS APPROACH
+              // SEARCHPARAMS APPROACH
+              // <div
+              //   className={clsx("border-2 rounded-xl p-2 cursor-pointer", {
+              //     "bg-purple-600": searchParams
+              //       .getAll("category")
+              //       .includes(cat.category as string),
+              //   })}
+              //   key={cat._id}
+              //   onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+              //     handleClickCategory(e);
+              //   }}
+              // >
+              //   {cat.category}
+              // </div>
               <div
                 className={clsx("border-2 rounded-xl p-2 cursor-pointer", {
-                  "bg-purple-600": searchParams
-                    .getAll("category")
-                    .includes(cat.category as string),
+                  "bg-purple-600": selectedCategories.includes(cat.category),
                 })}
                 key={cat._id}
                 onClick={(e: React.MouseEvent<HTMLDivElement>) => {

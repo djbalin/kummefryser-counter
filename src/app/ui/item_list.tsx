@@ -1,66 +1,41 @@
-"use server";
-import { Suspense } from "react";
-import {
-  getAllSorted,
-  getAllFilteredByCategories,
-  getAllCategories,
-} from "../lib/db/dbhelper";
-import { FoodItemType } from "../types_schemas/typesAndSchemas";
+"use client";
 import FoodItem from "./food_item";
 import ListHeader from "./list_header";
-import CategoriesHolder from "./categories_holder";
+import { useCategoryContext } from "../contexts/categories-context";
+import { FoodItemSchema, FoodItemType } from "../types_schemas/typesAndSchemas";
+import { CategorySchemaType } from "../lib/db/dbschema";
 
-export default async function ItemList({
-  searchParams,
-}: // categoriesToShow,
-{
-  searchParams?: {
-    category?: string[];
-  };
-  // categoriesToShow: string[];
+export default function ItemList({
+  foodItemsParsed,
+  allCategories,
+}: {
+  foodItemsParsed: FoodItemType[];
+  allCategories: CategorySchemaType[];
 }) {
-  const categories: string[] = searchParams?.category || [];
-  // export default async function ItemList() {
-  const allCategories = await getAllCategories();
-  let foodItems: FoodItemType[];
-  // console.log();
-  if (categories.length > 0) {
-    foodItems = await getAllFilteredByCategories(categories);
-  } else {
-    foodItems = await getAllSorted();
-  }
-  console.log("No. of fooditems in foodlist:" + foodItems.length);
+  const { categoryContext, setCategoryContext } = useCategoryContext();
 
-  const foodItemsSerialized = await JSON.stringify(foodItems);
-  const foodItemsParsed: FoodItemType[] = JSON.parse(
-    foodItemsSerialized,
-    (key, value) => {
-      if (key.endsWith("Date")) {
-        return new Date(value);
-      } else {
-        return value;
-      }
-    }
-  );
+  let foodItemsToShow: FoodItemType[];
+  if (categoryContext.length > 0 && categoryContext[0] != "") {
+    foodItemsToShow = foodItemsParsed.filter((el) =>
+      categoryContext.includes(el.category)
+    );
+  } else {
+    foodItemsToShow = foodItemsParsed;
+  }
 
   return (
-    <>
-      <CategoriesHolder
-        allCategories={JSON.parse(JSON.stringify(allCategories))}
-      ></CategoriesHolder>
-      <div className="flex flex-col border-2 sm:px-4 border-opacity-30 sm:py-2 w-full gap-y-2">
-        <ListHeader></ListHeader>
-        {foodItemsParsed.map((foodItem) => {
-          return (
-            <FoodItem
-              key={foodItem._id}
-              // key={idx}
-              foodItem={foodItem}
-              allCategories={JSON.parse(JSON.stringify(allCategories))}
-            ></FoodItem>
-          );
-        })}
-      </div>
-    </>
+    <div className="flex flex-col border-2 sm:px-4 border-opacity-30 sm:py-2 w-full gap-y-2">
+      <ListHeader></ListHeader>
+      {foodItemsToShow.map((foodItem) => {
+        return (
+          <FoodItem
+            key={foodItem._id}
+            // key={idx}
+            foodItem={foodItem}
+            allCategories={JSON.parse(JSON.stringify(allCategories))}
+          ></FoodItem>
+        );
+      })}
+    </div>
   );
 }
