@@ -23,7 +23,7 @@ export default async function Page({
   // const allCategories: CategorySchemaType[] = await getAllCategories();
   // if (allCategories.length === 0) {
   //   console.log("Database is empty. Populating with placeholder data");
-  //   await wipeAndPopulateDB();
+  //   await wipeAndPopulateDB();s
   // }
   console.log("DASHBOARD render");
 
