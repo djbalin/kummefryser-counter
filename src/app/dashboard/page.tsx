@@ -29,7 +29,7 @@ export default async function Page({
   return (
     <div className="flex flex-col sm:min-w-[95%] md:min-w-[90%] lg:min-w-[75%] items-center ">
       {/* <Suspense fallback={<p>Loading...</p>}> */}
-      <span className="text-3xl pb-10">Hvad har jeg i fryseren CHANGE :)</span>
+      <span className="text-3xl pb-10">Hvad har jeg i fryseren :)</span>
       {/* <Suspense
         fallback={
           <div className="h-[90vh] flex">
