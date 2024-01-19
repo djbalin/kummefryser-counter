@@ -32,7 +32,7 @@ export async function updateOne(updatedItem: FoodItemType) {
 
 export async function getAllCategories(): Promise<CategorySchemaType[]> {
   // noStore();
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
   await connectToDB();
   console.log("call get all ee categories");
 

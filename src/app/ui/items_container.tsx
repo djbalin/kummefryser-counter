@@ -55,13 +55,24 @@ export default async function ItemsContainer() {
 
   return (
     <>
-      <CategoriesHolder
-        allCategories={JSON.parse(JSON.stringify(allCategories))}
-      ></CategoriesHolder>
-      <ItemList
-        foodItemsParsed={foodItemsParsed}
-        allCategories={JSON.parse(JSON.stringify(allCategories))}
-      ></ItemList>
+      {foodItems.length == 0 ? (
+        <span className="text-xl text-red-500">
+          The database seems empty, please fill it with example data by clicking
+          the button below:
+        </span>
+      ) : (
+        <>
+          <CategoriesHolder
+            allCategories={JSON.parse(JSON.stringify(allCategories))}
+          ></CategoriesHolder>
+          <ItemList
+            foodItemsParsed={foodItemsParsed}
+            allCategories={JSON.parse(JSON.stringify(allCategories))}
+          ></ItemList>
+        </>
+      )}
+
+      {/* if (foodItems.length == 0){<span>Seems empty</span>} */}
       <WipeDB wipeDBAndRefresh={wipeAndPopulateDB}></WipeDB>
     </>
   );
