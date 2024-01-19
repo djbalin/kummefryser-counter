@@ -51,14 +51,14 @@ export async function addCategory(categoryName: string) {
 
 export async function updateItem(formData: FormData) {
   console.log("Updating new item: ");
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   const ob = Object.fromEntries(formData.entries());
   console.log(ob);
 
   const freezeDate = new Date(formData.get("freezeDate") as string);
   const expirationDate = new Date(formData.get("expirationDate") as string);
   const lifeSpanInDays = getDaysBetweenDates(freezeDate, expirationDate);
-  console.log("LIFESPAN IN DAYS: ", lifeSpanInDays);
+  // console.log("LIFESPAN IN DAYS: ", lifeSpanInDays);
 
   try {
     const item = FoodItemSchema.parse({
