@@ -4,10 +4,10 @@ import { useRef, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { createItem } from "@/app/lib/actions";
-import { CategorySchemaType } from "../lib/db/dbschema";
-import { generateId } from "../lib/tools";
+import { CategorySchemaType } from "../../lib/db/dbschema";
+import { generateId } from "../../lib/tools";
 // import { getAllCategories } from "../lib/db/dbhelper";
-import { getAllCategories } from "../lib/db/dbhelptest";
+import { getAllCategories } from "../../lib/db/dbhelptest";
 
 // import { Category } from "../types/fooditem";
 

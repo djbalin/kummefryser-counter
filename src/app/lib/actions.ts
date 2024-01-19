@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { FoodItemSchema } from "../types_schemas/typesAndSchemas";
-import { addDaysToDate } from "./datehelper";
+import { addDaysToDate, getDaysBetweenDates } from "./datehelper";
 import { addOne, tryAddCategory, updateOne } from "./db/dbhelper";
 import { redirect } from "next/navigation";
 import { generateId } from "./tools";
@@ -53,18 +53,26 @@ export async function updateItem(formData: FormData) {
   console.log("Updating new item: ");
   const ob = Object.fromEntries(formData.entries());
   console.log(ob);
+
+  const freezeDate = new Date(formData.get("freezeDate") as string);
+  const expirationDate = new Date(formData.get("expirationDate") as string);
+  const lifeSpanInDays = getDaysBetweenDates(freezeDate, expirationDate);
+  console.log("LIFESPAN IN DAYS: ", lifeSpanInDays);
+
   try {
     const item = FoodItemSchema.parse({
       name: formData.get("itemName"),
-      category: formData.get("category"),
-      freezeDate: new Date(formData.get("freezeDate") as string),
-      expirationDate: addDaysToDate(
-        new Date(formData.get("freezeDate") as string),
-        parseInt(formData.get("lifespanInDays") as string)
-      ),
-      lifespanInDays: parseInt(formData.get("lifespanInDays") as string),
-      volume: formData.get("itemSize"),
-      quantity: parseInt(formData.get("quantity") as string),
+      category: formData.get("itemCategory"),
+      freezeDate: freezeDate,
+      expirationDate: expirationDate,
+      // expirationDate: addDaysToDate(
+      //   new Date(formData.get("freezeDate") as string),
+      //   parseInt(formData.get("lifespanInDays") as string)
+      // ),
+      lifespanInDays: lifeSpanInDays,
+      // lifespanInDays: parseInt(formData.get("lifespanInDays") as string),
+      volume: formData.get("itemVolume"),
+      quantity: parseInt(formData.get("itemQuantity") as string),
       _id: formData.get("_id"),
     });
     try {

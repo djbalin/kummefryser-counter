@@ -18,6 +18,12 @@ export function addDaysToDate(startDate: Date, lifespanInDays: number): Date {
   return endDate;
 }
 
+export function getDaysBetweenDates(beginDate: Date, endDate: Date): number {
+  const diffInTime = endDate.getTime() - beginDate.getTime();
+  const diffInDays = Math.round(diffInTime / (1000 * 3600 * 24));
+  return diffInDays;
+}
+
 export function getDateDDMMYYYY(date: Date, verbose: boolean) {
   const paddedDate: string =
     date.getDate() < 10 ? "0" + date.getDate() : `${date.getDate()}`;

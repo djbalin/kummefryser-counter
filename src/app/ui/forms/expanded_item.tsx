@@ -125,9 +125,11 @@ export default function ExpandedFoodItem({
       <form
         className="w-full flex flex-col h-full items-center justify-center"
         action={async (formData: FormData) => {
+          formData.append("_id", foodItem._id);
           const ob = Object.fromEntries(formData);
           console.log(ob);
           await updateItem(formData);
+          handleCloseExpanded();
         }}
       >
         <div className="flex flex-row w-full">
@@ -359,7 +361,7 @@ export default function ExpandedFoodItem({
           }
         >
           <Button type="submit" className="w-48">
-            Submit (SOON)
+            Save changes
           </Button>
         </div>
       </form>
