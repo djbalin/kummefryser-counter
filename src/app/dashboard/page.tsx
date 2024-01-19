@@ -9,7 +9,7 @@ export default async function Page() {
   return (
     <CategoriesContextProvider>
       <div className="flex flex-col sm:min-w-[95%] md:min-w-[90%] lg:min-w-[75%] items-center ">
-        <span className="text-3xl pb-10">Hvad har jeg i fryseren :)</span>
+        <span className="text-3xl pb-10">What&apos;s in my freezer :)</span>
         <Suspense fallback={<p>LOADING ITEMS</p>}>
           <ItemsContainer></ItemsContainer>
         </Suspense>
