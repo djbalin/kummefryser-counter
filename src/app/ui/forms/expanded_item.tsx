@@ -56,6 +56,7 @@ export default function ExpandedFoodItem({
   const [freezeDate, setFreezeDate] = useState(
     getDateYYYYMMDD(foodItem.freezeDate)
   );
+
   const rawDaysLeft = getDaysLeftUntilDate(new Date(expirationDate));
   const daysLeft = formatDateToReadable(rawDaysLeft);
 
@@ -107,9 +108,34 @@ export default function ExpandedFoodItem({
 
     setCategoriesToShow(getMatchingCategories(allCategories, value));
   }
+  console.log("Render exp item");
+
+  async function handleUpdateItem(formData: FormData) {
+    const overlay = document.getElementById("overlay");
+    overlay?.classList.remove("invisible");
+    overlay?.classList.add("visible");
+    formData.append("_id", foodItem._id);
+    // const ob = Object.fromEntries(formData);
+    // console.log(ob);
+    await updateItem(formData);
+    handleCloseExpanded();
+    overlay?.classList.remove("visible");
+    overlay?.classList.add("invisible");
+  }
 
   return (
-    <div className="flex flex-col p-4 justify-center bg-orange-500 items-center w-full h-64  bg-opacity-20 rounded-md">
+    <div
+      id="expanded_item_container"
+      className="flex flex-col p-4 justify-center bg-orange-500 items-center w-full h-64  bg-opacity-20 rounded-md"
+    >
+      <div
+        id="overlay"
+        className="absolute invisible flex items-center cursor-not-allowed justify-center top-0 left-0 w-full h-[150vh] bg-slate-700 bg-opacity-50"
+      >
+        <p className="absolute flex text-2xl rounded-[10rem] justify-center items-center py-auto  w-[20%] h-[10%] bg-black z-10">
+          Saving item...
+        </p>
+      </div>
       <div className="flex w-full justify-end">
         {" "}
         <button
@@ -124,13 +150,7 @@ export default function ExpandedFoodItem({
       </div>
       <form
         className="w-full flex flex-col h-full items-center justify-center"
-        action={async (formData: FormData) => {
-          formData.append("_id", foodItem._id);
-          const ob = Object.fromEntries(formData);
-          console.log(ob);
-          await updateItem(formData);
-          handleCloseExpanded();
-        }}
+        action={async (formData) => handleUpdateItem(formData)}
       >
         <div className="flex flex-row w-full">
           <div

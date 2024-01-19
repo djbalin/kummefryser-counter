@@ -51,6 +51,7 @@ export async function addCategory(categoryName: string) {
 
 export async function updateItem(formData: FormData) {
   console.log("Updating new item: ");
+  await new Promise((resolve) => setTimeout(resolve, 3000));
   const ob = Object.fromEntries(formData.entries());
   console.log(ob);
 
