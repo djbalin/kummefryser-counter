@@ -11,7 +11,7 @@ export default function Login() {
       <Button onClick={(e) => googleSignIn()}>LOGIN</Button>
       <Button onClick={(e) => logOut()}>LOG OUT</Button>
       {user ? (
-        <span>Logged in as: {user.displayName}</span>
+        <span>Logged in as user: {user.displayName}</span>
       ) : (
         <span>Not logged in</span>
       )}
