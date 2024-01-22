@@ -1,6 +1,5 @@
 "use server";
 import "server-only";
-import { unstable_noStore as noStore } from "next/cache";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { placeholderData } from "@/app/lib/placeholderData";
@@ -11,6 +10,22 @@ import {
   CategorySchemaType,
 } from "@/app/lib/db/dbschema";
 import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
+import { db_firebase } from "@/app/lib/firebase/firebase";
+import { addDoc, collection, doc, setDoc, Timestamp } from "firebase/firestore";
+
+export async function addItemFirebase(newItem: FoodItemType) {
+  try {
+    // const docRef = await addDoc(collection(db_firebase, "items"), newItem);
+    const docRef = doc(collection(db_firebase, "items"));
+    console.log(docRef);
+
+    await setDoc(docRef, { ...newItem, id: docRef.id });
+
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+}
 
 async function connectToDB() {
   try {

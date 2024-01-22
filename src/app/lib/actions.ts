@@ -2,7 +2,12 @@
 import { revalidatePath } from "next/cache";
 import { FoodItemSchema } from "../types_schemas/typesAndSchemas";
 import { addDaysToDate, getDaysBetweenDates } from "./datehelper";
-import { addOne, tryAddCategory, updateOne } from "./db/dbhelper";
+import {
+  addItemFirebase,
+  addOne,
+  tryAddCategory,
+  updateOne,
+} from "./db/dbhelper";
 import { redirect } from "next/navigation";
 import { generateId } from "./tools";
 
@@ -26,6 +31,7 @@ export async function createItem(formData: FormData) {
     });
     try {
       await addOne(item);
+      await addItemFirebase(item);
       await tryAddCategory(item);
     } catch (error) {
       return {

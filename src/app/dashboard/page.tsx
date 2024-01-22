@@ -7,13 +7,13 @@ export default async function Page() {
   console.log("DASHBOARD render");
 
   return (
-    <CategoriesContextProvider>
-      <div className="flex flex-col sm:min-w-[95%] md:min-w-[90%] lg:min-w-[75%] items-center ">
-        <span className="text-3xl pb-10">What&apos;s in my freezer :)</span>
+    <div className="flex flex-col sm:min-w-[95%] md:min-w-[90%] lg:min-w-[75%] items-center ">
+      <span className="text-3xl pb-10">What&apos;s in my freezer :)</span>
+      <CategoriesContextProvider>
         <Suspense fallback={<p>LOADING ITEMS</p>}>
           <ItemsContainer></ItemsContainer>
         </Suspense>
-      </div>
-    </CategoriesContextProvider>
+      </CategoriesContextProvider>
+    </div>
   );
 }
