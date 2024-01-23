@@ -14,6 +14,9 @@ import {
 import { getFirestore } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { deleteCookie, setCookie } from "cookies-next";
+import { redirect } from "next/navigation";
+import path from "path";
+import { revalidatePath } from "next/cache";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -33,6 +36,7 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
+auth.useDeviceLanguage();
 
 onAuthStateChanged(auth, (user) => {
   console.log(auth.currentUser);
@@ -46,6 +50,8 @@ onAuthStateChanged(auth, (user) => {
   } else {
     console.log("In auth state changed. User is signed out");
     deleteCookie("USER");
+    // revalidatePath("/dashboard");
+    // redirect("/");
   }
 });
 // setPersistence(auth, browserLocalPersistence);

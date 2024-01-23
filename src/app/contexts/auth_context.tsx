@@ -10,7 +10,7 @@ import {
   GoogleAuthProvider,
   User,
 } from "firebase/auth";
-
+import { useRouter } from "next/navigation";
 import { auth } from "../lib/firebase/firebase";
 
 // type AuthContext = {
@@ -20,7 +20,8 @@ import { auth } from "../lib/firebase/firebase";
 // };
 type AuthContext = {
   user: User | null;
-  googleSignIn: () => void;
+  // googleSignIn: () => void;
+  googleSignIn: (redirectPath: string) => void;
   logOut: () => void;
   //   setCategoryContext: React.Dispatch<React.SetStateAction<string[]>>;
 };
@@ -33,14 +34,22 @@ export function AuthContextProvider({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
+  // function googleSignIn(): void {
 
-  function googleSignIn(): void {
+  async function googleSignIn(redirectPath: string): Promise<void> {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+    if (result.user) {
+      router.push(redirectPath);
+    }
   }
 
-  function logOut() {
-    signOut(auth);
+  async function logOut() {
+    console.log("LOGGIN OUT:)");
+
+    await signOut(auth);
+    router.push("/");
   }
 
   useEffect(() => {

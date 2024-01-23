@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { useAuthContext } from "../contexts/auth_context";
 import { Button } from "./button";
-import { db_firebase } from "../lib/firebase/firebase";
+import { auth, db_firebase } from "../lib/firebase/firebase";
 import { FoodItemType } from "../types_schemas/typesAndSchemas";
 import { Auth, getAuth } from "firebase/auth";
 import { middleware } from "../../middleware";
@@ -19,7 +19,8 @@ import { useEffect } from "react";
 
 // import user
 
-export default function Login() {
+export default function Login({ redirectPath }: { redirectPath: string }) {
+  // export default function Login() {
   const { user, googleSignIn, logOut } = useAuthContext();
   const cUser = getAuth().currentUser;
   console.log("login render");
@@ -30,8 +31,10 @@ export default function Login() {
   //   setSignInCookie(user!);
   // }, [user]);
 
-  function handleSignIn() {
-    googleSignIn();
+  function handleSignIn(redirectPath: string) {
+    if (!auth.currentUser) {
+      googleSignIn(redirectPath);
+    }
     // const signInUser =  googleSignIn();
     // await setSignInCookie(signInUser);
     // if (user) {
@@ -89,8 +92,11 @@ export default function Login() {
 
   return (
     <div className="">
-      <Button onClick={(e) => handleSignIn()}>LOGIN</Button>
-      <Button onClick={(e) => logOut()}>LOG OUT</Button>
+      {auth.currentUser ? (
+        <Button onClick={(e) => logOut()}>LOG OUT</Button>
+      ) : (
+        <Button onClick={(e) => handleSignIn(redirectPath)}>LOGIN</Button>
+      )}
       <Button onClick={(e) => fakeAddData()}>Fake add data</Button>
       <Button onClick={(e) => getDocsOfUser()}>Get docs of user</Button>
       <Button onClick={() => cookiesTest()}>cookietest</Button>

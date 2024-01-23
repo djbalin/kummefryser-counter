@@ -31,8 +31,15 @@ export function middleware(request: NextRequest) {
   // } else {
   //   console.log("USER NO");
   // }
+  if (request.nextUrl.pathname == "/") {
+    console.log("middleware for homepage");
+    if (userLoggedIn) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  }
 
   if (request.nextUrl.pathname.startsWith("/dashboard")) {
+    console.log("middleware for dashboard");
     if (userLoggedIn) {
       return response;
     } else {
@@ -47,6 +54,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
+
   if (request.nextUrl.pathname.startsWith("/profile")) {
     console.log("middleware for profile");
 
@@ -60,5 +68,5 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   //   matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
-  matcher: ["/dashboard", "/profile", "/login"],
+  matcher: ["/", "/dashboard", "/profile", "/login"],
 };

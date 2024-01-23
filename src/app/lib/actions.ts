@@ -11,8 +11,14 @@ import {
 import { redirect } from "next/navigation";
 import { generateId } from "./tools";
 import { cookies } from "next/headers";
-import { User, UserCredential } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  User,
+  UserCredential,
+  signInWithPopup,
+} from "firebase/auth";
 import { NextResponse } from "next/server";
+import { auth } from "./firebase/firebase";
 
 export async function createItem(formData: FormData) {
   console.log("Creating new item: ");
@@ -114,6 +120,14 @@ export async function updateItem(formData: FormData) {
 //   });
 //   // Redirect or handle the response after setting the cookie
 // }
+
+export async function handleSignIn(redirectPath: string) {
+  const provider = new GoogleAuthProvider();
+  const signInResult = await signInWithPopup(auth, provider);
+  if (signInResult.user) {
+    redirect(redirectPath);
+  }
+}
 
 export async function cookiesTest() {
   "use server";
