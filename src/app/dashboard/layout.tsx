@@ -1,4 +1,5 @@
 import { AuthContextProvider, useAuthContext } from "../contexts/auth_context";
+import { Button } from "../ui/button";
 import Login from "../ui/login";
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -1,7 +1,11 @@
+// "use server";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuthContext } from "./contexts/auth_context";
 import Login from "./ui/login";
+import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { Button } from "./ui/button";
 
 export default function Home() {
   return (

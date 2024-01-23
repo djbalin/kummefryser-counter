@@ -10,6 +10,9 @@ import {
 } from "./db/dbhelper";
 import { redirect } from "next/navigation";
 import { generateId } from "./tools";
+import { cookies } from "next/headers";
+import { User, UserCredential } from "firebase/auth";
+import { NextResponse } from "next/server";
 
 export async function createItem(formData: FormData) {
   console.log("Creating new item: ");
@@ -99,4 +102,21 @@ export async function updateItem(formData: FormData) {
 
   revalidatePath("/dashboard");
   // redirect("/dashboard");
+}
+
+// export async function handleLogin(sessionData) {
+//   const encryptedSessionData = encrypt(sessionData); // Encrypt your session data
+//   cookies().set("session", encryptedSessionData, {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     maxAge: 60 * 60 * 24 * 7, // One week
+//     path: "/",
+//   });
+//   // Redirect or handle the response after setting the cookie
+// }
+
+export async function cookiesTest() {
+  "use server";
+  cookies().set("cookietest", "true");
+  // log(request.cookies.size);
 }

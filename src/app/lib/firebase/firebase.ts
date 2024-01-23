@@ -1,12 +1,19 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  getAuth,
+  onAuthStateChanged,
+  setPersistence,
+} from "firebase/auth";
 
 // import { getAnalytics } from "firebase/analytics";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore } from "firebase/firestore";
+import { cookies } from "next/headers";
+import { deleteCookie, setCookie } from "cookies-next";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -19,15 +26,6 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAS3Gr88TDa99-Uq1kt0tUpODe3866dWCI",
-//   authDomain: "kummefryser-dab7f.firebaseapp.com",
-//   projectId: "kummefryser-dab7f",
-//   storageBucket: "kummefryser-dab7f.appspot.com",
-//   messagingSenderId: "890441632236",
-//   appId: "1:890441632236:web:f8fc3ea4abda6aea4458c9",
-//   measurementId: "G-94Q4RSJMFV",
-// };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -35,5 +33,21 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+  console.log(auth.currentUser);
+  console.log(user);
+
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/auth.user
+    console.log("In auth state changed. User is signed in");
+    setCookie("USER", "heyy");
+  } else {
+    console.log("In auth state changed. User is signed out");
+    deleteCookie("USER");
+  }
+});
+// setPersistence(auth, browserLocalPersistence);
 
 export const db_firebase = getFirestore(app);

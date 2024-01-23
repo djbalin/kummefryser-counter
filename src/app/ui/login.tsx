@@ -12,12 +12,35 @@ import { Button } from "./button";
 import { db_firebase } from "../lib/firebase/firebase";
 import { FoodItemType } from "../types_schemas/typesAndSchemas";
 import { Auth, getAuth } from "firebase/auth";
+import { middleware } from "../../middleware";
+import { NextResponse } from "next/server";
+import { cookiesTest } from "../lib/actions";
+import { useEffect } from "react";
+
 // import user
 
 export default function Login() {
-  //   const authContext = useAuthContext();
   const { user, googleSignIn, logOut } = useAuthContext();
   const cUser = getAuth().currentUser;
+  console.log("login render");
+
+  // useEffect(() => {
+  //   console.log("Useeffect ran");
+
+  //   setSignInCookie(user!);
+  // }, [user]);
+
+  function handleSignIn() {
+    googleSignIn();
+    // const signInUser =  googleSignIn();
+    // await setSignInCookie(signInUser);
+    // if (user) {
+    //   setSignInCookie(user);
+    // } else {
+    //   console.log("no user");
+    // }
+    // setSignInCookie(googleSignIn());
+  }
 
   async function fakeAddData() {
     const foodItem: FoodItemType = {
@@ -66,10 +89,12 @@ export default function Login() {
 
   return (
     <div className="">
-      <Button onClick={(e) => googleSignIn()}>LOGIN</Button>
+      <Button onClick={(e) => handleSignIn()}>LOGIN</Button>
       <Button onClick={(e) => logOut()}>LOG OUT</Button>
       <Button onClick={(e) => fakeAddData()}>Fake add data</Button>
       <Button onClick={(e) => getDocsOfUser()}>Get docs of user</Button>
+      <Button onClick={() => cookiesTest()}>cookietest</Button>
+
       {user ? (
         <span>
           Logged in as user: {user.displayName} {user.uid} {cUser!.tenantId}

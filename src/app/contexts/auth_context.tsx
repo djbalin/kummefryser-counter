@@ -1,4 +1,5 @@
 "use client";
+// "use server";
 
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -33,10 +34,11 @@ export function AuthContextProvider({
 }) {
   const [user, setUser] = useState<User | null>(null);
 
-  function googleSignIn() {
+  function googleSignIn(): void {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider);
   }
+
   function logOut() {
     signOut(auth);
   }
@@ -61,7 +63,6 @@ export function AuthContextProvider({
 
 export function useAuthContext(): AuthContext {
   const context = useContext(AuthContext);
-
   if (!context) {
     throw new Error("useAuthContext must be used within a AuthContextProvider");
   }
