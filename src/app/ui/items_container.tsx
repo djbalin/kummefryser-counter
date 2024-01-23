@@ -12,6 +12,7 @@ import CategoriesHolder from "./categories_holder";
 import CategoriesContextProvider from "../contexts/categories-context";
 import ItemList from "./item_list";
 import WipeDB from "./WIPEDB";
+import { useAuthContext } from "../contexts/auth_context";
 //
 // URL SEARCH PARAM APPROACH
 //
@@ -37,6 +38,7 @@ export default async function ItemsContainer() {
   // }
 
   // const [categoriesToShow, setCategoriesToShow] = useState<string[]>([]);
+  // const { user } = useAuthContext();
   const foodItems = await getAllSorted();
   const allCategories = await getAllCategories();
   console.log("No. of fooditems in foodlist:" + foodItems.length);

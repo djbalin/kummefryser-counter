@@ -178,6 +178,6 @@ export async function wipeAndPopulateDB() {
   console.log("END OF WIPING");
   // Ghetto solution for now: To attempt to ensure that database population has occurred successfully before redirecting to the dashboard.
   // await new Promise((resolve) => setTimeout(resolve, 1000));
-  revalidatePath("/dashboard");
-  redirect("/dashboard");
+  revalidatePath("/example");
+  redirect("/example");
 }

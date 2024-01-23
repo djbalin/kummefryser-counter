@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { AuthContextProvider } from "./contexts/auth_context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,7 @@ export default function RootLayout({
     // <html lang="en">
     <html lang="en" className="no-scrollbar">
       <body className={`{inter.className}`}>
-        {children}
+        <AuthContextProvider>{children}</AuthContextProvider>
         <SpeedInsights />
       </body>
       {/* <body>{children}</body> */}

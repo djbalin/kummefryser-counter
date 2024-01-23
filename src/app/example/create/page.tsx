@@ -16,7 +16,7 @@ export default async function Page() {
   return (
     // <div className="w-auto">
     <div className="flex flex-col items-center w-full gap-y-4">
-      <Link href="/dashboard">
+      <Link href="/example">
         <Button>Go back</Button>
       </Link>
       <CreateForm

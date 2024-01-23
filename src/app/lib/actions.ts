@@ -45,8 +45,8 @@ export async function createItem(formData: FormData) {
     );
   }
 
-  revalidatePath("/dashboard");
-  redirect("/dashboard");
+  revalidatePath("/example");
+  redirect("/example");
 }
 
 export async function addCategory(categoryName: string) {
