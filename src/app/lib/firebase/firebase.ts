@@ -1,10 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
-  browserLocalPersistence,
+  GoogleAuthProvider,
+  UserCredential,
   getAuth,
   onAuthStateChanged,
-  setPersistence,
+  signInWithPopup,
+  signOut,
 } from "firebase/auth";
 
 // import { getAnalytics } from "firebase/analytics";
@@ -12,10 +14,8 @@ import {
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore } from "firebase/firestore";
-import { cookies } from "next/headers";
 import { deleteCookie, setCookie } from "cookies-next";
 import { redirect } from "next/navigation";
-import path from "path";
 import { revalidatePath } from "next/cache";
 
 // Your web app's Firebase configuration
@@ -33,27 +33,37 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
+const provider = new GoogleAuthProvider();
+provider.setCustomParameters({
+  prompt: "select_account",
+});
 
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 auth.useDeviceLanguage();
 
-onAuthStateChanged(auth, (user) => {
-  console.log(auth.currentUser);
-  console.log(user);
+// onAuthStateChanged(auth, (user) => {
+//   console.log(auth.currentUser);
+//   console.log(user);
 
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/auth.user
-    console.log("In auth state changed. User is signed in");
-    setCookie("USER", "heyy");
-  } else {
-    console.log("In auth state changed. User is signed out");
-    deleteCookie("USER");
-    // revalidatePath("/dashboard");
-    // redirect("/");
-  }
-});
+//   if (user) {
+//     // User is signed in, see docs for a list of available properties
+//     // https://firebase.google.com/docs/reference/js/auth.user
+//     console.log("In auth state changed. User is signed in");
+//     setCookie("USER", "heyy");
+//   } else {
+//     console.log("In auth state changed. User is signed out");
+//     deleteCookie("USER");
+//     // revalidatePath("/dashboard");
+//     // redirect("/");
+//   }
+// });
 // setPersistence(auth, browserLocalPersistence);
 
 export const db_firebase = getFirestore(app);
+
+export async function signInGooglePopup() {
+  // "use server";
+  console.log("GOOGLE LOG In");
+  await signInWithPopup(auth, provider);
+}

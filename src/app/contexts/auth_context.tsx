@@ -39,14 +39,20 @@ export function AuthContextProvider({
 
   async function googleSignIn(redirectPath: string): Promise<void> {
     const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    if (result.user) {
-      router.push(redirectPath);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      if (result.user) {
+        router.push(redirectPath);
+      }
+    } catch (error) {
+      console.log("ERROR");
+      console.log(error);
+      alert("Eyyys");
     }
   }
 
   async function logOut() {
-    console.log("LOGGIN OUT:)");
+    // console.log("LOGGIN OUT:)");
 
     await signOut(auth);
     router.push("/");

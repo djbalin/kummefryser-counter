@@ -12,7 +12,7 @@ import CategoriesHolder from "./categories_holder";
 import CategoriesContextProvider from "../contexts/categories-context";
 import ItemList from "./item_list";
 import WipeDB from "./WIPEDB";
-import { useAuthContext } from "../contexts/auth_context";
+// import { useAuthContext } from "../contexts/auth_context";
 //
 // URL SEARCH PARAM APPROACH
 //

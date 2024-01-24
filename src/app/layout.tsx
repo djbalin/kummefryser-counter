@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AuthContextProvider } from "./contexts/auth_context";
+import Navbar from "./ui/navbar/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
     // <html lang="en">
     <html lang="en" className="no-scrollbar">
       <body className={`{inter.className}`}>
+        <Navbar></Navbar>
         <AuthContextProvider>{children}</AuthContextProvider>
         <SpeedInsights />
       </body>

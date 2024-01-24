@@ -1,4 +1,4 @@
-"use server";
+// "use server";
 import ItemsContainer from "@/app/ui/items_container";
 import { Suspense } from "react";
 import CategoriesContextProvider from "../contexts/categories-context";

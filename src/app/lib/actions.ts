@@ -16,9 +16,10 @@ import {
   User,
   UserCredential,
   signInWithPopup,
+  signOut,
 } from "firebase/auth";
 import { NextResponse } from "next/server";
-import { auth } from "./firebase/firebase";
+import { auth, signInGooglePopup } from "./firebase/firebase";
 
 export async function createItem(formData: FormData) {
   console.log("Creating new item: ");
@@ -121,16 +122,40 @@ export async function updateItem(formData: FormData) {
 //   // Redirect or handle the response after setting the cookie
 // }
 
-export async function handleSignIn(redirectPath: string) {
-  const provider = new GoogleAuthProvider();
-  const signInResult = await signInWithPopup(auth, provider);
-  if (signInResult.user) {
-    redirect(redirectPath);
-  }
-}
+// export async function handleSignIn(redirectPath: string) {
+//   const signInResult = await signInWithPopup(auth, provider);
+//   if (signInResult.user) {
+//     redirect(redirectPath);
+//   }
+// }
 
 export async function cookiesTest() {
   "use server";
   cookies().set("cookietest", "true");
   // log(request.cookies.size);
+}
+
+export async function handleSignInGooglePopup() {
+  "use server";
+  console.log("SERVER ACTION RUNNING");
+  const provider = new GoogleAuthProvider();
+  await signInWithPopup(auth, provider);
+
+  // await signInGooglePopup();
+  cookies().set("USER", "yeye");
+  redirect("/");
+}
+
+export async function signOutGoogle() {
+  "use server";
+  console.log("LOGGIN OUT:)");
+  const loggedIn = cookies().has("USER");
+  if (loggedIn) {
+    alert("Error: already logged in");
+  } else {
+    await signOut(auth);
+    cookies().delete("USER");
+    // revalidatePath("/");
+    redirect("/");
+  }
 }
