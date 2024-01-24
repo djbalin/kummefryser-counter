@@ -10,14 +10,11 @@ import {
   GoogleAuthProvider,
   User,
 } from "firebase/auth";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { auth } from "../lib/firebase/firebase";
+import { deleteCookie, setCookie } from "cookies-next";
+import { revalidatePath } from "next/cache";
 
-// type AuthContext = {
-//   userContext: User | null;
-//   setUserContext: React.Dispatch<React.SetStateAction<User | null>>;
-//   //   setCategoryContext: React.Dispatch<React.SetStateAction<string[]>>;
-// };
 type AuthContext = {
   user: User | null;
   // googleSignIn: () => void;
@@ -41,20 +38,22 @@ export function AuthContextProvider({
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      if (result.user) {
-        router.push(redirectPath);
-      }
+      setCookie("USER", "yeye");
+      revalidatePath("/");
+      console.log("after reval path");
+      // router.push(redirectPath);
+
+      redirect("/dashboard");
     } catch (error) {
       console.log("ERROR");
       console.log(error);
-      alert("Eyyys");
+      // alert("Eyyys");
     }
   }
 
   async function logOut() {
-    // console.log("LOGGIN OUT:)");
-
     await signOut(auth);
+    deleteCookie("USER");
     router.push("/");
   }
 

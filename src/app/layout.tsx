@@ -21,8 +21,10 @@ export default function RootLayout({
     // <html lang="en">
     <html lang="en" className="no-scrollbar">
       <body className={`{inter.className}`}>
-        <Navbar></Navbar>
-        <AuthContextProvider>{children}</AuthContextProvider>
+        <AuthContextProvider>
+          <Navbar></Navbar>
+          {children}
+        </AuthContextProvider>
         <SpeedInsights />
       </body>
       {/* <body>{children}</body> */}

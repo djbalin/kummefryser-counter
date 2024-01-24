@@ -2,32 +2,47 @@
 import { useAuthContext } from "@/app/contexts/auth_context";
 import { handleSignInGooglePopup } from "@/app/lib/actions";
 import { signInGooglePopup } from "@/app/lib/firebase/firebase";
-import { signInWithPopup, signOut } from "firebase/auth";
 import { revalidatePath } from "next/cache";
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { useRouter } from "next/navigation";
 
-export default function NavLogin({ title }: { title: string }) {
+export default function NavLogin({ login }: { login: boolean }) {
   const router = useRouter();
-  //   const authContext = useAuthContext();
+  const authContext = useAuthContext();
 
   //   const contextUser = authContext.user;
   console.log("NAVLOGIN RENDERED");
 
   return (
     <>
-      {/* {!user ? ( */}
-      <div
-        onClick={async () => {
-          //   await handleSignInGooglePopup();
-          await signInGooglePopup();
-          // revalidatePath("/", "layout");
-          router.push("/dashboard");
-        }}
-        className="w-auto hover:scale-110 hover:duration-150 hover:ease-in-out flex items-center h-full"
-      >
-        {title}
-      </div>
+      {login ? (
+        <form action={handleSignInGooglePopup}>
+          <button type="submit">LOGIN</button>
+        </form>
+      ) : (
+        // <div
+        //   onClick={async () => {
+        //     //   await handleSignInGooglePopup();
+        //     // await signInGooglePopup();
+        //     await authContext.googleSignIn("/dashboard");
+        //     // revalidatePath("/", "layout");
+        //     // router.push("/dashboard");
+        //   }}
+        //   className="w-auto hover:scale-110 hover:duration-150 hover:ease-in-out flex items-center h-full"
+        // >
+        //   Log in
+        // </div>
+        <div
+          onClick={async () => {
+            authContext.logOut();
+            // await googleLogOut();
+            // revalidatePath("/", "layout");
+            // router.push("/");
+          }}
+          className="w-auto hover:scale-110 hover:duration-150 hover:ease-in-out flex items-center h-full"
+        >
+          Log out
+        </div>
+      )}
       {/* {!contextUser ? (
         <div
           onClick={async () => {

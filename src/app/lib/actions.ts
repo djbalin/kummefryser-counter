@@ -136,10 +136,10 @@ export async function cookiesTest() {
 }
 
 export async function handleSignInGooglePopup() {
-  "use server";
   console.log("SERVER ACTION RUNNING");
-  const provider = new GoogleAuthProvider();
-  await signInWithPopup(auth, provider);
+  await signInGooglePopup();
+  // const provider = new GoogleAuthProvider();
+  // await signInWithPopup(auth, provider);
 
   // await signInGooglePopup();
   cookies().set("USER", "yeye");
@@ -158,4 +158,9 @@ export async function signOutGoogle() {
     // revalidatePath("/");
     redirect("/");
   }
+}
+
+export async function revalidateTest() {
+  revalidatePath("/");
+  redirect("/");
 }

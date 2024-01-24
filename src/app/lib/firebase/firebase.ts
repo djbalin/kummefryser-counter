@@ -14,9 +14,13 @@ import {
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getFirestore } from "firebase/firestore";
-import { deleteCookie, setCookie } from "cookies-next";
+import {
+  deleteCookie as deleteCookieClient,
+  setCookie as setCookieClient,
+} from "cookies-next";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -62,8 +66,26 @@ auth.useDeviceLanguage();
 
 export const db_firebase = getFirestore(app);
 
+// TODO:
+// This is now client-side. Make server-side authentication in the future so more can be server-side rendered
 export async function signInGooglePopup() {
   // "use server";
   console.log("GOOGLE LOG In");
   await signInWithPopup(auth, provider);
+  setCookieClient("USER", "yeye");
+  redirect("/");
 }
+
+// export async function signOutGoogle() {
+//   "use server";
+//   console.log("LOGGIN OUT:)");
+//   const loggedIn = cookies().has("USER");
+//   if (loggedIn) {
+//     alert("Error: already logged in");
+//   } else {
+//     await signOut(auth);
+//     cookies().delete("USER");
+//     // revalidatePath("/");
+//     redirect("/");
+//   }
+// }
