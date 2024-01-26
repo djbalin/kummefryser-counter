@@ -8,7 +8,7 @@ import { placeholderData } from "../lib/placeholderData";
 export default function WipeDB({
   wipeDBAndRefresh,
 }: {
-  wipeDBAndRefresh(): () => Promise<void>;
+  wipeDBAndRefresh: () => Promise<void>;
 }) {
   const [loading, setLoading] = useState(false);
   const authContext = useAuthContext();
@@ -32,7 +32,7 @@ export default function WipeDB({
         console.log(result);
       }
       // await new Promise((resolve) => setTimeout(resolve, 2000));
-      // await wipeDBAndRefresh(authContext.user!.uid);
+      // await wipeDBAndRefresh();
     } finally {
       setLoading(false);
     }

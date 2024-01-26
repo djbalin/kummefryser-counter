@@ -128,11 +128,11 @@ export async function addOne(newItem: FoodItemType) {
 }
 
 export async function wipeAndPopulateDB() {
-  const gottenAuth = QUERYAUTH();
-  // const gottenAuth = getAuth();
-  console.log("GOTTEN AUTH CURRENT USER:");
+  // const gottenAuth = QUERYAUTH();
+  // // const gottenAuth = getAuth();
+  // console.log("GOTTEN AUTH CURRENT USER:");
 
-  console.log(gottenAuth.currentUser);
+  // console.log(gottenAuth.currentUser);
 
   if (auth.currentUser == null) {
     throw new Error("No currently authenticated user.");
