@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { Categories, CategorySchemaType } from "./dbschema";
 
 export async function getAllCategories(): Promise<CategorySchemaType[]> {
-  console.log("call get all categories");
   try {
     await mongoose.connect(process.env.MONGODB_URI!);
   } catch (error) {

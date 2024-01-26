@@ -11,9 +11,29 @@ import {
 } from "@/app/lib/db/dbschema";
 import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
 import { QUERYAUTH, auth, db_firebase } from "@/app/lib/firebase/firebase";
-import { addDoc, collection, doc, setDoc, Timestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  DocumentData,
+  getDocs,
+  orderBy,
+  query,
+  QuerySnapshot,
+  setDoc,
+  Timestamp,
+  where,
+} from "firebase/firestore";
 import { cookies } from "next/headers";
 import { getAuth } from "firebase/auth";
+import { db, getAuthenticatedAppForUser } from "../firebase/fierbase3";
+
+const itemsRef = collection(
+  db_firebase,
+  "users",
+  cookies().get("USER")!.value,
+  "items"
+);
 
 export async function addItemFirebase(newItem: FoodItemType) {
   try {
@@ -51,7 +71,6 @@ export async function getAllCategories(): Promise<CategorySchemaType[]> {
   // noStore();
   // await new Promise((resolve) => setTimeout(resolve, 1000));
   await connectToDB();
-  console.log("call get all ee categories");
 
   try {
     const all: CategorySchemaType[] = await Categories.find();
@@ -76,6 +95,55 @@ export async function tryAddCategory(category: CategorySchemaType) {
   }
 }
 
+export async function getAllSortedFB(): Promise<FoodItemType[]> {
+  // export async function getAllSortedFB(): Promise<
+  //   QuerySnapshot<DocumentData, DocumentData>
+  // > {
+  // noStore();
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  try {
+    // return await getDocs(
+    //   collection(
+    //     db,
+    //     "users",
+    //     cookies().get("USER")!.value,
+    //     "items",
+    //     orderBy("expirationDate")
+    //   )
+    // );
+
+    const itemsRef = collection(
+      db_firebase,
+      "users",
+      cookies().get("USER")!.value,
+      "items"
+    );
+    const q = query(itemsRef, orderBy("expirationDate"));
+
+    const querySnapshot = await getDocs(q);
+    const items: FoodItemType[] = [];
+    // await Promise.all(
+    querySnapshot.forEach((el) => {
+      const data = el.data();
+      for (const [key, value] of Object.entries(data)) {
+        if (key.endsWith("Date")) {
+          data[key] = value.toDate();
+          // console.log(`converted for ${key}: ${value}`);
+        }
+      }
+      items.push(data as FoodItemType);
+      // console.log(el.data());
+    });
+    // );
+    return items;
+    // console.log(querySnapshot.docs);
+
+    // return all;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Database error while trying to retrieve all items");
+  }
+}
 export async function getAllSorted(): Promise<FoodItemType[]> {
   // noStore();
   // await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -115,17 +183,17 @@ export async function getAllFilteredByCategories(
   }
 }
 
-export async function addOne(newItem: FoodItemType) {
-  try {
-    await connectToDB();
-    const result = await FreezerItems.create(newItem);
-    console.log("RESULT" + result);
-  } catch (error) {
-    return {
-      message: `Database error. Failed to connect or to create this new item: ${newItem}`,
-    };
-  }
-}
+// export async function addOne(newItem: FoodItemType) {
+//   try {
+//     await connectToDB();
+//     const result = await FreezerItems.create(newItem);
+//     console.log("RESULT" + result);
+//   } catch (error) {
+//     return {
+//       message: `Database error. Failed to connect or to create this new item: ${newItem}`,
+//     };
+//   }
+// }
 
 export async function wipeAndPopulateDB() {
   // const gottenAuth = QUERYAUTH();

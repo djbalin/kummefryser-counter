@@ -11,11 +11,15 @@ export default function NavLogin({ login }: { login: boolean }) {
   const authContext = useAuthContext();
 
   //   const contextUser = authContext.user;
-  console.log("NAVLOGIN RENDERED");
   const [user2, loading] = useAuthState(auth);
   return (
     <>
       {user2 ? <span>hello {user2.displayName}</span> : "nooo"}
+      {authContext.user ? (
+        <span>AUTHCONTEXT hello: {authContext.user.displayName}</span>
+      ) : (
+        "nooo"
+      )}
       {login ? (
         // <form action={handleSignInGooglePopup}>
         //   <button type="submit">LOGIN</button>

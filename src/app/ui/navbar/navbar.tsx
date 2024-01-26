@@ -12,10 +12,8 @@ import {
 
 export default async function Navbar() {
   // unstable_noStore();
-  // const authContext = useAuthContext();
   // handleSignIn;
   const user = cookies().get("USER");
-  console.log("Navbar render");
 
   return (
     <div className="w-[100vw] h-min bg-slate-400 bg-opacity-50 px-32">

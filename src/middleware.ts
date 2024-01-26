@@ -26,10 +26,10 @@ import { cookies } from "next/headers";
 // }
 
 export function middleware(request: NextRequest) {
-  console.log("MIDDLEWARE?");
+  // console.log("MIDDLEWARE?");
   const response = NextResponse.next();
   const userLoggedIn = cookies().has("USER");
-  console.log("User logged in ? " + userLoggedIn);
+  // console.log("User logged in ? " + userLoggedIn);
 
   // console.log();
   // console.log(response.cookies);
@@ -49,7 +49,7 @@ export function middleware(request: NextRequest) {
   // }
 
   if (request.nextUrl.pathname.startsWith("/dashboard")) {
-    console.log("middleware for dashboard");
+    // console.log("middleware for dashboard");
     if (userLoggedIn) {
       return response;
     } else {
@@ -58,7 +58,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (request.nextUrl.pathname.startsWith("/login")) {
-    console.log("middleware for login");
+    // console.log("middleware for login");
 
     if (userLoggedIn) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
@@ -66,7 +66,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (request.nextUrl.pathname.startsWith("/profile")) {
-    console.log("middleware for profile");
+    // console.log("middleware for profile");
 
     if (userLoggedIn) {
       return response;

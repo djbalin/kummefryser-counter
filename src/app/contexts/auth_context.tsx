@@ -36,13 +36,8 @@ export function AuthContextProvider({
 
   async function googleSignIn(redirectPath: string): Promise<void> {
     try {
-      console.log("Signing in. auth.currentUser: " + auth.currentUser);
       const result = await signInWithPopup(auth, provider);
-      console.log(
-        "AFTER sign in. auth.currentUser.uid: " + auth.currentUser?.uid
-      );
       setCookie("USER", result.user.uid);
-      console.log("after reval path");
       router.push(redirectPath);
 
       // revalidatePath("/");

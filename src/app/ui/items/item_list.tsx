@@ -1,9 +1,12 @@
 "use client";
 import FoodItem from "./food_item";
 import ListHeader from "./list_header";
-import { useCategoryContext } from "../contexts/categories-context";
-import { FoodItemSchema, FoodItemType } from "../types_schemas/typesAndSchemas";
-import { CategorySchemaType } from "../lib/db/dbschema";
+import { useCategoryContext } from "../../contexts/categories-context";
+import {
+  FoodItemSchema,
+  FoodItemType,
+} from "../../types_schemas/typesAndSchemas";
+import { CategorySchemaType } from "../../lib/db/dbschema";
 
 export default function ItemList({
   foodItemsParsed,

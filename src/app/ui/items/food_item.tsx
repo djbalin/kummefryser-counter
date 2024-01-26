@@ -1,11 +1,11 @@
 "use client";
-import { FoodItemType } from "../types_schemas/typesAndSchemas";
+import { FoodItemType } from "../../types_schemas/typesAndSchemas";
 import {
   addDaysToDate,
   formatDateToReadable,
   getDateDDMMYYYY,
   getDaysLeftUntilDate,
-} from "../lib/datehelper";
+} from "../../lib/datehelper";
 import {
   PlusIcon,
   MinusIcon,
@@ -14,9 +14,9 @@ import {
 } from "@heroicons/react/20/solid";
 import { PencilIcon } from "@heroicons/react/20/solid";
 import { SetStateAction, useState } from "react";
-import { Button } from "./button";
-import ExpandedFoodItem from "./forms/expanded_item";
-import { CategorySchemaType } from "../lib/db/dbschema";
+import { Button } from "../button";
+import ExpandedFoodItem from "../forms/expanded_item";
+import { CategorySchemaType } from "../../lib/db/dbschema";
 
 export default function FoodItem({
   foodItem,

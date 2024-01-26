@@ -4,14 +4,15 @@ import {
   getAllFilteredByCategories,
   getAllCategories,
   wipeAndPopulateDB,
-} from "../lib/db/dbhelper";
-import { FoodItemType } from "../types_schemas/typesAndSchemas";
+  getAllSortedFB,
+} from "../../lib/db/dbhelper";
+import { FoodItemType } from "../../types_schemas/typesAndSchemas";
 import FoodItem from "./food_item";
 import ListHeader from "./list_header";
-import CategoriesHolder from "./categories_holder";
-import CategoriesContextProvider from "../contexts/categories-context";
+import CategoriesHolder from "../categories_holder";
+import CategoriesContextProvider from "../../contexts/categories-context";
 import ItemList from "./item_list";
-import WipeDB from "./WIPEDB";
+import WipeDB from "../WIPEDB";
 // import { useAuthContext } from "../contexts/auth_context";
 //
 // URL SEARCH PARAM APPROACH
@@ -39,10 +40,11 @@ export default async function ItemsContainer() {
 
   // const [categoriesToShow, setCategoriesToShow] = useState<string[]>([]);
   // const { user } = useAuthContext();
-  const foodItems = await getAllSorted();
+  // const foodItems: FoodItemType[] = await getAllSorted();
   const allCategories = await getAllCategories();
-  console.log("No. of fooditems in foodlist:" + foodItems.length);
 
+  // const fbAllItems = await getAllSortedFB();
+  const foodItems: FoodItemType[] = await getAllSortedFB();
   const foodItemsSerialized = await JSON.stringify(foodItems);
   const foodItemsParsed: FoodItemType[] = JSON.parse(
     foodItemsSerialized,
@@ -75,7 +77,8 @@ export default async function ItemsContainer() {
       )}
 
       {/* if (foodItems.length == 0){<span>Seems empty</span>} */}
-      <WipeDB wipeDBAndRefresh={wipeAndPopulateDB}></WipeDB>
+      <WipeDB></WipeDB>
+      {/* <WipeDB wipeDBAndRefresh={wipeAndPopulateDB}></WipeDB> */}
     </>
   );
 }

@@ -16,7 +16,9 @@ import { useState } from "react";
 import { Button } from "../button";
 import { CategorySchemaType } from "@/app/lib/db/dbschema";
 import React from "react";
-import { updateItem } from "@/app/lib/actions";
+import { updateItem } from "@/app/lib/db/firebase";
+import { useAuthContext } from "@/app/contexts/auth_context";
+// import { updateItem } from "@/app/lib/actions";
 
 function createRegex(query: string): RegExp {
   const charArr: string[] = Array.from(query.toLowerCase());
@@ -40,6 +42,7 @@ export default function ExpandedFoodItem({
   handleCloseExpanded(): void;
   allCategories: CategorySchemaType[];
 }) {
+  const { user } = useAuthContext();
   const originalLifespan = formatDateToReadable(foodItem.lifespanInDays);
 
   const [quantityValue, setQuantityValue] = useState(
@@ -108,7 +111,6 @@ export default function ExpandedFoodItem({
 
     setCategoriesToShow(getMatchingCategories(allCategories, value));
   }
-  console.log("Render exp item");
 
   async function handleUpdateItem(formData: FormData) {
     const overlay = document.getElementById("overlay");
@@ -121,7 +123,11 @@ export default function ExpandedFoodItem({
     formData.append("_id", foodItem._id);
     // const ob = Object.fromEntries(formData);
     // console.log(ob);
-    await updateItem(formData);
+    // await updateItem(formData);
+    if (!user) {
+      throw new Error("Must be logged in to update item");
+    }
+    await updateItem(foodItem._id, formData, user.uid);
     handleCloseExpanded();
     overlay?.classList.remove("visible");
     overlay?.classList.add("invisible");

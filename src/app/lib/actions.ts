@@ -2,12 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { FoodItemSchema } from "../types_schemas/typesAndSchemas";
 import { addDaysToDate, getDaysBetweenDates } from "./datehelper";
-import {
-  addItemFirebase,
-  addOne,
-  tryAddCategory,
-  updateOne,
-} from "./db/dbhelper";
+import { addItemFirebase, tryAddCategory, updateOne } from "./db/dbhelper";
 import { redirect } from "next/navigation";
 import { generateId } from "./tools";
 import { cookies } from "next/headers";
@@ -20,8 +15,9 @@ import {
 } from "firebase/auth";
 import { NextResponse } from "next/server";
 import { auth, signInGooglePopup } from "./firebase/firebase";
+import { addItemToDB } from "./db/firebase";
 
-export async function createItem(formData: FormData) {
+export async function createItem(formData: FormData, uid: string) {
   console.log("Creating new item: ");
   const ob = Object.fromEntries(formData.entries());
   console.log(ob);
@@ -40,9 +36,11 @@ export async function createItem(formData: FormData) {
       _id: formData.get("_id"),
     });
     try {
-      await addOne(item);
-      await addItemFirebase(item);
-      await tryAddCategory(item);
+      console.log("adding");
+
+      await addItemToDB(item, uid);
+      // await addItemFirebase(item);
+      // await tryAddCategory(item);
     } catch (error) {
       return {
         message: "Database error. Could not create new item.",
@@ -55,8 +53,8 @@ export async function createItem(formData: FormData) {
     );
   }
 
-  revalidatePath("/example");
-  redirect("/example");
+  revalidatePath("/dashboard");
+  redirect("/dashboard");
 }
 
 export async function addCategory(categoryName: string) {

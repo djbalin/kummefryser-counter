@@ -8,10 +8,10 @@ import { CategorySchemaType } from "../../lib/db/dbschema";
 import { generateId } from "../../lib/tools";
 // import { getAllCategories } from "../lib/db/dbhelper";
 import { getAllCategories } from "../../lib/db/dbhelptest";
-
-// import { Category } from "../types/fooditem";
-
-// export function CreateForm({ categories }: { categories: Category[] }) {
+import { useAuth } from "@/app/hooks/hooks";
+import { useAuthContext } from "@/app/contexts/auth_context";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/lib/firebase/firebase";
 const dropdownNumbers = Array(14)
   .fill(0)
   .map((_, i) => i + 1);
@@ -33,16 +33,8 @@ export function CreateForm({
   categories: CategorySchemaType[];
   handleAddNewCategory(categoryName: string): Promise<void>;
 }) {
-  // export default function CreateForm({
-  //   categories,
-  // }: {
-  //   categories: CategorySchemaType[];
-  // }) {
-
-  // const categories: CategorySchemaType[] = await getAllCategories();
-
   const currentDate = new Date();
-  console.log("FORM RENDERED");
+  const [user, loading] = useAuthState(auth);
 
   const [inputName, setInputName] = useState("");
   const [inputSize, setInputSize] = useState("");
@@ -152,9 +144,32 @@ export function CreateForm({
   const listStyle =
     "flex p-[0.1rem] w-full justify-center bg-slate-800 rounded-lg";
 
+  // function handleClickSubmit(e: FormData) {
+  //   if (!user) {
+  //     throw new Error("Must be logged in to create item");
+  //   }
+  //   e.delete("daysweeksmonths");
+  //   e.delete("lifespan");
+  //   e.append("category", selectedCategoryButton!.innerHTML);
+  //   e.set(
+  //     "lifespanInDays",
+  //     (
+  //       parseInt(selectedLifespanInteger) * parseInt(selectedLifespanQualifier)
+  //     ).toString()
+  //   );
+  //   e.append("_id", generateId(16));
+  //   console.log("now calling createitem");
+
+  //   createItem(e, user);
+  // }
+
   return (
     <form
       action={async (e) => {
+        // handleClickSubmit(e);
+        if (!user) {
+          throw new Error("Must be logged in to create item");
+        }
         e.delete("daysweeksmonths");
         e.delete("lifespan");
         e.append("category", selectedCategoryButton!.innerHTML);
@@ -166,8 +181,9 @@ export function CreateForm({
           ).toString()
         );
         e.append("_id", generateId(16));
-        createItem(e);
-        // handleClickSubmit(e);
+        console.log("now calling createitem");
+
+        createItem(e, user.uid);
       }}
       // onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleClickSubmit(e)}
       // action={createItem}
@@ -180,7 +196,7 @@ export function CreateForm({
     >
       <div className="mb-4">
         <label className={`${labelStyle}`} htmlFor="itemName">
-          Item name:
+          Item name: {loading ? "loading" : "not loading"} {user?.displayName}
         </label>
         <div className="">
           <input
@@ -372,17 +388,34 @@ export function CreateForm({
           ></input>
         </div>
       </div>
-      <Button
-        type="submit"
-        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-          validateInputs(e);
-        }}
-        // onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-        //   handleClickSubmit(e)
-        // }
-      >
-        Save new item
-      </Button>
+      {loading ? (
+        <Button
+          className="bg-red-500"
+          disabled
+          color="red-500"
+          type="submit"
+          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            validateInputs(e);
+          }}
+          // onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+          //   handleClickSubmit(e)
+          // }
+        >
+          Wait...
+        </Button>
+      ) : (
+        <Button
+          type="submit"
+          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            validateInputs(e);
+          }}
+          // onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+          //   handleClickSubmit(e)
+          // }
+        >
+          Save new item
+        </Button>
+      )}
     </form>
   );
 }
