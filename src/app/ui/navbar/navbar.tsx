@@ -9,10 +9,8 @@ import {
   revalidateTest,
   signOutGoogle,
 } from "@/app/lib/actions";
-import { signInGooglePopup } from "@/app/lib/firebase/firebase";
-// import { useAuthContext } from "@/app/contexts/auth_context";
 
-export default function Navbar() {
+export default async function Navbar() {
   // unstable_noStore();
   // const authContext = useAuthContext();
   // handleSignIn;
@@ -23,6 +21,8 @@ export default function Navbar() {
     <div className="w-[100vw] h-min bg-slate-400 bg-opacity-50 px-32">
       <ul className="flex flex-row py-2 items-center justify-evenly bg-red-400 h-full">
         <Navitem title={"Home"} destination={"/"}></Navitem>
+        {/* {idT ? idT : "no idt"}
+        {idT2 ? idT2.toString() : "no idt2"} */}
         <form action={revalidateTest}>
           <button type="submit">Reval test</button>
         </form>

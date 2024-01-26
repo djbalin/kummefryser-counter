@@ -1,10 +1,12 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { getApps, initializeApp } from "firebase/app";
 import {
+  Auth,
   GoogleAuthProvider,
   UserCredential,
   getAuth,
   onAuthStateChanged,
+  signInWithCustomToken,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
@@ -35,44 +37,57 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const firebaseApp =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 // const analytics = getAnalytics(app);
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
+export const provider = new GoogleAuthProvider().setCustomParameters({
   prompt: "select_account",
 });
 
 // Initialize Firebase Authentication and get a reference to the service
-export const auth = getAuth(app);
+export const auth = getAuth(firebaseApp);
 auth.useDeviceLanguage();
 
+export function QUERYAUTH(): Auth {
+  return getAuth(firebaseApp);
+}
+
 // onAuthStateChanged(auth, (user) => {
-//   console.log(auth.currentUser);
-//   console.log(user);
+//   // console.log(auth.currentUser);
+//   // console.log(user);
 
 //   if (user) {
 //     // User is signed in, see docs for a list of available properties
 //     // https://firebase.google.com/docs/reference/js/auth.user
 //     console.log("In auth state changed. User is signed in");
-//     setCookie("USER", "heyy");
+//     console.log("User: ");
+//     console.log(user);
+//     console.log("auth: ");
+//     console.log(auth);
+//     console.log("Auth.currentuser: ");
+//     console.log(auth.currentUser);
+//     console.log("User == auth.currentuser ? " + (user == auth.currentUser));
+//     // auth.updateCurrentUser(user);
+
+//     // setCookie("USER", "heyy");
 //   } else {
 //     console.log("In auth state changed. User is signed out");
-//     deleteCookie("USER");
+//     // deleteCookie("USER");
 //     // revalidatePath("/dashboard");
 //     // redirect("/");
 //   }
 // });
 // setPersistence(auth, browserLocalPersistence);
 
-export const db_firebase = getFirestore(app);
+export const db_firebase = getFirestore(firebaseApp);
 
 // TODO:
 // This is now client-side. Make server-side authentication in the future so more can be server-side rendered
 export async function signInGooglePopup() {
   // "use server";
   console.log("GOOGLE LOG In");
-  await signInWithPopup(auth, provider);
-  setCookieClient("USER", "yeye");
+  const result = await signInWithPopup(auth, provider);
+  setCookieClient("USER", result.user.uid);
   redirect("/");
 }
 

@@ -10,8 +10,10 @@ import {
   CategorySchemaType,
 } from "@/app/lib/db/dbschema";
 import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
-import { db_firebase } from "@/app/lib/firebase/firebase";
+import { QUERYAUTH, auth, db_firebase } from "@/app/lib/firebase/firebase";
 import { addDoc, collection, doc, setDoc, Timestamp } from "firebase/firestore";
+import { cookies } from "next/headers";
+import { getAuth } from "firebase/auth";
 
 export async function addItemFirebase(newItem: FoodItemType) {
   try {
@@ -126,58 +128,132 @@ export async function addOne(newItem: FoodItemType) {
 }
 
 export async function wipeAndPopulateDB() {
-  await connectToDB();
-  try {
-    const itemRes = await mongoose.connection
-      .collection("freezeritems")
-      .deleteMany({});
-    console.log("REMOVED FREEZERITEMS: ");
-    console.log(itemRes);
+  const gottenAuth = QUERYAUTH();
+  // const gottenAuth = getAuth();
+  console.log("GOTTEN AUTH CURRENT USER:");
 
-    const catRes = await mongoose.connection
-      .collection("categories")
-      .deleteMany({});
-    console.log("REMOVED categories: ");
-    console.log(catRes);
-  } catch (error) {
-    console.error("Error deleting contents of database");
-    console.error(error);
-  }
-  let numDocs: number = await FreezerItems.countDocuments();
-  if (numDocs > 0) {
-    console.log("already data inside, this many docs: " + numDocs);
-  } else {
-    console.log("Empty");
-    console.log("Inserting placeholder data: ");
+  console.log(gottenAuth.currentUser);
 
-    for (const d of placeholderData) {
-      console.log(d);
-    }
-    await Promise.all(
-      placeholderData.map(async (item) => {
-        console.log("adding item w lifespan " + item.lifespanInDays);
-        try {
-          await FreezerItems.create(item);
-          await Categories.updateOne(
-            { category: item.category },
-            { $setOnInsert: { category: item.category } },
-            { upsert: true }
-          ).then((upsert) =>
-            console.log(
-              `Inserted ${upsert.upsertedCount} new categories for category ${item.category}`
-            )
-          );
-        } catch (error) {
-          console.log("Error");
-          console.log(error);
-        } finally {
-        }
-      })
-    );
+  if (auth.currentUser == null) {
+    throw new Error("No currently authenticated user.");
   }
-  console.log("END OF WIPING");
-  // Ghetto solution for now: To attempt to ensure that database population has occurred successfully before redirecting to the dashboard.
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
-  revalidatePath("/example");
-  redirect("/example");
+  // console.log("IN WIPE FUNCTION; USER IS: " + user);
+
+  // await connectToDB();
+  // try {
+  //   const itemRes = await mongoose.connection
+  //     .collection("freezeritems")
+  //     .deleteMany({});
+  //   console.log("REMOVED FREEZERITEMS: ");
+  //   console.log(itemRes);
+
+  //   const catRes = await mongoose.connection
+  //     .collection("categories")
+  //     .deleteMany({});
+  //   console.log("REMOVED categories: ");
+  //   console.log(catRes);
+  // } catch (error) {
+  //   console.error("Error deleting contents of database");
+  //   console.error(error);
+  // }
+  const user = cookies().get("USER")!.value;
+  const docRef = doc(collection(db_firebase, `users/${user}/items`));
+  console.log(docRef);
+  console.log(placeholderData[0]);
+  console.log(auth);
+  console.log(auth.currentUser);
+  await setDoc(docRef, { ...placeholderData[0], id: docRef.id });
+  // let numDocs: number = await FreezerItems.countDocuments();
+  // if (numDocs > 0) {
+  //   console.log("already data inside, this many docs: " + numDocs);
+  // } else {
+  //   console.log("Empty");
+  //   console.log("Inserting placeholder data: ");
+
+  //   for (const d of placeholderData) {
+  //     console.log(d);
+  //   }
+  //   await Promise.all(
+  //     placeholderData.map(async (item) => {
+  //       console.log("adding item w lifespan " + item.lifespanInDays);
+  //       try {
+  //         await FreezerItems.create(item);
+  //         await Categories.updateOne(
+  //           { category: item.category },
+  //           { $setOnInsert: { category: item.category } },
+  //           { upsert: true }
+  //         ).then((upsert) =>
+  //           console.log(
+  //             `Inserted ${upsert.upsertedCount} new categories for category ${item.category}`
+  //           )
+  //         );
+  //       } catch (error) {
+  //         console.log("Error");
+  //         console.log(error);
+  //       } finally {
+  //       }
+  //     })
+  //   );
+  // }
+  // console.log("END OF WIPING");
+  // // Ghetto solution for now: To attempt to ensure that database population has occurred successfully before redirecting to the dashboard.
+  // // await new Promise((resolve) => setTimeout(resolve, 1000));
+  // revalidatePath("/example");
+  // redirect("/example");
 }
+// export async function wipeAndPopulateDB() {
+//   await connectToDB();
+//   try {
+//     const itemRes = await mongoose.connection
+//       .collection("freezeritems")
+//       .deleteMany({});
+//     console.log("REMOVED FREEZERITEMS: ");
+//     console.log(itemRes);
+
+//     const catRes = await mongoose.connection
+//       .collection("categories")
+//       .deleteMany({});
+//     console.log("REMOVED categories: ");
+//     console.log(catRes);
+//   } catch (error) {
+//     console.error("Error deleting contents of database");
+//     console.error(error);
+//   }
+//   let numDocs: number = await FreezerItems.countDocuments();
+//   if (numDocs > 0) {
+//     console.log("already data inside, this many docs: " + numDocs);
+//   } else {
+//     console.log("Empty");
+//     console.log("Inserting placeholder data: ");
+
+//     for (const d of placeholderData) {
+//       console.log(d);
+//     }
+//     await Promise.all(
+//       placeholderData.map(async (item) => {
+//         console.log("adding item w lifespan " + item.lifespanInDays);
+//         try {
+//           await FreezerItems.create(item);
+//           await Categories.updateOne(
+//             { category: item.category },
+//             { $setOnInsert: { category: item.category } },
+//             { upsert: true }
+//           ).then((upsert) =>
+//             console.log(
+//               `Inserted ${upsert.upsertedCount} new categories for category ${item.category}`
+//             )
+//           );
+//         } catch (error) {
+//           console.log("Error");
+//           console.log(error);
+//         } finally {
+//         }
+//       })
+//     );
+//   }
+//   console.log("END OF WIPING");
+//   // Ghetto solution for now: To attempt to ensure that database population has occurred successfully before redirecting to the dashboard.
+//   // await new Promise((resolve) => setTimeout(resolve, 1000));
+//   revalidatePath("/example");
+//   redirect("/example");
+// }

@@ -6,6 +6,7 @@ import { signInWithPopup } from "firebase/auth";
 import { AuthContextProvider, useAuthContext } from "../contexts/auth_context";
 import Navbar from "./navbar/navbar";
 import { cookies } from "next/headers";
+import { auth } from "../lib/firebase/firebase";
 
 export default function MainContainer() {
   // const { user, googleSignIn, logOut } = useAuthContext();
@@ -19,6 +20,8 @@ export default function MainContainer() {
         {/* <AuthContextProvider> */}
         {/* <Login redirectPath="/dashboard"></Login> */}
         <span>{user ? "yes user" : "no user"}</span>
+        <span>{auth ? "yes auth" : "no auth"}</span>
+        <span>{auth.currentUser?.uid}</span>
         {user ? (
           <Link href={"/dashboard"}>
             <div className="flex items-center rounded-[2rem] justify-center p-4 bg-orange-300">

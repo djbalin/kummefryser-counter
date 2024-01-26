@@ -11,7 +11,7 @@ import {
   User,
 } from "firebase/auth";
 import { redirect, useRouter } from "next/navigation";
-import { auth } from "../lib/firebase/firebase";
+import { auth, provider } from "../lib/firebase/firebase";
 import { deleteCookie, setCookie } from "cookies-next";
 import { revalidatePath } from "next/cache";
 
@@ -35,15 +35,18 @@ export function AuthContextProvider({
   // function googleSignIn(): void {
 
   async function googleSignIn(redirectPath: string): Promise<void> {
-    const provider = new GoogleAuthProvider();
     try {
+      console.log("Signing in. auth.currentUser: " + auth.currentUser);
       const result = await signInWithPopup(auth, provider);
-      setCookie("USER", "yeye");
-      revalidatePath("/");
+      console.log(
+        "AFTER sign in. auth.currentUser.uid: " + auth.currentUser?.uid
+      );
+      setCookie("USER", result.user.uid);
       console.log("after reval path");
-      // router.push(redirectPath);
+      router.push(redirectPath);
 
-      redirect("/dashboard");
+      // revalidatePath("/");
+      // redirect("/dashboard");
     } catch (error) {
       console.log("ERROR");
       console.log(error);
@@ -59,6 +62,8 @@ export function AuthContextProvider({
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("AUTH STATE CHANGED IN CONTEXT");
+
       setUser(currentUser);
     });
     return () => unsubscribe();

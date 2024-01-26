@@ -1,18 +1,38 @@
 "use client";
 import { useState } from "react";
+import { useAuthContext } from "../contexts/auth_context";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { db_firebase } from "../lib/firebase/firebase";
+import { placeholderData } from "../lib/placeholderData";
 
 export default function WipeDB({
   wipeDBAndRefresh,
 }: {
-  wipeDBAndRefresh(): Promise<void>;
+  wipeDBAndRefresh(): () => Promise<void>;
 }) {
   const [loading, setLoading] = useState(false);
-
+  const authContext = useAuthContext();
   async function handleClick() {
     try {
       setLoading(true);
+      if (authContext.user) {
+        const docRef = doc(
+          collection(db_firebase, `users/${authContext.user.uid}/items`)
+        );
+        console.log(authContext.user);
+
+        // console.log(docRef);
+        // console.log(placeholderData[0]);
+        // console.log(auth);
+        // console.log(auth.currentUser);
+        const result = await setDoc(docRef, {
+          ...placeholderData[0],
+          id: docRef.id,
+        });
+        console.log(result);
+      }
       // await new Promise((resolve) => setTimeout(resolve, 2000));
-      await wipeDBAndRefresh();
+      // await wipeDBAndRefresh(authContext.user!.uid);
     } finally {
       setLoading(false);
     }

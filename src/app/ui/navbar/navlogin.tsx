@@ -1,9 +1,10 @@
 "use client";
 import { useAuthContext } from "@/app/contexts/auth_context";
 import { handleSignInGooglePopup } from "@/app/lib/actions";
-import { signInGooglePopup } from "@/app/lib/firebase/firebase";
+import { auth, signInGooglePopup } from "@/app/lib/firebase/firebase";
 import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function NavLogin({ login }: { login: boolean }) {
   const router = useRouter();
@@ -11,26 +12,28 @@ export default function NavLogin({ login }: { login: boolean }) {
 
   //   const contextUser = authContext.user;
   console.log("NAVLOGIN RENDERED");
-
+  const [user2, loading] = useAuthState(auth);
   return (
     <>
+      {user2 ? <span>hello {user2.displayName}</span> : "nooo"}
       {login ? (
-        <form action={handleSignInGooglePopup}>
-          <button type="submit">LOGIN</button>
-        </form>
+        // <form action={handleSignInGooglePopup}>
+        //   <button type="submit">LOGIN</button>
+        // </form>
+
+        <div
+          onClick={async () => {
+            //   await handleSignInGooglePopup();
+            // await signInGooglePopup();
+            await authContext.googleSignIn("/");
+            // revalidatePath("/", "layout");
+            // router.push("/");
+          }}
+          className="w-auto hover:scale-110 hover:duration-150 hover:ease-in-out flex items-center h-full"
+        >
+          Log in
+        </div>
       ) : (
-        // <div
-        //   onClick={async () => {
-        //     //   await handleSignInGooglePopup();
-        //     // await signInGooglePopup();
-        //     await authContext.googleSignIn("/dashboard");
-        //     // revalidatePath("/", "layout");
-        //     // router.push("/dashboard");
-        //   }}
-        //   className="w-auto hover:scale-110 hover:duration-150 hover:ease-in-out flex items-center h-full"
-        // >
-        //   Log in
-        // </div>
         <div
           onClick={async () => {
             authContext.logOut();
@@ -40,7 +43,7 @@ export default function NavLogin({ login }: { login: boolean }) {
           }}
           className="w-auto hover:scale-110 hover:duration-150 hover:ease-in-out flex items-center h-full"
         >
-          Log out
+          Log out {auth.currentUser?.uid}
         </div>
       )}
       {/* {!contextUser ? (

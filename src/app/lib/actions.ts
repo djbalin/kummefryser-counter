@@ -141,8 +141,6 @@ export async function handleSignInGooglePopup() {
   // const provider = new GoogleAuthProvider();
   // await signInWithPopup(auth, provider);
 
-  // await signInGooglePopup();
-  cookies().set("USER", "yeye");
   redirect("/");
 }
 
