@@ -1,21 +1,12 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { FoodItemSchema } from "../types_schemas/typesAndSchemas";
-import { addDaysToDate, getDaysBetweenDates } from "./datehelper";
-import { addItemFirebase, tryAddCategory, updateOne } from "./db/dbhelper";
+import { FoodItemSchema } from "./utils/types_schemas/typesAndSchemas";
+import { addDaysToDate } from "./utils/datehelper";
 import { redirect } from "next/navigation";
-import { generateId } from "./tools";
 import { cookies } from "next/headers";
-import {
-  GoogleAuthProvider,
-  User,
-  UserCredential,
-  signInWithPopup,
-  signOut,
-} from "firebase/auth";
-import { NextResponse } from "next/server";
-import { auth, signInGooglePopup } from "./firebase/firebase";
-import { addItemToDB } from "./db/firebase";
+import { signOut } from "firebase/auth";
+import { auth } from "./firebase/firebase";
+import { addCategoryToDB, addItemToDB } from "./db/firebase";
 
 export async function createItem(formData: FormData, uid: string) {
   console.log("Creating new item: ");
@@ -39,8 +30,7 @@ export async function createItem(formData: FormData, uid: string) {
       console.log("adding");
 
       await addItemToDB(item, uid);
-      // await addItemFirebase(item);
-      // await tryAddCategory(item);
+      await addCategoryToDB(item.category, uid);
     } catch (error) {
       return {
         message: "Database error. Could not create new item.",
@@ -52,111 +42,31 @@ export async function createItem(formData: FormData, uid: string) {
       'Error creating new item. Verify that the input fields conform to their types (e.g. "quantity" must be a number)'
     );
   }
+  redirect("/dashboard");
+}
 
+export async function revalidateAndRedirectDashboard() {
+  "use server";
+  console.log("LOGGIN IN:)");
   revalidatePath("/dashboard");
   redirect("/dashboard");
 }
 
-export async function addCategory(categoryName: string) {
-  console.log("in add category in actions.ts");
-
-  await tryAddCategory({ category: categoryName, _id: generateId(16) });
-}
-
-export async function updateItem(formData: FormData) {
-  console.log("Updating new item: ");
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
-  const ob = Object.fromEntries(formData.entries());
-  console.log(ob);
-
-  const freezeDate = new Date(formData.get("freezeDate") as string);
-  const expirationDate = new Date(formData.get("expirationDate") as string);
-  const lifeSpanInDays = getDaysBetweenDates(freezeDate, expirationDate);
-  // console.log("LIFESPAN IN DAYS: ", lifeSpanInDays);
-
-  try {
-    const item = FoodItemSchema.parse({
-      name: formData.get("itemName"),
-      category: formData.get("itemCategory"),
-      freezeDate: freezeDate,
-      expirationDate: expirationDate,
-      // expirationDate: addDaysToDate(
-      //   new Date(formData.get("freezeDate") as string),
-      //   parseInt(formData.get("lifespanInDays") as string)
-      // ),
-      lifespanInDays: lifeSpanInDays,
-      // lifespanInDays: parseInt(formData.get("lifespanInDays") as string),
-      volume: formData.get("itemVolume"),
-      quantity: parseInt(formData.get("itemQuantity") as string),
-      _id: formData.get("_id"),
-    });
-    try {
-      await updateOne(item);
-      await tryAddCategory(item);
-    } catch (error) {
-      return {
-        message: "Database error. Could not create new item.",
-      };
-    }
-  } catch (error) {
-    console.error("Error parsing new item. ", error);
-    throw new Error(
-      'Error creating new item. Verify that the input fields conform to their types (e.g. "quantity" must be a number)'
-    );
-  }
-
-  revalidatePath("/dashboard");
-  // redirect("/dashboard");
-}
-
-// export async function handleLogin(sessionData) {
-//   const encryptedSessionData = encrypt(sessionData); // Encrypt your session data
-//   cookies().set("session", encryptedSessionData, {
-//     httpOnly: true,
-//     secure: process.env.NODE_ENV === "production",
-//     maxAge: 60 * 60 * 24 * 7, // One week
-//     path: "/",
-//   });
-//   // Redirect or handle the response after setting the cookie
-// }
-
-// export async function handleSignIn(redirectPath: string) {
-//   const signInResult = await signInWithPopup(auth, provider);
-//   if (signInResult.user) {
-//     redirect(redirectPath);
-//   }
-// }
-
-export async function cookiesTest() {
-  "use server";
-  cookies().set("cookietest", "true");
-  // log(request.cookies.size);
-}
-
-export async function handleSignInGooglePopup() {
-  console.log("SERVER ACTION RUNNING");
-  await signInGooglePopup();
-  // const provider = new GoogleAuthProvider();
-  // await signInWithPopup(auth, provider);
-
-  redirect("/");
-}
-
-export async function signOutGoogle() {
+export async function handleSignOut() {
   "use server";
   console.log("LOGGIN OUT:)");
-  const loggedIn = cookies().has("USER");
-  if (loggedIn) {
-    alert("Error: already logged in");
+
+  const loggedIn = cookies().has("user_id");
+  if (!loggedIn) {
+    throw new Error(
+      "Error while trying to log out: No user is currently logged in"
+    );
   } else {
+    console.log("signin out");
+
+    cookies().delete("user_id");
     await signOut(auth);
-    cookies().delete("USER");
-    // revalidatePath("/");
+    revalidatePath("/");
     redirect("/");
   }
-}
-
-export async function revalidateTest() {
-  revalidatePath("/");
-  redirect("/");
 }

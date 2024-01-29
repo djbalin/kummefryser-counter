@@ -3,17 +3,16 @@ import FoodItem from "./food_item";
 import ListHeader from "./list_header";
 import { useCategoryContext } from "../../contexts/categories-context";
 import {
-  FoodItemSchema,
+  Category,
   FoodItemType,
-} from "../../types_schemas/typesAndSchemas";
-import { CategorySchemaType } from "../../lib/db/dbschema";
+} from "../../lib/utils/types_schemas/typesAndSchemas";
 
 export default function ItemList({
   foodItemsParsed,
   allCategories,
 }: {
   foodItemsParsed: FoodItemType[];
-  allCategories: CategorySchemaType[];
+  allCategories: Category[];
 }) {
   const { categoryContext, setCategoryContext } = useCategoryContext();
 
@@ -33,7 +32,6 @@ export default function ItemList({
         return (
           <FoodItem
             key={foodItem._id}
-            // key={idx}
             foodItem={foodItem}
             allCategories={JSON.parse(JSON.stringify(allCategories))}
           ></FoodItem>

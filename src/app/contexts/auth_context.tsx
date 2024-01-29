@@ -1,26 +1,15 @@
 "use client";
-// "use server";
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-import {
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-  GoogleAuthProvider,
-  User,
-} from "firebase/auth";
-import { redirect, useRouter } from "next/navigation";
+import { signInWithPopup, onAuthStateChanged, User } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { auth, provider } from "../lib/firebase/firebase";
-import { deleteCookie, setCookie } from "cookies-next";
-import { revalidatePath } from "next/cache";
+import { setCookie } from "cookies-next";
 
 type AuthContext = {
   user: User | null;
-  // googleSignIn: () => void;
   googleSignIn: (redirectPath: string) => void;
-  logOut: () => void;
-  //   setCategoryContext: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 const AuthContext = createContext<AuthContext | null>(null);
@@ -32,27 +21,24 @@ export function AuthContextProvider({
 }) {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
-  // function googleSignIn(): void {
 
   async function googleSignIn(redirectPath: string): Promise<void> {
     try {
       const result = await signInWithPopup(auth, provider);
-      setCookie("USER", result.user.uid);
-      router.push(redirectPath);
+      console.log("in auth context sign in");
+      console.log(result.user.uid);
 
-      // revalidatePath("/");
-      // redirect("/dashboard");
+      setCookie("user_id", result.user.uid, {
+        sameSite: "strict",
+        secure: true,
+        maxAge: 60 * 24 * 14,
+      });
+
+      router.push(redirectPath);
     } catch (error) {
       console.log("ERROR");
       console.log(error);
-      // alert("Eyyys");
     }
-  }
-
-  async function logOut() {
-    await signOut(auth);
-    deleteCookie("USER");
-    router.push("/");
   }
 
   useEffect(() => {
@@ -65,11 +51,7 @@ export function AuthContextProvider({
   }, [user]);
 
   return (
-    <AuthContext.Provider
-      // <AuthContext.Provider
-      // value={{ userContext: user, setUserContext: setUser }}
-      value={{ user, googleSignIn, logOut }}
-    >
+    <AuthContext.Provider value={{ user, googleSignIn }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,13 +1,21 @@
-import { Category, FoodItemType } from "../types_schemas/typesAndSchemas";
-import { addDaysToDate } from "./datehelper";
+import { Category, FoodItemType } from "./utils/types_schemas/typesAndSchemas";
+import { addDaysToDate } from "./utils/datehelper";
 
-import { generateId } from "./tools";
+import { generateId } from "./utils/tools";
+
+enum PlaceholderCategory {
+  MEAT = "Meat",
+  DAIRY = "Dairy",
+  FRUIT = "Fruit",
+  COOKED_DISH = "Cooked dish",
+  VEGETABLE = "Vegetable",
+}
 
 export const placeholderData: FoodItemType[] = [
   {
     _id: generateId(10),
     name: "Kødsovs",
-    category: Category.COOKED_DISH,
+    category: PlaceholderCategory.COOKED_DISH,
     freezeDate: new Date("2023-12-18"),
     expirationDate: addDaysToDate(new Date("2023-12-18"), 30),
     lifespanInDays: 30,
@@ -17,7 +25,7 @@ export const placeholderData: FoodItemType[] = [
   {
     _id: generateId(10),
     name: "Ærter",
-    category: Category.VEGETABLE,
+    category: PlaceholderCategory.VEGETABLE,
     freezeDate: new Date("2023-12-05"),
     expirationDate: addDaysToDate(new Date("2023-12-05"), 150),
     lifespanInDays: 150,
@@ -27,7 +35,7 @@ export const placeholderData: FoodItemType[] = [
   {
     _id: generateId(10),
     name: "Tomatsuppe",
-    category: Category.COOKED_DISH,
+    category: PlaceholderCategory.COOKED_DISH,
     freezeDate: new Date("2023-10-18"),
     expirationDate: addDaysToDate(new Date("2023-11-18"), 90),
     lifespanInDays: 90,
@@ -37,7 +45,7 @@ export const placeholderData: FoodItemType[] = [
   {
     _id: generateId(10),
     name: "Mango  i tern",
-    category: Category.FRUIT,
+    category: PlaceholderCategory.FRUIT,
     freezeDate: new Date("2023-12-10"),
     expirationDate: addDaysToDate(new Date("2023-12-10"), 4 * 30),
     lifespanInDays: 4 * 30,
@@ -47,7 +55,7 @@ export const placeholderData: FoodItemType[] = [
   {
     _id: generateId(10),
     name: "Jordbær",
-    category: Category.FRUIT,
+    category: PlaceholderCategory.FRUIT,
     freezeDate: new Date("2023-12-10"),
     expirationDate: addDaysToDate(new Date("2023-12-10"), 4 * 30),
     lifespanInDays: 4 * 30,
@@ -57,7 +65,7 @@ export const placeholderData: FoodItemType[] = [
   {
     _id: generateId(10),
     name: "Smør",
-    category: Category.DAIRY,
+    category: PlaceholderCategory.DAIRY,
     freezeDate: new Date("2023-12-10"),
     expirationDate: addDaysToDate(new Date("2023-12-10"), 10 * 30),
     lifespanInDays: 10 * 30,
@@ -67,7 +75,7 @@ export const placeholderData: FoodItemType[] = [
   {
     _id: generateId(10),
     name: "Flæskesteg",
-    category: Category.MEAT,
+    category: PlaceholderCategory.MEAT,
     freezeDate: new Date("2023-12-10"),
     expirationDate: addDaysToDate(new Date("2023-12-10"), 6 * 30),
     lifespanInDays: 6 * 30,

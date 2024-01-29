@@ -63,3 +63,7 @@ body {
 .fifthColumn {
   @apply w-[7%];
 }
+
+.navitem {
+  @apply w-auto text-lg text-center p-1 font-normal hover:scale-110 hover:duration-150 hover:ease-in-out h-full;
+}

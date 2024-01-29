@@ -1,43 +1,73 @@
-import Navitem from "./navitem";
-// import { handleSignIn } from "@/app/lib/actions";
-import { signInWithPopup } from "firebase/auth";
-import NavLogin from "./navlogin";
-import { cookies } from "next/headers";
-import { unstable_noStore } from "next/cache";
+"use client";
+import Link from "next/link";
+import { setCookie } from "cookies-next";
 import {
-  handleSignInGooglePopup,
-  revalidateTest,
-  signOutGoogle,
+  handleSignOut,
+  revalidateAndRedirectDashboard,
 } from "@/app/lib/actions";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "@/app/lib/firebase/firebase";
 
-export default async function Navbar() {
-  // unstable_noStore();
-  // handleSignIn;
-  const user = cookies().get("USER");
+export default function Navbar({ user }: { user: string | undefined }) {
+  console.log("NAVBAR RENDER");
+
+  async function handleSignIn(): Promise<void> {
+    console.log("Client sign in");
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log("in auth context sign in");
+      console.log(result.user.uid);
+
+      setCookie("user_id", result.user.uid, {
+        sameSite: "strict",
+        secure: true,
+        maxAge: 60 * 24 * 14,
+      });
+      revalidateAndRedirectDashboard();
+    } catch (error) {
+      console.error("Error occurred while signing in from the client:");
+      console.log(error);
+    }
+  }
 
   return (
-    <div className="w-[100vw] h-min bg-slate-400 bg-opacity-50 px-32">
-      <ul className="flex flex-row py-2 items-center justify-evenly bg-red-400 h-full">
-        <Navitem title={"Home"} destination={"/"}></Navitem>
-        {/* {idT ? idT : "no idt"}
-        {idT2 ? idT2.toString() : "no idt2"} */}
-        <form action={revalidateTest}>
-          <button type="submit">Reval test</button>
-        </form>
+    <header className="w-[100vw] h-min bg-slate-600 bg-opacity-50 px-32">
+      <nav className="flex flex-row py-1 items-center justify-evenly  h-full">
+        <Link className="navitem " href={"/example"}>
+          Example freezer
+        </Link>
         {user ? (
           <>
-            <Navitem title={"My freezer"} destination={"/dashboard"}></Navitem>
-            <Navitem title={"Profile"} destination={"/profile"}></Navitem>
-            <NavLogin login={false}></NavLogin>
+            <Link className="navitem" href={"/dashboard"}>
+              My freezer
+            </Link>
+            <Link className="navitem" href={"/profile"}>
+              Profile
+            </Link>
+
+            <Link
+              href="#"
+              onClick={() => {
+                console.log("CLICK NAV SIGN OUT");
+                handleSignOut();
+              }}
+              className="navitem"
+            >
+              Log out
+            </Link>
           </>
         ) : (
-          <NavLogin login={true}></NavLogin>
-          // <form action={signInGooglePopup}>
-          //   <button type="submit">Log in</button>
-          // </form>
-          // <NavLogin title={"Log in"} user={user}></NavLogin>
+          <Link
+            href="#"
+            onClick={() => {
+              handleSignIn();
+            }}
+            className="navitem"
+          >
+            Log in
+          </Link>
         )}
-      </ul>
-    </div>
+      </nav>
+    </header>
   );
 }

@@ -55,12 +55,3 @@ export function getDaysLeftUntilDate(targetDate: Date) {
   );
   return daysLeft;
 }
-
-// export function getRemainingTime(expirationDate: Date): [number, string] {
-//   const daysLeft = getDaysLeftUntilDate(expirationDate);
-//   if (daysLeft > 60) {
-//     return [daysLeft, Math.round(daysLeft / 30) + " months"];
-//   } else {
-//     return [daysLeft, daysLeft + " days"];
-//   }
-// }

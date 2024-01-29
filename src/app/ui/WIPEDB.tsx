@@ -1,18 +1,13 @@
 "use client";
 import { useState } from "react";
 import { useAuthContext } from "../contexts/auth_context";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  setDoc,
-} from "firebase/firestore";
-import { db_firebase } from "../lib/firebase/firebase";
 import { placeholderData } from "../lib/placeholderData";
 import { useRouter } from "next/navigation";
-import { addItemToDB } from "../lib/db/firebase";
+import {
+  addCategoryToDB,
+  addItemToDB,
+  deleteCollectionAndSubcollections,
+} from "../lib/db/firebase";
 
 export default function WipeDB() {
   const authContext = useAuthContext();
@@ -22,17 +17,13 @@ export default function WipeDB() {
     try {
       if (authContext.user != null) {
         setLoading(true);
-
-        const docs = await getDocs(
-          collection(db_firebase, `users/${authContext.user!.uid}/items`)
-        );
-        docs.forEach(async (doc) => {
-          await deleteDoc(doc.ref);
-        });
+        deleteCollectionAndSubcollections("items", authContext.user!.uid);
+        deleteCollectionAndSubcollections("categories", authContext.user!.uid);
         await Promise.all(
           placeholderData.map(async (item) => {
             try {
               await addItemToDB(item, authContext.user!.uid);
+              await addCategoryToDB(item.category, authContext.user!.uid);
             } catch (error) {
               console.log("Error");
               console.log(error);
