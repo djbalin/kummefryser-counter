@@ -1,18 +1,20 @@
 "use client";
 import FoodItem from "./food_item";
 import ListHeader from "./list_header";
-import { useCategoryContext } from "../contexts/categories-context";
-import { FoodItemSchema, FoodItemType } from "../types_schemas/typesAndSchemas";
-import { CategorySchemaType } from "../lib/db/dbschema";
+import { useCategoryContext } from "../../contexts/categories-context";
+import {
+  Category,
+  FoodItemType,
+} from "../../lib/utils/types_schemas/typesAndSchemas";
 
 export default function ItemList({
   foodItemsParsed,
   allCategories,
 }: {
   foodItemsParsed: FoodItemType[];
-  allCategories: CategorySchemaType[];
+  allCategories: Category[];
 }) {
-  const { categoryContext, setCategoryContext } = useCategoryContext();
+  const { categoryContext } = useCategoryContext();
 
   let foodItemsToShow: FoodItemType[];
   if (categoryContext.length > 0 && categoryContext[0] != "") {
@@ -30,7 +32,6 @@ export default function ItemList({
         return (
           <FoodItem
             key={foodItem._id}
-            // key={idx}
             foodItem={foodItem}
             allCategories={JSON.parse(JSON.stringify(allCategories))}
           ></FoodItem>

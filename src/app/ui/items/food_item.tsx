@@ -1,29 +1,23 @@
 "use client";
-import { FoodItemType } from "../types_schemas/typesAndSchemas";
 import {
-  addDaysToDate,
+  Category,
+  FoodItemType,
+} from "@/app/lib/utils/types_schemas/typesAndSchemas";
+import {
   formatDateToReadable,
   getDateDDMMYYYY,
   getDaysLeftUntilDate,
-} from "../lib/datehelper";
-import {
-  PlusIcon,
-  MinusIcon,
-  MinusCircleIcon,
-  PlusCircleIcon,
-} from "@heroicons/react/20/solid";
+} from "../../lib/utils/datehelper";
 import { PencilIcon } from "@heroicons/react/20/solid";
-import { SetStateAction, useState } from "react";
-import { Button } from "./button";
-import ExpandedFoodItem from "./forms/expanded_item";
-import { CategorySchemaType } from "../lib/db/dbschema";
+import { useState } from "react";
+import ExpandedFoodItem from "../forms/expanded_item";
 
 export default function FoodItem({
   foodItem,
   allCategories,
 }: {
   foodItem: FoodItemType;
-  allCategories: CategorySchemaType[];
+  allCategories: Category[];
 }) {
   // console.log("RENDER FOODITEM");
 
@@ -72,7 +66,6 @@ export default function FoodItem({
 function CollapsedFoodItem({ foodItem }: { foodItem: FoodItemType }) {
   const rawDaysLeft = getDaysLeftUntilDate(foodItem.expirationDate);
   const daysLeft = formatDateToReadable(rawDaysLeft);
-  const originalLifespan = formatDateToReadable(foodItem.lifespanInDays);
   let listColumnStyle = "flex flex-col h-full items-center justify-center ";
 
   let expiryStyle = listColumnStyle + " rounded-xl ";
@@ -89,8 +82,6 @@ function CollapsedFoodItem({ foodItem }: { foodItem: FoodItemType }) {
   }
   return (
     <div className="flex justify-center flex-row px-2 bg-orange-400 py-2 items-center w-full h-auto  bg-opacity-20 rounded-md">
-      {/* <div className="justify-around w-full"> */}
-
       {/* QUANTITY */}
       <div className={listColumnStyle + "text-lg firstColumn"}>
         <span className="border-2 border-white border-opacity-30 px-3">
@@ -127,12 +118,7 @@ function CollapsedFoodItem({ foodItem }: { foodItem: FoodItemType }) {
         </span>
       </div>
       <div className={listColumnStyle + " fifthColumn"}>
-        <button
-          // onClick={(e) => {
-          //   handleClickEdit(e);
-          // }}
-          className="flex h-full w-[40%] items-center justify-center hover:scale-110 transition-all"
-        >
+        <button className="flex h-full w-[40%] items-center justify-center hover:scale-110 transition-all">
           <PencilIcon></PencilIcon>
         </button>
       </div>

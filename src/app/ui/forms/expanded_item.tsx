@@ -1,11 +1,13 @@
 "use client";
-import { FoodItemType } from "@/app/types_schemas/typesAndSchemas";
+import {
+  Category,
+  FoodItemType,
+} from "@/app/lib/utils/types_schemas/typesAndSchemas";
 import {
   formatDateToReadable,
-  getDateDDMMYYYY,
   getDateYYYYMMDD,
   getDaysLeftUntilDate,
-} from "../../lib/datehelper";
+} from "../../lib/utils/datehelper";
 import {
   MinusCircleIcon,
   PlusCircleIcon,
@@ -14,9 +16,9 @@ import {
 } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { Button } from "../button";
-import { CategorySchemaType } from "@/app/lib/db/dbschema";
 import React from "react";
-import { updateItem } from "@/app/lib/actions";
+import { updateItem } from "@/app/lib/db/firebase";
+import { useAuthContext } from "@/app/contexts/auth_context";
 
 function createRegex(query: string): RegExp {
   const charArr: string[] = Array.from(query.toLowerCase());
@@ -24,11 +26,11 @@ function createRegex(query: string): RegExp {
 }
 
 function getMatchingCategories(
-  categories: CategorySchemaType[],
+  categories: Category[],
   query: string
-): CategorySchemaType[] {
+): Category[] {
   const reg: RegExp = createRegex(query);
-  return categories.filter((cat) => reg.test(cat.category.toLowerCase()));
+  return categories.filter((cat) => reg.test(cat.name.toLowerCase()));
 }
 
 export default function ExpandedFoodItem({
@@ -38,9 +40,9 @@ export default function ExpandedFoodItem({
 }: {
   foodItem: FoodItemType;
   handleCloseExpanded(): void;
-  allCategories: CategorySchemaType[];
+  allCategories: Category[];
 }) {
-  const originalLifespan = formatDateToReadable(foodItem.lifespanInDays);
+  const { user } = useAuthContext();
 
   const [quantityValue, setQuantityValue] = useState(
     foodItem.quantity.toString()
@@ -62,7 +64,7 @@ export default function ExpandedFoodItem({
 
   const [categoryInputIsFocused, setCategoryInputIsFocused] = useState(false);
   const [categoriesToShow, setCategoriesToShow] =
-    useState<CategorySchemaType[]>(allCategories);
+    useState<Category[]>(allCategories);
   let listColumnStyle = "flex flex-col h-full ";
 
   let expiryStyle = "flex flex-col items-center justify-center rounded-xl ";
@@ -108,7 +110,6 @@ export default function ExpandedFoodItem({
 
     setCategoriesToShow(getMatchingCategories(allCategories, value));
   }
-  console.log("Render exp item");
 
   async function handleUpdateItem(formData: FormData) {
     const overlay = document.getElementById("overlay");
@@ -119,9 +120,10 @@ export default function ExpandedFoodItem({
     overlay?.classList.remove("invisible");
     overlay?.classList.add("visible");
     formData.append("_id", foodItem._id);
-    // const ob = Object.fromEntries(formData);
-    // console.log(ob);
-    await updateItem(formData);
+    if (!user) {
+      throw new Error("Must be logged in to update item");
+    }
+    await updateItem(foodItem._id, formData, user.uid);
     handleCloseExpanded();
     overlay?.classList.remove("visible");
     overlay?.classList.add("invisible");
@@ -151,9 +153,6 @@ export default function ExpandedFoodItem({
         >
           <XMarkIcon className=""></XMarkIcon>
         </button>
-        {/* <Button className="w-auto" onClick={(e) => handleCloseExpanded()}>
-          X
-        </Button> */}
       </div>
       <form
         className="w-full flex flex-col h-full items-center justify-center"
@@ -247,7 +246,6 @@ export default function ExpandedFoodItem({
                 name="itemVolume"
                 id="volumeInput"
                 className={`${textInputStyle}`}
-                // className="text-xl w-[75%] text-left bg-inherit"
                 type="text"
                 value={foodItemVolume}
                 onChange={(e) => {
@@ -266,17 +264,14 @@ export default function ExpandedFoodItem({
                 >
                   Category:
                 </label>
-                {/* <select className={`${textInputStyle} appearance-none`}> */}
 
                 <input
                   id="categoryInput"
                   name="itemCategory"
                   className={`${textInputStyle}`}
-                  // className="text-xl px-2 w-[75%] border-2 bg-inherit text-left"
                   type="text"
                   onFocus={(e: React.FocusEvent) => {
                     handleFocusCategory(e);
-                    // setCategoryIsFocused(true);
                   }}
                   onBlur={(e: React.FocusEvent) => {
                     handleBlurCategory(e);
@@ -298,21 +293,18 @@ export default function ExpandedFoodItem({
                     className={`z-10 cursor-pointer absolute flex flex-col rounded-md  
                    border-orange-800 bg-orange-500`}
                     style={{ width: getDropdownWidthInPx() }}
-                    // className={`${
-                    //   categoryInputIsFocused ? "absolute" : "hidden"
-                    // } px-2 rounded-md border-orange-800 bg-orange-500 border-2`}
                   >
-                    {categoriesToShow.map((cat) => {
+                    {categoriesToShow.map((category) => {
                       return (
                         <li
-                          key={cat._id}
-                          value={cat.category}
+                          key={category.id}
+                          value={category.name}
                           className="flex px-2 z-10 rounded-sm hover:bg-orange-700 text-center "
                           onMouseDown={(e) => {
                             setFoodItemCategory(e.currentTarget.innerHTML);
                           }}
                         >
-                          {cat.category}
+                          {category.name}
                         </li>
                       );
                     })}
@@ -348,16 +340,12 @@ export default function ExpandedFoodItem({
               </label>
               <input
                 className={`${inputStyle} h-10 border-2 w-min border-white border-opacity-50 placeholder:text-xs`}
-                // value={"Choose"}
                 type="date"
                 id="expirationDate"
                 name="expirationDate"
-                // value={foodItem.expirationDate.toString()}
                 value={expirationDate}
                 onChange={(e) => {
-                  // e.target.classList.remove(...invalidInputStyle);
                   setExpirationDate(e.target.value);
-                  // setFreezeDateIsSet(true);
                 }}
               />
             </div>
@@ -367,16 +355,12 @@ export default function ExpandedFoodItem({
               </label>
               <input
                 className={`${inputStyle} h-10 w-min border-2 border-white border-opacity-50 placeholder:text-xs`}
-                // value={"Choose"}
                 type="date"
                 id="freezeDate"
                 name="freezeDate"
-                // value={foodItem.expirationDate.toString()}
                 value={freezeDate}
                 onChange={(e) => {
-                  // e.target.classList.remove(...invalidInputStyle);
                   setFreezeDate(e.target.value);
-                  // setFreezeDateIsSet(true);
                 }}
               />
             </div>

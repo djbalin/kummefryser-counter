@@ -1,30 +1,22 @@
 "use server";
-import { getAllCategories, tryAddCategory } from "@/app/lib/db/dbhelper";
-import { CategorySchemaType } from "@/app/lib/db/dbschema";
 import { CreateForm } from "@/app/ui/forms/create_form";
-import { addCategory } from "@/app/lib/actions";
 import Link from "next/link";
 import { Button } from "@/app/ui/button";
+import { addCategoryToDB, getAllCategories } from "@/app/lib/db/firebase";
+import { Category } from "@/app/lib/utils/types_schemas/typesAndSchemas";
 
 export default async function Page() {
-  const allCategories: CategorySchemaType[] = await getAllCategories();
+  const allCategories: Category[] = await getAllCategories();
 
-  // async function handleAddNewCategory(categoryName: string) {
-  //   "use server";
-  //   tryAddCategory({ category: categoryName, _id: generateId(16) });
-  // }
   return (
-    // <div className="w-auto">
     <div className="flex flex-col items-center w-full gap-y-4">
       <Link href="/dashboard">
         <Button>Go back</Button>
       </Link>
       <CreateForm
         categories={JSON.parse(JSON.stringify(allCategories))}
-        handleAddNewCategory={addCategory}
-        // getAllCategories={getAllCategories}
+        handleAddNewCategory={addCategoryToDB}
       ></CreateForm>
     </div>
-    // </div>
   );
 }

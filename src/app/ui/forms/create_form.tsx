@@ -1,53 +1,33 @@
 "use client";
 import { Button } from "@/app/ui/button";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { createItem } from "@/app/lib/actions";
-import { CategorySchemaType } from "../../lib/db/dbschema";
-import { generateId } from "../../lib/tools";
-// import { getAllCategories } from "../lib/db/dbhelper";
-import { getAllCategories } from "../../lib/db/dbhelptest";
-
-// import { Category } from "../types/fooditem";
-
-// export function CreateForm({ categories }: { categories: Category[] }) {
+import { generateId } from "../../lib/utils/tools";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/lib/firebase/firebase";
+import { getCookie } from "cookies-next";
+import { Category } from "@/app/lib/utils/types_schemas/typesAndSchemas";
 const dropdownNumbers = Array(14)
   .fill(0)
   .map((_, i) => i + 1);
 
 const invalidInputStyle = ["border-red-500", "border-2"];
 
-// export default function CreateForm({
-//   getAllCategories,
-//   handleAddNewCategory,
-// }: {
-//   getAllCategories(): Promise<CategorySchemaType[]>;
-//   handleAddNewCategory(categoryName: string): Promise<void>;
-// }) {
-
 export function CreateForm({
   categories,
   handleAddNewCategory,
 }: {
-  categories: CategorySchemaType[];
-  handleAddNewCategory(categoryName: string): Promise<void>;
+  categories: Category[];
+  handleAddNewCategory(categoryName: string, uid: string): Promise<void>;
 }) {
-  // export default function CreateForm({
-  //   categories,
-  // }: {
-  //   categories: CategorySchemaType[];
-  // }) {
-
-  // const categories: CategorySchemaType[] = await getAllCategories();
-
   const currentDate = new Date();
-  console.log("FORM RENDERED");
+  const [user, loading] = useAuthState(auth);
 
   const [inputName, setInputName] = useState("");
   const [inputSize, setInputSize] = useState("");
   const [inputQuantity, setInputQuantity] = useState("");
-  // const [categories, setCategories] = useState<string[]>(CATEGORYDATA);
   const [newCategory, setNewCategory] = useState<string>("");
   const [categoryHasBeenAdded, setCategoryHasBeenAdded] = useState(false);
   const [selectedLifespanInteger, setSelectedLifespanInteger] = useState("0");
@@ -56,11 +36,6 @@ export function CreateForm({
   const [selectedLifespanQualifier, setSelectedLifespanQualifier] =
     useState("30");
 
-  const [manuallyAddedCategories, setManuallyAddedCatgories] = useState<
-    string[]
-  >([]);
-
-  const [expirationDate, setExpirationDate] = useState(new Date());
   const [freezeDate, setFreezeDate] = useState(
     currentDate.toISOString().split("T")[0]
   );
@@ -84,22 +59,13 @@ export function CreateForm({
     setSelectedCategoryButton(clickedButton);
   }
 
-  // async function handleClickNewCategory(e: React.MouseEvent<HTMLElement>) {
-  //   e.preventDefault();
-  //   await handleAddNewCategory(newCategory);
-  //   if (categoryHasBeenAdded == false) {
-  //     setCategoryHasBeenAdded(true);
-  //   }
-  //   categories.push({ _id: generateId(10), category: newCategory });
-  //   setNewCategory("");
-  // }
   async function handleClickNewCategory(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    await handleAddNewCategory(newCategory);
+    await handleAddNewCategory(newCategory, getCookie("user_id")!.valueOf());
     if (categoryHasBeenAdded == false) {
       setCategoryHasBeenAdded(true);
     }
-    categories.push({ _id: generateId(10), category: newCategory });
+    categories.push({ id: generateId(10), name: newCategory });
     setNewCategory("");
   }
 
@@ -142,19 +108,17 @@ export function CreateForm({
 
   function handleTypeNewCategory(e: React.ChangeEvent<HTMLInputElement>) {
     setNewCategory(e.target.value);
-    // TODO:
-    // Implement searching and validation to check if the inputted new cateogyr already exists
-    // "Did you mean 'fruit'? Already exists"
   }
 
   const labelStyle = "block mb-1 text-xl";
   const inputStyle = "bg-slate-500 bg-opacity-40 pl-2 rounded-lg";
-  const listStyle =
-    "flex p-[0.1rem] w-full justify-center bg-slate-800 rounded-lg";
 
   return (
     <form
       action={async (e) => {
+        if (!user) {
+          throw new Error("Must be logged in to create item");
+        }
         e.delete("daysweeksmonths");
         e.delete("lifespan");
         e.append("category", selectedCategoryButton!.innerHTML);
@@ -166,21 +130,15 @@ export function CreateForm({
           ).toString()
         );
         e.append("_id", generateId(16));
-        createItem(e);
-        // handleClickSubmit(e);
+        console.log("now calling createitem");
+
+        createItem(e, user.uid);
       }}
-      // onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleClickSubmit(e)}
-      // action={createItem}
-      // action={async (e) => {
-      //   e.append("category", selectedCategoryButton!.innerHTML);
-      //   handleClickSubmit(e);
-      // }}
-      // onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleClickSubmit(e)}
       className=" min-w-[40%] gap-y-8 border-2 p-4 bg-slate-800 bg-opacity-40 rounded-lg"
     >
       <div className="mb-4">
         <label className={`${labelStyle}`} htmlFor="itemName">
-          Item name:
+          Item name: {loading ? "loading" : "not loading"} {user?.displayName}
         </label>
         <div className="">
           <input
@@ -204,7 +162,6 @@ export function CreateForm({
         <div className="">
           <input
             className={`${inputStyle} h-10 w-full placeholder:text-xs`}
-            // className="bg-slate-500 bg-opacity-40 h-10 pl-2 w-full rounded-lg placeholder:text-xs"
             placeholder="200 g, ca. 1 kg, 0.5 L ..."
             type="text"
             id="itemSize"
@@ -226,8 +183,7 @@ export function CreateForm({
           {categories.map((category) => {
             return (
               <button
-                // key={category}
-                key={category._id}
+                key={category.id}
                 onClick={(e: React.MouseEvent<HTMLElement>) => {
                   e.currentTarget.parentElement!.classList.remove(
                     ...invalidInputStyle
@@ -236,7 +192,7 @@ export function CreateForm({
                 }}
                 className="text-sm rounded-lg w-20 h-10 bg-red-300 bg-opacity-40 break-words"
               >
-                {category.category}
+                {category.name}
               </button>
             );
           })}
@@ -252,18 +208,12 @@ export function CreateForm({
                 handleTypeNewCategory(e);
               }}
               value={newCategory}
-              // ref={newCategoryInput}
-
-              //   autoFocus
             />
             <button
               onClick={(e: React.MouseEvent<HTMLElement>) => {
                 document;
-                // .getElementById("categoriesContainer")
-                // ?.classList.remove(...invalidInputStyle);
                 handleClickNewCategory(e);
               }}
-              // onClick={(e) => e.preventDefault()}
               className="flex mr-4 items-center justify-center rounded-lg w-16 h-10 bg-green-400 bg-opacity-50"
             >
               <PlusIcon width={40} />
@@ -284,10 +234,10 @@ export function CreateForm({
           </label>
           <input
             className={`${inputStyle} h-10 placeholder:text-xs`}
-            // value={"Choose"}
             type="date"
             id="freezeDate"
             name="freezeDate"
+            defaultValue={freezeDate}
             onChange={(e) => {
               e.target.classList.remove(...invalidInputStyle);
               setFreezeDate(e.target.value);
@@ -306,7 +256,6 @@ export function CreateForm({
                 name="lifespan"
                 className={`${inputStyle} h-full`}
                 defaultValue=""
-                // value={selectedLifespanInteger}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                   e.target.classList.remove(...invalidInputStyle);
                   handleSelectLifespan(e);
@@ -372,30 +321,28 @@ export function CreateForm({
           ></input>
         </div>
       </div>
-      <Button
-        type="submit"
-        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-          validateInputs(e);
-        }}
-        // onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-        //   handleClickSubmit(e)
-        // }
-      >
-        Save new item
-      </Button>
+      {loading ? (
+        <Button
+          className="bg-red-500"
+          disabled
+          color="red-500"
+          type="submit"
+          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            validateInputs(e);
+          }}
+        >
+          Wait...
+        </Button>
+      ) : (
+        <Button
+          type="submit"
+          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            validateInputs(e);
+          }}
+        >
+          Save new item
+        </Button>
+      )}
     </form>
   );
-}
-
-function makeid(length: number) {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
 }
