@@ -9,7 +9,6 @@ export default function Error({
   error: Error & { digest?: string };
 }) {
   useEffect(() => {
-    // Optionally log the error to an error reporting service
     console.error(error);
   }, [error]);
 
