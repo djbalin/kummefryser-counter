@@ -9,7 +9,7 @@ export default function Categories({
 }: {
   allCategories: Category[];
 }) {
-  const { categoryContext, setCategoryContext } = useCategoryContext();
+  const { setCategoryContext } = useCategoryContext();
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   function handleClickCategory(event: React.MouseEvent<HTMLElement>) {

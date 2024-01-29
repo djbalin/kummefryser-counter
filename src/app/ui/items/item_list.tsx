@@ -14,7 +14,7 @@ export default function ItemList({
   foodItemsParsed: FoodItemType[];
   allCategories: Category[];
 }) {
-  const { categoryContext, setCategoryContext } = useCategoryContext();
+  const { categoryContext } = useCategoryContext();
 
   let foodItemsToShow: FoodItemType[];
   if (categoryContext.length > 0 && categoryContext[0] != "") {

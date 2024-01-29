@@ -237,6 +237,7 @@ export function CreateForm({
             type="date"
             id="freezeDate"
             name="freezeDate"
+            defaultValue={freezeDate}
             onChange={(e) => {
               e.target.classList.remove(...invalidInputStyle);
               setFreezeDate(e.target.value);
