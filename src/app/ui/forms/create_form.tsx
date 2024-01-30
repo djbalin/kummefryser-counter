@@ -69,12 +69,16 @@ export function CreateForm({
 
   async function handleClickNewCategory(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    await handleAddNewCategory(newCategory, uid);
+    // const trimmed = newCategory.trim();
+    // const parsed = trimmed.substring(0, 1).toUpperCase() + trimmed.substring(0);
+    // if (!categories.includes(parsed)) {
+    // }
+    categories.push({ id: generateId(10), name: newCategory });
     if (categoryHasBeenAdded == false) {
       setCategoryHasBeenAdded(true);
     }
-    categories.push({ id: generateId(10), name: newCategory });
     setNewCategory("");
+    // await handleAddNewCategory(newCategory, uid);
   }
 
   function validateInputs(
@@ -140,11 +144,17 @@ export function CreateForm({
       <form
         action={async (e) => {
           if (!uid) {
-            throw new Error("Must be logged in to create item");
+            throw new Error("Error: no uid with which to create item");
           }
           e.delete("daysweeksmonths");
           e.delete("lifespan");
-          e.append("category", selectedCategoryButton!.innerHTML);
+          const categoryTrimmedLower = selectedCategoryButton!.innerHTML
+            .trim()
+            .toLowerCase();
+          const categoryParsed =
+            categoryTrimmedLower.charAt(0).toUpperCase() +
+            categoryTrimmedLower.substring(1);
+          e.append("category", categoryParsed);
           e.set(
             "lifespanInDays",
             (
@@ -153,9 +163,7 @@ export function CreateForm({
             ).toString()
           );
           e.append("_id", generateId(16));
-          console.log("now calling createitem");
           await createItem(e, uid);
-          // setCreatingItem(false);
         }}
         className=" min-w-[40%] gap-y-8 border-2 p-4 bg-slate-800 bg-opacity-40 rounded-lg"
       >
@@ -237,7 +245,7 @@ export function CreateForm({
               />
               <button
                 onClick={(e: React.MouseEvent<HTMLElement>) => {
-                  document;
+                  // document;
                   handleClickNewCategory(e);
                 }}
                 className="flex mr-4 items-center justify-center rounded-lg w-16 h-10 bg-green-400 bg-opacity-50"

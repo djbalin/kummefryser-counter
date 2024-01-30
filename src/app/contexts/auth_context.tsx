@@ -25,8 +25,6 @@ export function AuthContextProvider({
   async function googleSignIn(redirectPath: string): Promise<void> {
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log("in auth context sign in");
-      console.log(result.user.uid);
 
       setCookie("user_id", result.user.uid, {
         sameSite: "strict",

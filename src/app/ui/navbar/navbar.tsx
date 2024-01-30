@@ -9,14 +9,9 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "@/app/lib/firebase/firebase";
 
 export default function Navbar({ user }: { user: string | undefined }) {
-  console.log("NAVBAR RENDER");
-
   async function handleSignIn(): Promise<void> {
-    console.log("Client sign in");
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log("in auth context sign in");
-      console.log(result.user.uid);
 
       setCookie("user_id", result.user.uid, {
         sameSite: "strict",
@@ -48,7 +43,6 @@ export default function Navbar({ user }: { user: string | undefined }) {
             <Link
               href="#"
               onClick={() => {
-                console.log("CLICK NAV SIGN OUT");
                 handleSignOut();
               }}
               className="navitem"

@@ -14,9 +14,10 @@ import {
 import { placeholderData } from "./placeholderData";
 
 export async function createItem(formData: FormData, uid: string) {
-  console.log("Creating new item: ");
-  const ob = Object.fromEntries(formData.entries());
-  console.log(ob);
+  // console.log("Creating new item: ");
+  // const ob = Object.fromEntries(formData.entries());
+  // console.log(ob);
+
   try {
     const item = FoodItemSchema.parse({
       name: formData.get("itemName"),
@@ -32,8 +33,6 @@ export async function createItem(formData: FormData, uid: string) {
       _id: formData.get("_id"),
     });
     try {
-      console.log("adding");
-
       await addItemToDB(item, uid);
       await addCategoryToDB(item.category, uid);
     } catch (error) {
@@ -54,14 +53,12 @@ export async function createItem(formData: FormData, uid: string) {
 
 export async function revalidateAndRedirectDashboard() {
   "use server";
-  console.log("LOGGIN IN:)");
   revalidatePath("/dashboard");
   redirect("/dashboard");
 }
 
 export async function handleSignOut() {
   "use server";
-  console.log("LOGGIN OUT:)");
 
   const loggedIn = cookies().has("user_id");
   if (!loggedIn) {
@@ -69,8 +66,6 @@ export async function handleSignOut() {
       "Error while trying to log out: No user is currently logged in"
     );
   } else {
-    console.log("signin out");
-
     cookies().delete("user_id");
     await signOut(auth);
     revalidatePath("/");
@@ -104,5 +99,6 @@ export async function resetDB(uid: string) {
     }
   } catch (e) {
     console.log(e);
+    throw new Error("Error");
   }
 }

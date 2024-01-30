@@ -8,20 +8,19 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   orderBy,
   query,
   setDoc,
-  where,
 } from "firebase/firestore";
 import { db_firebase } from "../firebase/firebase";
 import { getDaysBetweenDates } from "../utils/datehelper";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { generateId } from "../utils/tools";
 
 export async function addItemToDB(newItem: FoodItemType, uid: string) {
-  console.log("adding item");
-
   try {
     const docRef = doc(
       collection(db_firebase, `users/${uid}/items`),
@@ -40,15 +39,16 @@ export async function addCategoryToDB(newCategory: string, uid: string) {
     const stringParsed =
       stringTrimmedLower.charAt(0).toUpperCase() +
       stringTrimmedLower.substring(1);
-    const docRef = collection(db_firebase, `users/${uid}/categories`);
-    const q = query(docRef, where("name", "==", stringParsed));
-    const querySnapshot = await getDocs(q);
+    console.log(`Checking if category exists: ${stringParsed}`);
+    const ref = doc(db_firebase, "users", uid, "categories", stringParsed);
 
-    if (querySnapshot.empty) {
-      console.log(`Category ${stringParsed} doesn't exist, adding`);
-      const document = doc(docRef);
-      const categoryObject: Category = { name: stringParsed, id: document.id };
-      await setDoc(document, categoryObject);
+    const exists = (await getDoc(ref)).exists();
+
+    if (!exists) {
+      console.log(
+        `Category ${stringParsed} doesn't exist, adding ${stringParsed} to ${ref.path}`
+      );
+      await setDoc(ref, { name: stringParsed, id: generateId(10) });
     } else {
       console.log(`Category ${stringParsed} already exists, skipping`);
     }
@@ -64,9 +64,9 @@ export async function updateItem(
   uid: string
 ) {
   try {
-    console.log("Updating new item: ");
-    const ob = Object.fromEntries(formData.entries());
-    console.log(ob);
+    // console.log("Updating new item: ");
+    // const ob = Object.fromEntries(formData.entries());
+    // console.log(ob);
 
     const freezeDate = new Date(formData.get("freezeDate") as string);
     const expirationDate = new Date(formData.get("expirationDate") as string);
@@ -81,14 +81,12 @@ export async function updateItem(
       quantity: parseInt(formData.get("itemQuantity") as string),
       _id: formData.get("_id"),
     });
-    console.log("Updating item from fb");
 
     try {
       const docRef = doc(
         collection(db_firebase, `users/${uid}/items`),
         item._id
       );
-      console.log("docref id:");
       await setDoc(docRef, item);
     } catch (error) {
       console.log(error);

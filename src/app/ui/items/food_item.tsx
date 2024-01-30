@@ -19,13 +19,7 @@ export default function FoodItem({
   foodItem: FoodItemType;
   allCategories: Category[];
 }) {
-  // console.log("RENDER FOODITEM");
-
   const [expanded, setExpanded] = useState<boolean>(false);
-  // function handleClickEdit(event: any) {
-  //   console.log("CLICKED EDIT");
-  //   console.log(event);
-  // }
 
   function handleCloseExpanded() {
     setExpanded(false);

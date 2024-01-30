@@ -96,8 +96,6 @@ export default function ExpandedFoodItem({
 
   function getDropdownWidthInPx(): string {
     const width: number = getWidthOfElement("categoryInput");
-    console.log(width);
-
     return width.toString() + "px";
   }
 
@@ -190,8 +188,6 @@ export default function ExpandedFoodItem({
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      console.log("clicked minus");
-
                       setQuantityValue((old) => (parseInt(old) - 1).toString());
                     }}
                   >
