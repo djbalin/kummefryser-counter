@@ -6,11 +6,11 @@ import CategoriesContextProvider from "../contexts/categories-context";
 export default async function Page() {
   return (
     <div className="flex flex-col sm:min-w-[95%] md:min-w-[90%] lg:min-w-[75%] items-center ">
-      <h1 className="text-3xl pb-10">EXAMPLE freezer! :)</h1>
+      <h1 className="text-3xl py-4">EXAMPLE freezer! :)</h1>
       <p className="text-orange-300 pb-4 max-w-[60%] text-center">
         Do not use this freezer for your important personal items - all users of
-        this website have access to this freezer and can view or delete items in
-        it!
+        this website have access to this freezer and can change or remove the
+        items in it!
       </p>
       <CategoriesContextProvider>
         <Suspense fallback={<p>LOADING ITEMS</p>}>
