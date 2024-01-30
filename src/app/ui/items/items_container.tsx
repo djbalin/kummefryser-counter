@@ -30,10 +30,6 @@ export default async function ItemsContainer({
     allCategories = await getAllCategories();
     foodItems = await getAllSorted();
   }
-  console.log("ITEMS CONTAINER RENDERING");
-
-  console.log("FOODITEMS LENGTH: " + foodItems.length);
-
   const foodItemsSerialized = JSON.stringify(foodItems);
   const foodItemsParsed: FoodItemType[] = JSON.parse(
     foodItemsSerialized,

@@ -7,8 +7,12 @@ import {
 } from "@/app/lib/actions";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "@/app/lib/firebase/firebase";
+import { useState } from "react";
 
 export default function Navbar({ user }: { user: string | undefined }) {
+  // export default function Navbar() {
+  // const user = getCookie("user_id");
+  const [loggingOut, setLoggingOut] = useState<boolean>(false);
   async function handleSignIn(): Promise<void> {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -27,11 +31,19 @@ export default function Navbar({ user }: { user: string | undefined }) {
 
   return (
     <header className="w-[100vw] h-min bg-slate-600 bg-opacity-50 px-32">
+      {loggingOut ? (
+        <div className="absolute w-full h-full bg-slate-800 bg-opacity-80">
+          LOGGING OUT
+        </div>
+      ) : (
+        <></>
+      )}
       <nav className="flex flex-row py-1 items-center justify-evenly  h-full">
         <Link className="navitem " href={"/example"}>
           Example freezer
         </Link>
-        {user ? (
+        {/* {user && user?.valueOf() != "_EXAMPLE" ? ( */}
+        {user && user != "_EXAMPLE" ? (
           <>
             <Link className="navitem" href={"/dashboard"}>
               My freezer
@@ -42,8 +54,11 @@ export default function Navbar({ user }: { user: string | undefined }) {
 
             <Link
               href="#"
-              onClick={() => {
-                handleSignOut();
+              onClick={async () => {
+                setLoggingOut(true);
+                await handleSignOut();
+                setCookie("user_id", "_EXAMPLE");
+                setLoggingOut(false);
               }}
               className="navitem"
             >

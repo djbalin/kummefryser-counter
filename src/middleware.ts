@@ -1,11 +1,24 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { cookies } from "next/headers";
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
-  const userLoggedIn =
-    cookies().has("user_id") && cookies().get("user_id")!.value.length > 0;
+
+  let userLoggedIn = false;
+
+  const uid = request.cookies.get("user_id");
+
+  if (!uid) {
+    response.cookies.set("user_id", "_EXAMPLE");
+  } else {
+    if (uid!.value.length > 0 && uid!.value != "_EXAMPLE") {
+      userLoggedIn = true;
+    }
+  }
+  // response.cookies.set("user_id", uid!.value);
+  // const userLoggedIn =
+  //   request.cookies.has("user_id") &&
+  //   request.cookies.get("user_id")!.value.length > 0;
 
   if (request.nextUrl.pathname === "/") {
     console.log("middleware for home page");
@@ -24,12 +37,6 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  if (request.nextUrl.pathname.startsWith("/login")) {
-    if (userLoggedIn) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-  }
-
   if (request.nextUrl.pathname.startsWith("/profile")) {
     if (userLoggedIn) {
       return response;
@@ -40,5 +47,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/dashboard", "/profile", "/login"],
+  matcher: ["/", "/dashboard", "/profile"],
 };

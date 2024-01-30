@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AuthContextProvider } from "./contexts/auth_context";
-import Navbar from "./ui/navbar/navbar";
 import { StrictMode } from "react";
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 // const inter = Inter({ subsets: ["latin"] });
 import { Analytics } from "@vercel/analytics/react";
+import NavHolder from "./ui/navbar/navholder";
 export const metadata: Metadata = {
   title: "Kummefryser",
 };
@@ -17,13 +17,17 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = cookies().get("user_id")?.value;
+  // const user = cookies().get("user_id")?.value;
   return (
     <StrictMode>
       <html lang="en" className="no-scrollbar">
         <body className={`{inter.className}`}>
           <AuthContextProvider>
-            <Navbar user={user}></Navbar>
+            {/* <Navbar user={user}></Navbar> */}
+            {/* <Suspense fallback={<p>LOADING</p>}> */}
+            {/* <Navbar></Navbar> */}
+            <NavHolder></NavHolder>
+            {/* </Suspense> */}
             {children}
           </AuthContextProvider>
           <Analytics />

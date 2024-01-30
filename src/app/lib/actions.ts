@@ -3,7 +3,6 @@ import { revalidatePath } from "next/cache";
 import { FoodItemSchema } from "./utils/types_schemas/typesAndSchemas";
 import { addDaysToDate } from "./utils/datehelper";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 import { signOut } from "firebase/auth";
 import { auth } from "./firebase/firebase";
 import {
@@ -60,17 +59,21 @@ export async function revalidateAndRedirectDashboard() {
 export async function handleSignOut() {
   "use server";
 
-  const loggedIn = cookies().has("user_id");
-  if (!loggedIn) {
-    throw new Error(
-      "Error while trying to log out: No user is currently logged in"
-    );
-  } else {
-    cookies().delete("user_id");
-    await signOut(auth);
-    revalidatePath("/");
-    redirect("/");
-  }
+  // const loggedIn = cookies().has("user_id");
+  // if (!loggedIn) {
+  //   throw new Error(
+  //     "Error while trying to log out: No user is currently logged in"
+  //   );
+  // } else {
+  //   cookies().delete("user_id");
+  //   await signOut(auth);
+  //   revalidatePath("/");
+  //   redirect("/");
+  // }
+  // cookies().delete("user_id");
+  await signOut(auth);
+  revalidatePath("/");
+  redirect("/");
 }
 
 export async function resetDB(uid: string) {

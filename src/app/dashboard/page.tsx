@@ -2,6 +2,7 @@ import ItemsContainer from "@/app/ui/items/items_container";
 import { Suspense } from "react";
 import CategoriesContextProvider from "../contexts/categories-context";
 
+// export default async function Page(response: NextResponse) {
 export default async function Page() {
   console.log("DASHBOARD render");
 
