@@ -6,7 +6,12 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { signOut } from "firebase/auth";
 import { auth } from "./firebase/firebase";
-import { addCategoryToDB, addItemToDB } from "./db/firebase";
+import {
+  addCategoryToDB,
+  addItemToDB,
+  deleteCollectionAndSubcollections,
+} from "./db/firebase";
+import { placeholderData } from "./placeholderData";
 
 export async function createItem(formData: FormData, uid: string) {
   console.log("Creating new item: ");
@@ -32,9 +37,7 @@ export async function createItem(formData: FormData, uid: string) {
       await addItemToDB(item, uid);
       await addCategoryToDB(item.category, uid);
     } catch (error) {
-      return {
-        message: "Database error. Could not create new item.",
-      };
+      throw new Error("Error: could not add new item");
     }
   } catch (error) {
     console.error("Error parsing new item. ", error);
@@ -42,7 +45,11 @@ export async function createItem(formData: FormData, uid: string) {
       'Error creating new item. Verify that the input fields conform to their types (e.g. "quantity" must be a number)'
     );
   }
-  redirect("/dashboard");
+  if (uid === "_EXAMPLE") {
+    redirect("/example");
+  } else {
+    redirect("/dashboard");
+  }
 }
 
 export async function revalidateAndRedirectDashboard() {
@@ -68,5 +75,34 @@ export async function handleSignOut() {
     await signOut(auth);
     revalidatePath("/");
     redirect("/");
+  }
+}
+
+export async function resetDB(uid: string) {
+  try {
+    if (uid) {
+      await deleteCollectionAndSubcollections("items", uid);
+      await deleteCollectionAndSubcollections("categories", uid);
+      await Promise.all(
+        placeholderData.map(async (item) => {
+          try {
+            await addItemToDB(item, uid);
+            await addCategoryToDB(item.category, uid);
+          } catch (error) {
+            console.log("Error");
+            console.log(error);
+          }
+        })
+      );
+    } else {
+      throw new Error("No authenticated user");
+    }
+    if (uid === "_EXAMPLE") {
+      revalidatePath("/example");
+    } else {
+      revalidatePath("/dashboard");
+    }
+  } catch (e) {
+    console.log(e);
   }
 }

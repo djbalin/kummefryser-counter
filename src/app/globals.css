@@ -67,3 +67,13 @@ body {
 .navitem {
   @apply w-auto text-lg text-center p-1 font-normal hover:scale-110 hover:duration-150 hover:ease-in-out h-full;
 }
+
+.path1 {
+  fill: red;
+}
+.path2 {
+  stroke: red;
+  stroke-width: 1.25px;
+  fill: none;
+  marker-end: url(#arrow);
+}

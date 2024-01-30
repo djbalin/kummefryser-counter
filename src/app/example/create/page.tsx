@@ -1,31 +1,30 @@
-// "use server";
-// // import { getAllCategories, tryAddCategory } from "@/app/lib/db/dbhelper";
-// import { CategorySchemaType } from "@/app/lib/db/dbschema";
-// import { CreateForm } from "@/app/ui/forms/create_form";
-// import { addCategory } from "@/app/lib/actions";
-// import Link from "next/link";
-// import { Button } from "@/app/ui/button";
+"use server";
+import { CreateForm } from "@/app/ui/forms/create_form";
+import Link from "next/link";
+import { Button } from "@/app/ui/button";
+import {
+  EXAMPLE_getAllCategories,
+  addCategoryToDB,
+} from "@/app/lib/db/firebase";
+import { Category } from "@/app/lib/utils/types_schemas/typesAndSchemas";
 
 export default async function Page() {
-  //   const allCategories: CategorySchemaType[] = await getAllCategories();
+  const allCategories: Category[] = await EXAMPLE_getAllCategories();
 
-  // async function handleAddNewCategory(categoryName: string) {
-  //   "use server";
-  //   tryAddCategory({ category: categoryName, _id: generateId(16) });
-  // }
   return (
-    // <div className="w-auto">
     <div className="flex flex-col items-center w-full gap-y-4">
-      empty
-      {/* <Link href="/example">
-        <Button>Go back</Button>
-      </Link>
+      <div className="flex flex-row gap-x-10">
+        <h2 className="text-orange-400 font-semibold text-2xl">
+          Example freezer
+        </h2>
+        <Link href="/dashboard">
+          <Button>Go back</Button>
+        </Link>
+      </div>
       <CreateForm
         categories={JSON.parse(JSON.stringify(allCategories))}
-        handleAddNewCategory={addCategory}
-        // getAllCategories={getAllCategories}
-      ></CreateForm> */}
+        handleAddNewCategory={addCategoryToDB}
+      ></CreateForm>
     </div>
-    // </div>
   );
 }

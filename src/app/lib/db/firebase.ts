@@ -29,9 +29,8 @@ export async function addItemToDB(newItem: FoodItemType, uid: string) {
     );
     await setDoc(docRef, newItem);
   } catch (error) {
-    return {
-      message: `Database error. Failed to connect or to create this new item: ${newItem}`,
-    };
+    console.log(error);
+    throw new Error("Error adding item to database:");
   }
 }
 
@@ -100,17 +99,34 @@ export async function updateItem(
   revalidatePath("/dashboard");
 }
 
+export async function EXAMPLE_getAllCategories(): Promise<Category[]> {
+  try {
+    const uid = "_EXAMPLE";
+
+    const result = await getDocs(
+      query(collection(db_firebase, "users", uid, "categories"))
+    );
+    var items: Category[] = [];
+    result.forEach((item) => {
+      const data = item.data();
+      if (data as Category) {
+        items.push(data as Category);
+      } else {
+        throw new Error(`Error trying to parse this object: ${data}`);
+      }
+    });
+    return items;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error trying to fetch all categories");
+  }
+}
 export async function getAllCategories(): Promise<Category[]> {
   try {
+    const uid = cookies().get("user_id")!.value;
+
     const result = await getDocs(
-      query(
-        collection(
-          db_firebase,
-          "users",
-          cookies().get("user_id")!.value,
-          "categories"
-        )
-      )
+      query(collection(db_firebase, "users", uid, "categories"))
     );
     var items: Category[] = [];
     result.forEach((item) => {
@@ -130,14 +146,33 @@ export async function getAllCategories(): Promise<Category[]> {
 
 export async function getAllSorted(): Promise<FoodItemType[]> {
   try {
-    const itemsRef = collection(
-      db_firebase,
-      "users",
-      cookies().get("user_id")!.value,
-      "items"
-    );
-    const q = query(itemsRef, orderBy("expirationDate"));
+    const uid = cookies().get("user_id")!.value;
 
+    const itemsRef = collection(db_firebase, "users", uid, "items");
+    const q = query(itemsRef, orderBy("expirationDate"));
+    const querySnapshot = await getDocs(q);
+    const items: FoodItemType[] = [];
+    querySnapshot.forEach((el) => {
+      const data = el.data();
+      for (const [key, value] of Object.entries(data)) {
+        if (key.endsWith("Date")) {
+          data[key] = value.toDate();
+        }
+      }
+      items.push(data as FoodItemType);
+    });
+    return items;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Database error while trying to retrieve all items");
+  }
+}
+export async function EXAMPLE_getAllSorted(): Promise<FoodItemType[]> {
+  try {
+    const uid = "_EXAMPLE";
+
+    const itemsRef = collection(db_firebase, "users", uid, "items");
+    const q = query(itemsRef, orderBy("expirationDate"));
     const querySnapshot = await getDocs(q);
     const items: FoodItemType[] = [];
     querySnapshot.forEach((el) => {
@@ -179,4 +214,9 @@ export async function deleteCollectionAndSubcollections(
       throw new Error("Error occurred while trying to delete an item");
     }
   });
+  if (uid === "_EXAMPLE") {
+    revalidatePath("/example");
+  } else {
+    revalidatePath("/dashboard");
+  }
 }

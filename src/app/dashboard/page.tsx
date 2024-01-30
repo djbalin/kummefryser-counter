@@ -10,7 +10,7 @@ export default async function Page() {
       <span className="text-3xl pb-10">What&apos;s in my freezer :)</span>
       <CategoriesContextProvider>
         <Suspense fallback={<p>LOADING ITEMS</p>}>
-          <ItemsContainer></ItemsContainer>
+          <ItemsContainer isExample={false}></ItemsContainer>
         </Suspense>
       </CategoriesContextProvider>
     </div>

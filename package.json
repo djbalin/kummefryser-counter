@@ -12,6 +12,7 @@
     "@heroicons/react": "^2.0.18",
     "@types/jest": "^29.5.11",
     "@vercel/speed-insights": "^1.0.5",
+    "bcrypt": "^5.1.1",
     "clsx": "^2.0.0",
     "cookies-next": "^4.1.0",
     "eslint-plugin-next": "^0.0.0",
