@@ -7,7 +7,7 @@ import Navbar from "./ui/navbar/navbar";
 import { StrictMode } from "react";
 import { cookies } from "next/headers";
 // const inter = Inter({ subsets: ["latin"] });
-
+import { Analytics } from "@vercel/analytics/react";
 export const metadata: Metadata = {
   title: "Kummefryser",
 };
@@ -26,6 +26,7 @@ export default async function RootLayout({
             <Navbar user={user}></Navbar>
             {children}
           </AuthContextProvider>
+          <Analytics />
           <SpeedInsights />
         </body>
       </html>

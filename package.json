@@ -11,6 +11,7 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "@types/jest": "^29.5.11",
+    "@vercel/analytics": "^1.1.2",
     "@vercel/speed-insights": "^1.0.5",
     "bcrypt": "^5.1.1",
     "clsx": "^2.0.0",
