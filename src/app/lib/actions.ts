@@ -44,8 +44,10 @@ export async function createItem(formData: FormData, uid: string) {
     );
   }
   if (uid === "_EXAMPLE") {
+    revalidatePath("/example");
     redirect("/example");
   } else {
+    revalidatePath("/dashboard");
     redirect("/dashboard");
   }
 }

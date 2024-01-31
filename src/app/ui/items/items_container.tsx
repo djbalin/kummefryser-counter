@@ -13,7 +13,7 @@ import {
 } from "@/app/lib/db/firebase";
 import Link from "next/link";
 import Categories from "./categories";
-import { unstable_noStore } from "next/cache";
+// import { unstable_noStore } from "next/cache";
 import { cookies } from "next/headers";
 
 export default async function ItemsContainer({
@@ -21,7 +21,7 @@ export default async function ItemsContainer({
 }: {
   isExample: boolean;
 }) {
-  unstable_noStore();
+  // unstable_noStore();
 
   let allCategories: Category[];
   let foodItems: FoodItemType[];
