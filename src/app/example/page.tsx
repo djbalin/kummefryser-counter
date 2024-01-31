@@ -1,22 +1,6 @@
 "use server";
-import ItemsContainer from "@/app/ui/items/items_container";
-import { Suspense } from "react";
-import CategoriesContextProvider from "../contexts/categories-context";
+import Dashboard from "../ui/Dashboard";
 
 export default async function Page() {
-  return (
-    <div className="flex flex-col sm:min-w-[95%] md:min-w-[90%] lg:min-w-[75%] items-center ">
-      <h1 className="text-3xl py-4">EXAMPLE freezer! :)</h1>
-      <p className="text-orange-300 pb-4 max-w-[60%] text-center">
-        Do not use this freezer for your important personal items - all users of
-        this website have access to this freezer and can change or remove the
-        items in it!
-      </p>
-      <CategoriesContextProvider>
-        <Suspense fallback={<p>LOADING ITEMS</p>}>
-          <ItemsContainer isExample={true}></ItemsContainer>
-        </Suspense>
-      </CategoriesContextProvider>
-    </div>
-  );
+  return <Dashboard isExample={true}></Dashboard>;
 }

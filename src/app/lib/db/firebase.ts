@@ -87,6 +87,8 @@ export async function updateItem(
         collection(db_firebase, `users/${uid}/items`),
         item._id
       );
+      console.log(docRef.id);
+
       await setDoc(docRef, item);
     } catch (error) {
       console.log(error);
