@@ -30,14 +30,16 @@ export default function Categories({
 
   return (
     <>
-      <section className="flex w-full items-center mb-2">
-        <span className="text-2xl w-[30%]">Filter by categories:</span>
-        <ul className="flex flex-grow w-[70%] items-center justify-center pr-16 gap-x-2">
+      <div className="flex sm:flex-row flex-col w-full items-center mb-2 sm:mb-0">
+        <span className="text-lg sm:text-2xl text-center sm:text-center py-1 sm:w-min w-full">
+          Filter by categories:
+        </span>
+        <ul className="flex flex-wrap sm:w-[70%] gap-y-1 items-center justify-center pb-1 sm:pb-0 pr-8 md:pr-16 gap-x-1">
           {allCategories.map((cat) => {
             return (
               <li
                 className={clsx(
-                  "border-2 flex text-center rounded-xl p-2 cursor-pointer",
+                  "border-2 text-sm sm:text-base lg:text-lg flex text-center rounded-md sm:rounded-xl py-2 px-1 sm:p-2 cursor-pointer",
                   {
                     "bg-purple-600": selectedCategories.includes(cat.name),
                   }
@@ -52,7 +54,7 @@ export default function Categories({
             );
           })}
         </ul>
-      </section>
+      </div>
     </>
   );
 }

@@ -26,17 +26,19 @@ export default function ItemList({
   }
 
   return (
-    <div className="flex flex-col border-2 sm:px-4 border-opacity-30 sm:py-2 w-full gap-y-2">
+    <section className="flex flex-col border-2 sm:px-4 border-opacity-30 sm:py-2 w-full gap-y-2">
       <ListHeader></ListHeader>
-      {foodItemsToShow.map((foodItem) => {
-        return (
-          <FoodItem
-            key={foodItem._id}
-            foodItem={foodItem}
-            allCategories={JSON.parse(JSON.stringify(allCategories))}
-          ></FoodItem>
-        );
-      })}
-    </div>
+      <ol className="flex flex-col gap-y-2">
+        {foodItemsToShow.map((foodItem) => {
+          return (
+            <FoodItem
+              key={foodItem._id}
+              foodItem={foodItem}
+              allCategories={JSON.parse(JSON.stringify(allCategories))}
+            ></FoodItem>
+          );
+        })}
+      </ol>
+    </section>
   );
 }

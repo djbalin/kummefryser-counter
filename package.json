@@ -25,6 +25,7 @@
     "next": "14.0.4",
     "next-auth": "^5.0.0-beta.5",
     "react": "^18",
+    "react-datepicker": "^5.1.0",
     "react-dom": "^18",
     "react-firebase-hooks": "^5.1.1",
     "server-only": "^0.0.1",

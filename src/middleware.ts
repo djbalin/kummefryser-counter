@@ -20,15 +20,15 @@ export function middleware(request: NextRequest) {
   //   request.cookies.has("user_id") &&
   //   request.cookies.get("user_id")!.value.length > 0;
 
-  if (request.nextUrl.pathname === "/") {
-    console.log("middleware for home page");
-    if (userLoggedIn) {
-      console.log("middleware for home page: redirecting to dashboard");
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    } else {
-      return response;
-    }
-  }
+  // if (request.nextUrl.pathname === "/") {
+  //   console.log("middleware for home page");
+  //   if (userLoggedIn) {
+  //     console.log("middleware for home page: redirecting to dashboard");
+  //     return NextResponse.redirect(new URL("/dashboard", request.url));
+  //   } else {
+  //     return response;
+  //   }
+  // }
   if (request.nextUrl.pathname.startsWith("/dashboard")) {
     if (userLoggedIn) {
       return response;
