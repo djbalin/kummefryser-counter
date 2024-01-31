@@ -1,5 +1,5 @@
 import Image from "next/image";
-import bgImage from "@/app/assets/freezer.webp";
+import bgImage from "@/app/public/freezer.webp";
 
 export default function AppBgImg() {
   return (

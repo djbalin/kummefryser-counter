@@ -1,5 +1,3 @@
-import { ResponseCookies } from "next/dist/compiled/@edge-runtime/cookies";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
@@ -47,12 +45,6 @@ export function middleware(request: NextRequest) {
           headers: newHeaders,
         },
       });
-
-      request.cookies.set("user_id", "_EXAMPLE");
-      const req = new NextRequest(new URL("/", request.url), request);
-      return req;
-      cookies().set("user_id", "_EXAMPLE");
-      return NextResponse.redirect(new URL("/"));
     }
   }
   console.log("returnng middleware");

@@ -101,7 +101,7 @@ html {
   height: 100%;
   width: 100%;
   z-index: 10;
-  background-image: url("../app/assets/freezer.webp");
+  background-image: url("../app/public/freezer.webp");
   background-size: cover;
   animation: 10s linear 0s 1 unblurFront;
 }
@@ -116,7 +116,7 @@ html {
   z-index: 5;
   /* background-position: 25% 50%; */
   background-position: 25% 50%;
-  background-image: url("../app/assets/freezer2.webp");
+  background-image: url("../app/public/freezer2.webp");
   background-size: cover;
   animation: 20s ease-in-out 0s 1 moveDeep;
   /* filter: blur(30px);

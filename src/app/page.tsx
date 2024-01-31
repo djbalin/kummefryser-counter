@@ -7,6 +7,7 @@ export default function Home() {
       {/* <div id="background2" className="bg-red-200"> */}
       {/* <AppBgImg></AppBgImg> */}
       {/* </div> */}
+      <h1>Hey</h1>
       <div id="backgroundDeep" className=""></div>
       <div id="backgroundTop" className=""></div>
 
