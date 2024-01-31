@@ -5,11 +5,13 @@ import { Button } from "@/app/ui/button";
 import { addCategoryToDB, getAllCategories } from "@/app/lib/db/firebase";
 import { Category } from "@/app/lib/utils/types_schemas/typesAndSchemas";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
   const uid = cookies().get("user_id");
   if (!uid) {
-    throw new Error("NO UID");
+    console.error("NO UID!");
+    redirect("/");
   }
   const allCategories: Category[] = await getAllCategories(uid.value);
 
