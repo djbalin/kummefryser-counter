@@ -17,7 +17,7 @@ import {
 import { db_firebase } from "../firebase/firebase";
 import { getDaysBetweenDates } from "../utils/datehelper";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 import { generateId } from "../utils/tools";
 
 export async function addItemToDB(newItem: FoodItemType, uid: string) {
@@ -121,9 +121,9 @@ export async function EXAMPLE_getAllCategories(): Promise<Category[]> {
     throw new Error("Error trying to fetch all EXAMPLE categories");
   }
 }
-export async function getAllCategories(): Promise<Category[]> {
+export async function getAllCategories(uid: string): Promise<Category[]> {
   try {
-    const uid = cookies().get("user_id")!.value;
+    // const uid = cookies().get("user_id")!.value;
 
     const result = await getDocs(
       query(collection(db_firebase, "users", uid, "categories"))
@@ -144,9 +144,9 @@ export async function getAllCategories(): Promise<Category[]> {
   }
 }
 
-export async function getAllSorted(): Promise<FoodItemType[]> {
+export async function getAllSorted(uid: string): Promise<FoodItemType[]> {
   try {
-    const uid = cookies().get("user_id")!.value;
+    // const uid = cookies().get("user_id")!.value;
 
     const itemsRef = collection(db_firebase, "users", uid, "items");
     const q = query(itemsRef, orderBy("expirationDate"));

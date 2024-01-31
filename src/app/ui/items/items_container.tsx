@@ -13,12 +13,16 @@ import {
 } from "@/app/lib/db/firebase";
 import Link from "next/link";
 import Categories from "./categories";
+import { unstable_noStore } from "next/cache";
+import { cookies } from "next/headers";
 
 export default async function ItemsContainer({
   isExample,
 }: {
   isExample: boolean;
 }) {
+  unstable_noStore();
+
   let allCategories: Category[];
   let foodItems: FoodItemType[];
 
@@ -26,9 +30,15 @@ export default async function ItemsContainer({
     foodItems = await EXAMPLE_getAllSorted();
     allCategories = await EXAMPLE_getAllCategories();
   } else {
-    foodItems = await getAllSorted();
-    allCategories = await getAllCategories();
+    const uid = cookies().get("user_id");
+    if (uid) {
+      foodItems = await getAllSorted(uid.value);
+      allCategories = await getAllCategories(uid.value);
+    } else {
+      throw new Error("NO UID");
+    }
   }
+
   const foodItemsSerialized = JSON.stringify(foodItems);
   const foodItemsParsed: FoodItemType[] = JSON.parse(
     foodItemsSerialized,
