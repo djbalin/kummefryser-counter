@@ -1,4 +1,3 @@
-"use server";
 import {
   Category,
   FoodItemType,
@@ -24,11 +23,11 @@ export default async function ItemsContainer({
   let foodItems: FoodItemType[];
 
   if (isExample) {
-    allCategories = await EXAMPLE_getAllCategories();
     foodItems = await EXAMPLE_getAllSorted();
+    allCategories = await EXAMPLE_getAllCategories();
   } else {
-    allCategories = await getAllCategories();
     foodItems = await getAllSorted();
+    allCategories = await getAllCategories();
   }
   const foodItemsSerialized = JSON.stringify(foodItems);
   const foodItemsParsed: FoodItemType[] = JSON.parse(

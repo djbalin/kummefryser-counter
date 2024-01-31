@@ -118,7 +118,7 @@ export async function EXAMPLE_getAllCategories(): Promise<Category[]> {
     return items;
   } catch (error) {
     console.log(error);
-    throw new Error("Error trying to fetch all categories");
+    throw new Error("Error trying to fetch all EXAMPLE categories");
   }
 }
 export async function getAllCategories(): Promise<Category[]> {
@@ -140,7 +140,7 @@ export async function getAllCategories(): Promise<Category[]> {
     return items;
   } catch (error) {
     console.log(error);
-    throw new Error("Error trying to fetch all categories");
+    throw new Error("Error trying to fetch all USER categories");
   }
 }
 
@@ -164,7 +164,7 @@ export async function getAllSorted(): Promise<FoodItemType[]> {
     return items;
   } catch (error) {
     console.log(error);
-    throw new Error("Database error while trying to retrieve all items");
+    throw new Error("Database error while trying to retrieve all USER items");
   }
 }
 export async function EXAMPLE_getAllSorted(): Promise<FoodItemType[]> {
@@ -187,7 +187,9 @@ export async function EXAMPLE_getAllSorted(): Promise<FoodItemType[]> {
     return items;
   } catch (error) {
     console.log(error);
-    throw new Error("Database error while trying to retrieve all items");
+    throw new Error(
+      "Database error while trying to retrieve all EXAMPLE items"
+    );
   }
 }
 
