@@ -16,7 +16,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const user = cookies().get("user_id")?.value;
   return (
     <StrictMode>
       <html lang="en" className="no-scrollbar">

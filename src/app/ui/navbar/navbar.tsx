@@ -7,7 +7,7 @@ import {
 } from "@/app/lib/actions";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "@/app/lib/firebase/firebase";
-// import { useState } from "react";
+import { useState } from "react";
 
 export async function handleSignIn(): Promise<void> {
   try {
@@ -24,56 +24,60 @@ export async function handleSignIn(): Promise<void> {
     console.log(error);
   }
 }
-export default function Navbar({ user }: { user: string | undefined }) {
-  // export default function Navbar() {
-  // const user = getCookie("user_id");
-  // const [loggingOut, setLoggingOut] = useState<boolean>(false);
+export default function Navbar({ user: uid }: { user: string | undefined }) {
+  const [loading, setLoading] = useState<boolean>(false);
+  console.log("navbar render");
 
   return (
-    //  {loggingOut ? (
-    //   <div className="absolute w-full h-full bg-slate-800 bg-opacity-80">
-    //     LOGGING OUT
-    //   </div>
-    // ) : (
-    //   <></>
-    // )}
     <nav className="flex flex-row text-center items-center justify-evenly w-full sm:w-[60%] h-full">
+      {loading ? (
+        <div className="absolute w-full h-full bg-slate-800 bg-opacity-80">
+          LOGGING OUT
+        </div>
+      ) : (
+        <></>
+      )}
+
       <Link className="navitem " href={"/example"}>
         Example freezer
       </Link>
-      {/* {user && user?.valueOf() != "_EXAMPLE" ? ( */}
-      {user && user != "_EXAMPLE" ? (
+      {uid && uid != "_EXAMPLE" ? (
         <>
           <Link className="navitem" href={"/dashboard"}>
             My freezer
           </Link>
-          {/* <Link className="navitem" href={"/profile"}>
-            Profile
-          </Link> */}
-
-          <Link
-            href="#"
-            onClick={async () => {
-              // setLoggingOut(true);
+          <form
+            action={async () => {
+              setLoading(true);
               await handleSignOut();
               setCookie("user_id", "_EXAMPLE");
-              // setLoggingOut(false);
+              setLoading(false);
             }}
-            className="navitem"
           >
-            Log out
-          </Link>
+            <button
+              type="submit"
+              className="navitem"
+              onClick={() => setLoading(true)}
+            >
+              Log out(form)
+            </button>
+          </form>
         </>
       ) : (
-        <Link
-          href="#"
-          onClick={async () => {
+        <form
+          action={async () => {
             await handleSignIn();
+            setLoading(false);
           }}
-          className="navitem"
         >
-          Log in
-        </Link>
+          <button
+            type="submit"
+            className="navitem"
+            onClick={() => setLoading(true)}
+          >
+            Log in
+          </button>
+        </form>
       )}
     </nav>
   );

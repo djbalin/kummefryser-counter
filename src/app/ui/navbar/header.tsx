@@ -9,6 +9,7 @@ import { getCookie } from "cookies-next";
 export default function Header() {
   // const user = cookies().get("user_id");
   const user = getCookie("user_id");
+  console.log("header render");
 
   return (
     <header

@@ -29,10 +29,11 @@ export function middleware(request: NextRequest) {
 
       return response;
     } else {
+      return NextResponse.redirect(new URL("/example", request.url));
+
       const newHeaders = new Headers(request.headers);
       newHeaders.set("cookies", "user_id=_EXAMPLE");
       // const newResponse = NextResponse.next();
-      // NextResponse.redirect(new URL("/example", request.url));
       // return response;
       // newResponse.cookies.set("user_id", "_EXAMPLE");
       console.log("old HEADERS");
