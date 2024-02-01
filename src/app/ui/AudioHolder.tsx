@@ -42,26 +42,33 @@ export default function AudioHolder() {
   }
 
   return (
-    <div id="audioButtons" className="flex flex-col z-10 opacity-0">
-      <button
-        disabled={btnDisabled}
-        className="rounded-xl text-center  text-7xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-serif tracking-wide sm:tracking-[0.2em] sm:px-8 py-4 mt-[65%] sm:mt-[25%] mb-32  sm:mb-64"
-        onClick={async () => {
-          await handleClick(true);
-        }}
-        id="yesPlayAudio"
+    <div className="absolute bg-red-100 bg-opacity-20 z-10 top-0 h-full w-full">
+      <div
+        id="audioButtons"
+        className="flex  h-full w-full justify-evenly z-10 flex-col opacity-0"
       >
-        ENTER
-      </button>
-      <button
-        onClick={async () => {
-          await handleClick(false);
-        }}
-        className="rounded-xl text-slate-600 text-base p-4 "
-        id="noPlayAudio"
-      >
-        (enter without audio)
-      </button>
+        <div></div>
+        <button
+          disabled={btnDisabled}
+          className="rounded-xl text-center  text-7xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-serif tracking-wide sm:tracking-[0.2em] sm:px-8 py-4 "
+          //   className="rounded-xl text-center  text-7xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-serif tracking-wide sm:tracking-[0.2em] sm:px-8 py-4 mt-[65%] sm:mt-[25%] mb-32  sm:mb-64"
+          onClick={async () => {
+            await handleClick(true);
+          }}
+          id="yesPlayAudio"
+        >
+          ENTER
+        </button>
+        <button
+          onClick={async () => {
+            await handleClick(false);
+          }}
+          className="rounded-xl text-slate-500 text-base p-4 "
+          id="noPlayAudio"
+        >
+          (enter without audio)
+        </button>
+      </div>
     </div>
     // <span
     //   id="audio"

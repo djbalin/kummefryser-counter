@@ -21,6 +21,7 @@ body {
   color: rgb(var(--foreground-rgb));
   /* color: black; */
   background-color: black;
+  /* background-color: rgba(254 226 226 0.2); */
   /* background: linear-gradient(
       to bottom,
       transparent,
@@ -107,7 +108,7 @@ body {
 }
 
 .backgroundTopAnimate {
-  animation: 10s ease-in 8s 1 unblurAndMoveFront forwards;
+  animation: 10s ease-in 8s 1 unblurAndMoveFront;
 }
 
 .audioReady {
