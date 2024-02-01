@@ -90,8 +90,8 @@ body {
 }
 
 .welcomeAnimate {
-  /* animation: 5s linear 18s 1 fadeinContent forwards; */
-  animation: 5s linear 1s 1 fadeinContent forwards;
+  animation: 5s linear 18s 1 fadeinContent forwards;
+  /* animation: 5s linear 1s 1 fadeinContent forwards; */
 }
 
 .fadeIn3s {
