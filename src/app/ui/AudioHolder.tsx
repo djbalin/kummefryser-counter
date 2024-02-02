@@ -1,6 +1,6 @@
 "use client";
 
-import sound from "@/app/public/opening.mp3";
+import sound from "@/app/public/fryser4.mp3";
 import { useState, useEffect } from "react";
 
 export default function AudioHolder() {

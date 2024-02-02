@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "npx cross-env ANALYZE=true npm run build"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
+    "@next/bundle-analyzer": "^14.1.0",
     "@types/jest": "^29.5.11",
     "@vercel/analytics": "^1.1.2",
     "@vercel/speed-insights": "^1.0.5",

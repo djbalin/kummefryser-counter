@@ -6,11 +6,6 @@ export function middleware(request: NextRequest) {
 
   let userLoggedIn = false;
 
-  // console.log("REQ headers");
-  // console.log(request.headers);
-  // console.log("RES");
-  // console.log(response);
-
   const uid = request.cookies.get("user_id");
 
   if (!uid) {
@@ -30,35 +25,11 @@ export function middleware(request: NextRequest) {
       return response;
     } else {
       return NextResponse.redirect(new URL("/example", request.url));
-
-      const newHeaders = new Headers(request.headers);
-      newHeaders.set("cookies", "user_id=_EXAMPLE");
-      // const newResponse = NextResponse.next();
-      // return response;
-      // newResponse.cookies.set("user_id", "_EXAMPLE");
-      console.log("old HEADERS");
-      console.log(request.headers);
-      console.log("NEW HEADERS");
-      console.log(newHeaders.getSetCookie().push("user_id=_EXAMPLE"));
-
-      return NextResponse.next({
-        request: {
-          headers: newHeaders,
-        },
-      });
     }
   }
   console.log("returnng middleware");
 
   return response;
-
-  // if (request.nextUrl.pathname.startsWith("/profile")) {
-  //   if (userLoggedIn) {
-  //     return response;
-  //   } else {
-  //     return NextResponse.redirect(new URL("/dashboard", request.url));
-  //   }
-  // }
 }
 
 export const config = {

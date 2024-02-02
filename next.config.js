@@ -5,8 +5,12 @@
 // };
 
 // module.exports = nextConfig;
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   webpack(config, options) {
     config.module.rules.push({
       test: /\.mp3$/,
@@ -17,3 +21,5 @@ module.exports = {
     return config;
   },
 };
+
+module.exports = withBundleAnalyzer(nextConfig);
