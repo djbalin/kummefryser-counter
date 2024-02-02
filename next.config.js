@@ -13,7 +13,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const nextConfig = {
   webpack(config, options) {
     config.module.rules.push({
-      test: /\.mp3$/,
+      test: /\.ogg$/,
       use: {
         loader: "url-loader",
       },
