@@ -54,10 +54,17 @@ export default async function ItemsContainer({
   return (
     <>
       {foodItems.length == 0 ? (
-        <span className="text-xl text-red-500">
-          The database seems empty, please add items or fill it with example
-          data:
-        </span>
+        <>
+          <span className="text-xl text-red-500 my-12">
+            The database seems empty, please add items or fill it with example
+            data:
+          </span>
+          <Link href="/create">
+            <button className="flex h-12 sm:h-16 w-20 sm:w-28 items-center justify-center rounded-lg bg-blue-500 px-4 font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50">
+              NEW ITEM
+            </button>
+          </Link>
+        </>
       ) : (
         <>
           <section className="flex px-2 flex-row w-full justify-between sm:py-2 lg:px-24">

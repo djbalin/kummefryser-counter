@@ -1,5 +1,5 @@
-import { useAuthContext } from "@/app/contexts/auth_context";
-import { updateItem } from "@/app/lib/db/firebase";
+"use client";
+import { deleteItem, updateItem } from "@/app/lib/db/firebase";
 import {
   getDateYYYYMMDD,
   getDaysLeftUntilDate,
@@ -16,6 +16,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { Button } from "../button";
+import { getCookie } from "cookies-next";
 
 export default function UpdateForm({
   foodItem,
@@ -36,8 +37,8 @@ export default function UpdateForm({
       setIsSmallScreen(false);
     }
   });
-  const { user } = useAuthContext();
 
+  const user = getCookie("user_id");
   const [quantityValue, setQuantityValue] = useState(
     foodItem.quantity.toString()
   );
@@ -117,6 +118,8 @@ export default function UpdateForm({
   }
 
   async function handleUpdateItem(formData: FormData) {
+    console.log("Updating, userid: ", user?.valueOf());
+
     const overlay = document.getElementById("overlay");
     const container = document.getElementById("item_container");
     const overlayText = document.getElementById("overlay_text");
@@ -128,7 +131,7 @@ export default function UpdateForm({
     if (!user) {
       throw new Error("Must be logged in to update item");
     }
-    await updateItem(foodItem._id, formData, user.uid);
+    await updateItem(foodItem._id, formData, user.valueOf());
     handleCloseExpanded();
     overlay?.classList.remove("flex");
     overlay?.classList.add("invisible");
@@ -144,7 +147,6 @@ export default function UpdateForm({
           id="quantity_container"
           className="flex flex-row w-full items-center"
         >
-          {/* <span className="w-[25%] text-lg text-right pr-4">Quantity:</span> */}
           <label className="labelStyle" htmlFor="itemQuantity">
             Quantity
           </label>
@@ -318,12 +320,24 @@ export default function UpdateForm({
           </span>
         </div>
 
-        <div
-          className={"flex justify-end w-full items-center mt-2 align-center"}
-        >
+        <div className="flex justify-end gap-x-4 w-full items-center mt-2 align-center">
           <button
-            className="w-48 h-auto bg-[hsla(125,100%,50%,0.7)] rounded-lg py-2 font-semibold"
+            className="w-48 h-auto bg-[hsla(0,100%,50%,1)] rounded-lg py-2 font-semibold"
+            onClick={async (e) => {
+              e.preventDefault();
+              if (
+                window.confirm("Are you sure you wish to delete this item?")
+              ) {
+                await deleteItem(foodItem._id, user!.valueOf());
+                console.log("else?");
+              }
+            }}
+          >
+            Delete item
+          </button>
+          <button
             type="submit"
+            className="w-48 h-auto bg-[hsla(125,100%,50%,0.7)] rounded-lg py-2 font-semibold"
           >
             Save changes
           </button>

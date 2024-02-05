@@ -222,3 +222,17 @@ export async function deleteCollectionAndSubcollections(
     revalidatePath("/dashboard");
   }
 }
+
+export async function deleteItem(itemId: string, uid: string) {
+  try {
+    await deleteDoc(doc(collection(db_firebase, `users/${uid}/items`), itemId));
+  } catch (error) {
+    console.log(console.error());
+    throw new Error("Error occurred while trying to delete an item");
+  }
+  if (uid === "_EXAMPLE") {
+    revalidatePath("/example");
+  } else {
+    revalidatePath("/dashboard");
+  }
+}

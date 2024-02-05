@@ -12,7 +12,6 @@ import { useState } from "react";
 export async function handleSignIn(): Promise<void> {
   try {
     const result = await signInWithPopup(auth, provider);
-
     setCookie("user_id", result.user.uid, {
       sameSite: "strict",
       secure: true,
@@ -26,7 +25,6 @@ export async function handleSignIn(): Promise<void> {
 }
 export default function Navbar({ user: uid }: { user: string | undefined }) {
   const [loading, setLoading] = useState<boolean>(false);
-  console.log("navbar render");
 
   return (
     <nav className="flex flex-row text-center items-center justify-evenly w-full sm:w-[60%] h-full">

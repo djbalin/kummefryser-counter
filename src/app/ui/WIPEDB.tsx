@@ -32,7 +32,7 @@ export default function WipeDB({ isExample }: { isExample: boolean }) {
           }}
           className="border-4 items-center h-16 w-auto justify-center px-4 flex my-4 rounded-md border-purple-500 border-opacity-70"
         >
-          {isExample ? "RESET EXAMPLE DATABASE" : "RESET MY DATABASE"}
+          {isExample ? "RESET AND ADD EXAMPLE DATA" : "RESET MY DATABASE"}
         </button>
       </form>
     </>

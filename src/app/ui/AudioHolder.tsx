@@ -11,14 +11,12 @@ export default function AudioHolder() {
     // only run once on the first render on the client
   }, []);
   audio?.addEventListener("canplay", (event) => {
-    console.log("CAN PLAY AUDIO");
     document.getElementById("audioButtons")?.classList.add("audioReady");
     setBtnDisabled(false);
     // const btn = document.getElementById("yesPlayAudio");
     // btn?.setAttribute("disabled", "false");
     // console.log(btn?.getAttribute("disabled"));
   });
-  console.log("HOLDER RENDER");
 
   async function handleClick(playAudio: boolean) {
     if (playAudio) {
