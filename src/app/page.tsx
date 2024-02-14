@@ -1,3 +1,4 @@
+import Link from "next/link";
 import AudioHolder from "./ui/AudioHolder";
 import HomepageWelcome from "./ui/HomepageWelcome";
 export default function Home() {
@@ -12,6 +13,13 @@ export default function Home() {
       <div id="backgroundTop" className=""></div>
       <HomepageWelcome></HomepageWelcome>
       <AudioHolder></AudioHolder>
+      <Link
+        className="absolute bottom-10 right-10 text-center rounded-lg items-center justify-center flex w-32 h-16 bg-slate-500 bg-opacity-20 z-50"
+        href={"/example"}
+      >
+        SKIP INTRO
+        {/* <button>Heyy</button> */}
+      </Link>
     </main>
     // </>
   );
