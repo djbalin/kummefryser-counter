@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-import { setCookie } from "cookies-next";
+import { CookieValueTypes, setCookie } from "cookies-next";
 import {
   handleSignOut,
   revalidateAndRedirectDashboard,
 } from "@/app/lib/actions";
 import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "@/app/lib/firebase/firebase";
+import { auth, provider } from "@/app/lib/firebase/config";
 import { useState } from "react";
 
 export async function handleSignIn(): Promise<void> {
@@ -23,7 +23,9 @@ export async function handleSignIn(): Promise<void> {
     console.log(error);
   }
 }
-export default function Navbar({ user: uid }: { user: string | undefined }) {
+// export default function Navbar({ user: uid }: { user: string | undefined }) {
+export default function Navbar({ user }: { user: CookieValueTypes }) {
+  const uid = user?.valueOf();
   const [loggingIn, setLoggingIn] = useState<boolean>(false);
   const [loggingOut, setLoggingOut] = useState<boolean>(false);
 
@@ -54,8 +56,8 @@ export default function Navbar({ user: uid }: { user: string | undefined }) {
           </Link>
           <form
             action={async () => {
-              await handleSignOut("/example");
               setCookie("user_id", "_EXAMPLE");
+              await handleSignOut("/example");
               setLoggingOut(false);
             }}
           >

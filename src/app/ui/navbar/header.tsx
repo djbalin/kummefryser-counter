@@ -7,9 +7,7 @@ import Link from "next/link";
 import { getCookie } from "cookies-next";
 
 export default function Header() {
-  // const user = cookies().get("user_id");
   const user = getCookie("user_id");
-  console.log("header render");
 
   return (
     <header
@@ -19,11 +17,7 @@ export default function Header() {
       <Link href={"/"}>
         <Image src={topimg} className="w-16 h-16" alt={""}></Image>
       </Link>
-      {user ? (
-        <Navbar user={user.valueOf()}></Navbar>
-      ) : (
-        <Navbar user={undefined}></Navbar>
-      )}
+      <Navbar user={user}></Navbar>
     </header>
   );
 }

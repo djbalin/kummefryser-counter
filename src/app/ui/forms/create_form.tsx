@@ -8,34 +8,33 @@ import { generateId } from "../../lib/utils/tools";
 // import { useAuthState } from "react-firebase-hooks/auth";
 // import { auth } from "@/app/lib/firebase/firebase";
 import { getCookie } from "cookies-next";
-import {
-  Category,
-  FoodItemType,
-} from "@/app/lib/utils/types_schemas/typesAndSchemas";
-import { updateItem } from "@/app/lib/db/firebase";
+import { Category } from "@/app/lib/utils/types_schemas/typesAndSchemas";
+import { getAllCategories } from "@/app/lib/db/firebase";
 const dropdownNumbers = Array(14)
   .fill(0)
   .map((_, i) => i + 1);
 
 const invalidInputStyle = ["border-red-500", "border-2"];
 
-export function CreateForm({
-  categories,
+export async function CreateForm({
+  // categories,
   handleAddNewCategory,
 }: {
-  categories: Category[];
+  // categories: Category[];
   handleAddNewCategory(categoryName: string, uid: string): Promise<void>;
 }) {
-  const currentDate = new Date();
-  // const [user, loading] = useAuthState(auth);
-  let uid: string;
   const user = getCookie("user_id");
-  if (user) {
-    uid = user.valueOf();
-  } else {
-    uid = "_EXAMPLE";
+  console.log("USER: ", user);
+
+  if (!user) {
+    alert("NO USER");
   }
-  // const uid = getCookie("user_id")?.valueOf();
+  const uid = user!.valueOf();
+
+  const categories: Category[] = JSON.parse(
+    JSON.stringify(await getAllCategories(uid))
+  );
+  const currentDate = new Date();
 
   const [inputName, setInputName] = useState("");
   const [inputSize, setInputSize] = useState("");
