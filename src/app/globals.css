@@ -252,8 +252,12 @@ body {
   }
 }
 
-.textInputStyle {
-  @apply text-xl text-left w-[75%] py-1 bg-inherit rounded-md border-2 border-orange-800 border-opacity-50 px-2;
+.textInputLabel {
+  @apply w-[30%] xl:text-lg text-right pr-2 xl:pr-4;
+}
+
+.textInputField {
+  @apply text-lg xl:text-xl text-left w-[70%] py-1 bg-inherit rounded-md border-2 border-orange-800 border-opacity-50 px-2;
 }
 .navitem {
   @apply w-auto text-lg sm:text-xl text-center items-center p-1 font-normal hover:scale-110 hover:duration-150 hover:ease-in-out;

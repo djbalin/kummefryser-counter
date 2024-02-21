@@ -17,6 +17,7 @@ import {
 import { useState } from "react";
 import { Button } from "../button";
 import { getCookie } from "cookies-next";
+import Modal from "../Modal";
 
 export default function UpdateForm({
   foodItem,
@@ -27,6 +28,18 @@ export default function UpdateForm({
   handleCloseExpanded: () => void;
   allCategories: Category[];
 }) {
+  const [updatingItem, setUpdatingItem] = useState(false);
+
+  async function handleUpdateItem(formData: FormData) {
+    formData.append("_id", foodItem._id);
+    if (!user) {
+      throw new Error("Must be logged in to update item");
+    }
+    await updateItem(foodItem._id, formData, user.valueOf());
+    setUpdatingItem(false);
+    handleCloseExpanded();
+  }
+
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(
     window.innerWidth < 940
   );
@@ -76,7 +89,7 @@ export default function UpdateForm({
   }
 
   const inputStyle = "bg-slate-500 bg-opacity-40 pl-2 rounded-lg";
-  //   const textInputStyle =
+  //   const textInputField =
   //     "text-xl text-left w-[75%] py-1 bg-inherit rounded-md border-2 border-orange-800 border-opacity-50 px-2";
 
   function handleFocusCategory(event: React.FocusEvent) {
@@ -117,32 +130,13 @@ export default function UpdateForm({
     setCategoriesToShow(getMatchingCategories(allCategories, value));
   }
 
-  async function handleUpdateItem(formData: FormData) {
-    console.log("Updating, userid: ", user?.valueOf());
-
-    const overlay = document.getElementById("overlay");
-    const container = document.getElementById("item_container");
-    const overlayText = document.getElementById("overlay_text");
-    const itemOffset = container?.offsetTop;
-    overlayText!.style.top = itemOffset + "px";
-    overlay?.classList.remove("invisible");
-    overlay?.classList.add("flex");
-    formData.append("_id", foodItem._id);
-    if (!user) {
-      throw new Error("Must be logged in to update item");
-    }
-    await updateItem(foodItem._id, formData, user.valueOf());
-    handleCloseExpanded();
-    overlay?.classList.remove("flex");
-    overlay?.classList.add("invisible");
-  }
-
   if (isSmallScreen) {
     return (
       <form
-        className="w-full flex flex-col gap-y-2 h-auto items-center"
+        className="w-full flex flex-col gap-y-2 h-auto items-start"
         action={async (formData) => handleUpdateItem(formData)}
       >
+        {updatingItem && <Modal text={"Updating item..."} />}
         <div
           id="quantity_container"
           className="flex flex-row w-full items-center"
@@ -197,7 +191,7 @@ export default function UpdateForm({
             </label>
             <input
               name="itemName"
-              className="textInputStyle"
+              className="textInputField"
               type="text"
               id="nameInput"
               value={foodItemName}
@@ -207,14 +201,14 @@ export default function UpdateForm({
             />
           </div>
 
-          <div className="flex items-center justify-center w-full">
+          <div className="flex flex-row items-center w-full">
             <label className="labelStyle" htmlFor="volumeInput">
               Volume:
             </label>
             <input
               name="itemVolume"
               id="volumeInput"
-              className="textInputStyle"
+              className="textInputField"
               type="text"
               value={foodItemVolume}
               onChange={(e) => {
@@ -234,7 +228,7 @@ export default function UpdateForm({
               <input
                 id="categoryInput"
                 name="itemCategory"
-                className="textInputStyle"
+                className="textInputField"
                 type="text"
                 onFocus={(e: React.FocusEvent) => {
                   handleFocusCategory(e);
@@ -286,7 +280,7 @@ export default function UpdateForm({
             Expires:
           </label>
           <input
-            className={`${inputStyle} w-[75%] h-10 border-2 border-white border-opacity-50 placeholder:text-xs`}
+            className={`${inputStyle} w-62 h-10 border-2 border-white border-opacity-50 placeholder:text-xs`}
             type="date"
             id="expirationDate"
             name="expirationDate"
@@ -301,7 +295,7 @@ export default function UpdateForm({
             Frozen:
           </label>
           <input
-            className={`${inputStyle} h-10 w-[75%] border-2 border-white border-opacity-50 placeholder:text-xs`}
+            className={`${inputStyle} h-10 w-62 border-2 border-white border-opacity-50 placeholder:text-xs`}
             type="date"
             id="freezeDate"
             name="freezeDate"
@@ -338,6 +332,7 @@ export default function UpdateForm({
           <button
             type="submit"
             className="w-48 h-auto bg-[hsla(125,100%,50%,0.7)] rounded-lg py-2 font-semibold"
+            onClick={(e) => setUpdatingItem(true)}
           >
             Save changes
           </button>
@@ -350,6 +345,7 @@ export default function UpdateForm({
         className="w-full flex flex-col h-full items-center justify-center"
         action={async (formData) => handleUpdateItem(formData)}
       >
+        {updatingItem && <Modal text={"Updating item..."} />}
         <div className="flex flex-row w-full">
           <div
             className={
@@ -407,15 +403,12 @@ export default function UpdateForm({
             }
           >
             <div className="flex w-full items-center justify-center">
-              <label
-                className="w-[25%] text-lg text-right pr-4"
-                htmlFor="nameInput"
-              >
+              <label className="textInputLabel" htmlFor="nameInput">
                 Item name:
               </label>
               <input
                 name="itemName"
-                className="textInputStyle"
+                className="textInputField"
                 type="text"
                 id="nameInput"
                 value={foodItemName}
@@ -426,16 +419,13 @@ export default function UpdateForm({
             </div>
 
             <div className="flex items-center justify-center w-full">
-              <label
-                className="w-[25%] text-lg text-right pr-4"
-                htmlFor="volumeInput"
-              >
+              <label className="textInputLabel" htmlFor="volumeInput">
                 Volume:
               </label>
               <input
                 name="itemVolume"
                 id="volumeInput"
-                className="textInputStyle"
+                className="textInputField"
                 type="text"
                 value={foodItemVolume}
                 onChange={(e) => {
@@ -448,17 +438,14 @@ export default function UpdateForm({
               className="flex flex-col items-center justify-center w-full"
             >
               <div className="flex w-full items-center flex-row">
-                <label
-                  className="w-[25%] text-lg text-right pr-4"
-                  htmlFor="categoryInput"
-                >
+                <label className="textInputLabel" htmlFor="categoryInput">
                   Category:
                 </label>
 
                 <input
                   id="categoryInput"
                   name="itemCategory"
-                  className="textInputStyle"
+                  className="textInputField"
                   type="text"
                   onFocus={(e: React.FocusEvent) => {
                     handleFocusCategory(e);
@@ -473,7 +460,7 @@ export default function UpdateForm({
                 />
               </div>
 
-              {categoryInputIsFocused ? (
+              {categoryInputIsFocused && (
                 <div
                   id="dropdownContainer"
                   className={`pl-[25%] w-full z-10 items-left`}
@@ -500,8 +487,6 @@ export default function UpdateForm({
                     })}
                   </ul>
                 </div>
-              ) : (
-                <></>
               )}
             </div>
           </div>
@@ -521,7 +506,7 @@ export default function UpdateForm({
               listColumnStyle + " justify-center items-end w-[23%]  gap-y-4"
             }
           >
-            <div className="flex flex-row w-full items-center">
+            <div className="flex flex-row w-full items-center justify-between">
               <label
                 className=" text-lg text-right pr-4"
                 htmlFor="expirationDate"
@@ -539,7 +524,7 @@ export default function UpdateForm({
                 }}
               />
             </div>
-            <div className="flex flex-row w-full items-center">
+            <div className="flex flex-row w-full items-center justify-between">
               <label className=" text-lg text-right pr-4" htmlFor="freezeDate">
                 Frozen:
               </label>
@@ -561,7 +546,25 @@ export default function UpdateForm({
             "flex flex-row justify-end w-full gap-y-2 items-center mt-4 gap-x-10 align-center"
           }
         >
-          <Button type="submit" className="w-48">
+          <button
+            className="w-48 h-auto bg-[hsla(0,100%,50%,1)] rounded-lg py-2 font-semibold"
+            onClick={async (e) => {
+              e.preventDefault();
+              if (
+                window.confirm("Are you sure you wish to delete this item?")
+              ) {
+                await deleteItem(foodItem._id, user!.valueOf());
+                console.log("else?");
+              }
+            }}
+          >
+            Delete item
+          </button>
+          <Button
+            onClick={(e) => setUpdatingItem(true)}
+            type="submit"
+            className="w-48"
+          >
             Save changes
           </Button>
         </div>

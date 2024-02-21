@@ -58,7 +58,7 @@ export async function revalidateAndRedirectDashboard() {
   redirect("/dashboard");
 }
 
-export async function handleSignOut() {
+export async function handleSignOut(redirectPath: string) {
   "use server";
 
   // const loggedIn = cookies().has("user_id");
@@ -75,7 +75,7 @@ export async function handleSignOut() {
   // cookies().delete("user_id");
   await signOut(auth);
   revalidatePath("/");
-  redirect("/");
+  redirect(redirectPath);
 }
 
 export async function resetDB(uid: string) {

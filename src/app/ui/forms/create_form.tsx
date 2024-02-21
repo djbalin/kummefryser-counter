@@ -8,7 +8,11 @@ import { generateId } from "../../lib/utils/tools";
 // import { useAuthState } from "react-firebase-hooks/auth";
 // import { auth } from "@/app/lib/firebase/firebase";
 import { getCookie } from "cookies-next";
-import { Category } from "@/app/lib/utils/types_schemas/typesAndSchemas";
+import {
+  Category,
+  FoodItemType,
+} from "@/app/lib/utils/types_schemas/typesAndSchemas";
+import { updateItem } from "@/app/lib/db/firebase";
 const dropdownNumbers = Array(14)
   .fill(0)
   .map((_, i) => i + 1);
@@ -25,9 +29,9 @@ export function CreateForm({
   const currentDate = new Date();
   // const [user, loading] = useAuthState(auth);
   let uid: string;
-  const userCookie = getCookie("user_id");
-  if (userCookie) {
-    uid = userCookie.valueOf();
+  const user = getCookie("user_id");
+  if (user) {
+    uid = user.valueOf();
   } else {
     uid = "_EXAMPLE";
   }
