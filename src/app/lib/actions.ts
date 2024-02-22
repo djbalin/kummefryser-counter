@@ -4,7 +4,7 @@ import { FoodItemSchema } from "./utils/types_schemas/typesAndSchemas";
 import { addDaysToDate } from "./utils/datehelper";
 import { redirect } from "next/navigation";
 import { signOut } from "firebase/auth";
-import { auth } from "./firebase/config";
+import { auth } from "./firebase/firebase";
 import {
   addCategoryToDB,
   addItemToDB,
@@ -61,8 +61,20 @@ export async function revalidateAndRedirectDashboard() {
 export async function handleSignOut(redirectPath: string) {
   "use server";
 
+  // const loggedIn = cookies().has("user_id");
+  // if (!loggedIn) {
+  //   throw new Error(
+  //     "Error while trying to log out: No user is currently logged in"
+  //   );
+  // } else {
+  //   cookies().delete("user_id");
+  //   await signOut(auth);
+  //   revalidatePath("/");
+  //   redirect("/");
+  // }
+  // cookies().delete("user_id");
   await signOut(auth);
-  revalidatePath(redirectPath);
+  revalidatePath("/");
   redirect(redirectPath);
 }
 

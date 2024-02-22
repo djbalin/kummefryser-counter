@@ -14,7 +14,7 @@ import {
   query,
   setDoc,
 } from "firebase/firestore";
-import { db_firebase } from "../firebase/config";
+import { db_firebase } from "../firebase/firebase";
 import { getDaysBetweenDates } from "../utils/datehelper";
 import { revalidatePath } from "next/cache";
 // import { cookies } from "next/headers";

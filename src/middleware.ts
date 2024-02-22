@@ -17,17 +17,17 @@ export function middleware(request: NextRequest) {
   }
 
   if (request.nextUrl.pathname.startsWith("/dashboard")) {
-    // console.log("dashboard MIDDLEWARE");
+    console.log("dashboard MIDDLEWARE");
 
     if (userLoggedIn) {
-      // console.log("user logged in");
+      console.log("user logged in");
 
       return response;
     } else {
       return NextResponse.redirect(new URL("/example", request.url));
     }
   }
-  // console.log("returnng middleware");
+  console.log("returnng middleware");
 
   return response;
 }
