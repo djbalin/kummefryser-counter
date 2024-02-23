@@ -75,7 +75,7 @@ export default function UpdateForm({
     useState<Category[]>(allCategories);
   let listColumnStyle = "flex flex-col h-full ";
 
-  let expiryStyle = "flex flex-col items-center justify-center rounded-xl ";
+  let expiryStyle = "flex text-center justify-center items-center  rounded-xl ";
 
   // OK
   if (rawDaysLeft > 60) {
@@ -139,12 +139,12 @@ export default function UpdateForm({
         {updatingItem && <Modal text={"Updating item..."} />}
         <div
           id="quantity_container"
-          className="flex flex-row w-full items-center"
+          className="flex flex-row w-full items-center "
         >
           <label className="labelStyle" htmlFor="itemQuantity">
             Quantity
           </label>
-          <div className="flex flex-row w-[75%]">
+          <div className="flex flex-row">
             <input
               id="itemQuantity"
               name="itemQuantity"
@@ -185,7 +185,7 @@ export default function UpdateForm({
           </div>
         </div>
         <div id="text_areas" className="flex flex-col gap-y-1 w-full">
-          <div className="flex flex-row items-center gap-y-2 w-full">
+          <div className="flex flex-row items-center gap-y-2 ">
             <label className="labelStyle" htmlFor="nameInput">
               Item name:
             </label>
@@ -201,7 +201,7 @@ export default function UpdateForm({
             />
           </div>
 
-          <div className="flex flex-row items-center w-full">
+          <div className="flex flex-row items-center ">
             <label className="labelStyle" htmlFor="volumeInput">
               Volume:
             </label>
@@ -308,7 +308,9 @@ export default function UpdateForm({
         <div className="flex flex-row w-full h-auto items-center">
           <span className="labelStyle">Time left:</span>
           <span
-            className={expiryStyle + " w-[75%] h-10 bg-opacity-100 text-lg"}
+            className={
+              expiryStyle + " flex-1 max-w-sm h-10 bg-opacity-100 text-lg"
+            }
           >
             {daysLeft}
           </span>
@@ -342,14 +344,14 @@ export default function UpdateForm({
   } else {
     return (
       <form
-        className="w-full flex flex-col h-full items-center justify-center"
+        className="w-full flex flex-col h-full"
         action={async (formData) => handleUpdateItem(formData)}
       >
         {updatingItem && <Modal text={"Updating item..."} />}
-        <div className="flex flex-row w-full">
+        <div className="flex flex-row gap-x-2 w-full justify-between">
           <div
             className={
-              "flex flex-row h-full items-center justify-center text-lg w-[20%]"
+              "flex flex-row h-full items-center justify-center text-lg pl-8"
             }
           >
             <div className="flex flex-col gap-y-2">
@@ -399,7 +401,7 @@ export default function UpdateForm({
           <div
             className={
               listColumnStyle +
-              " w-[34%] items-center gap-y-2 bg-inherit justify-center"
+              " flex-1 max-w-sm items-center gap-y-2 bg-inherit justify-center"
             }
           >
             <div className="flex w-full items-center justify-center">
@@ -437,7 +439,7 @@ export default function UpdateForm({
               id="parentOfDropdown"
               className="flex flex-col items-center justify-center w-full"
             >
-              <div className="flex w-full items-center flex-row">
+              <div className="flex items-center justify-center w-full">
                 <label className="textInputLabel" htmlFor="categoryInput">
                   Category:
                 </label>
@@ -490,31 +492,25 @@ export default function UpdateForm({
               )}
             </div>
           </div>
-          <div
-            className={listColumnStyle + "items-center justify-center w-[23%]"}
-          >
+          <div className={listColumnStyle + "items-center justify-center "}>
             <span
-              className={
-                expiryStyle + " w-[70%] h-[50%] bg-opacity-100 text-lg"
-              }
+              className={expiryStyle + "  h-16 w-32  bg-opacity-100 text-lg"}
             >
               {daysLeft}
             </span>
           </div>
           <div
-            className={
-              listColumnStyle + " justify-center items-end w-[23%]  gap-y-4"
-            }
+            className={" flex flex-col h-full justify-center items-end gap-y-4"}
           >
-            <div className="flex flex-row w-full items-center justify-between">
+            <div className="flex flex-wrap flex-row w-auto  items-center justify-end">
               <label
-                className=" text-lg text-right pr-4"
+                className=" xl:text-lg text-right pr-2 xl:pr-4"
                 htmlFor="expirationDate"
               >
                 Expires:
               </label>
               <input
-                className={`${inputStyle} h-10 border-2 w-min border-white border-opacity-50 placeholder:text-xs`}
+                className={`${inputStyle} h-10 border-2 w-min border-white border-opacity-50 text-sm`}
                 type="date"
                 id="expirationDate"
                 name="expirationDate"
@@ -524,12 +520,15 @@ export default function UpdateForm({
                 }}
               />
             </div>
-            <div className="flex flex-row w-full items-center justify-between">
-              <label className=" text-lg text-right pr-4" htmlFor="freezeDate">
+            <div className="flex flex-wrap flex-row w-full items-center justify-end">
+              <label
+                className=" xl:text-lg text-right pr-2 xl:pr-4"
+                htmlFor="freezeDate"
+              >
                 Frozen:
               </label>
               <input
-                className={`${inputStyle} h-10 w-min border-2 border-white border-opacity-50 placeholder:text-xs`}
+                className={`${inputStyle} h-10 w-min border-2 border-white border-opacity-50 text-sm`}
                 type="date"
                 id="freezeDate"
                 name="freezeDate"

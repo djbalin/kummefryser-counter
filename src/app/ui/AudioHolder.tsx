@@ -68,12 +68,5 @@ export default function AudioHolder() {
         </button>
       </div>
     </div>
-    // <span
-    //   id="audio"
-    //   className="w-24 h-24 z-50"
-    //   onClick={async () => await mySound.play()}
-    // >
-    //   AUDIOAUDIOAUDIOAUDIO
-    // </span>
   );
 }
