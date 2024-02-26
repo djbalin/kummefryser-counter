@@ -1,5 +1,3 @@
-import { cookies } from "next/headers";
-
 export function generateId(length: number): string {
   let result = "";
   const characters =
