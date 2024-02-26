@@ -325,7 +325,6 @@ export default function UpdateForm({
                 window.confirm("Are you sure you wish to delete this item?")
               ) {
                 await deleteItem(foodItem._id, user!.valueOf());
-                console.log("else?");
               }
             }}
           >
@@ -553,7 +552,6 @@ export default function UpdateForm({
                 window.confirm("Are you sure you wish to delete this item?")
               ) {
                 await deleteItem(foodItem._id, user!.valueOf());
-                console.log("else?");
               }
             }}
           >

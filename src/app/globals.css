@@ -260,7 +260,7 @@ body {
   @apply text-lg xl:text-xl text-left flex-1 py-1 bg-inherit rounded-md border-2 border-orange-800 border-opacity-50 px-2;
 }
 .navitem {
-  @apply w-auto text-sm sm:text-xl text-center items-center p-1 font-normal hover:scale-110 hover:duration-150 hover:ease-in-out;
+  @apply w-auto md:text-lg text-base text-center items-center p-1 font-normal hover:scale-110 hover:duration-150 hover:ease-in-out;
 }
 
 input,
