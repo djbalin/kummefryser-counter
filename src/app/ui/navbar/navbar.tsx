@@ -49,7 +49,7 @@ export default function Navbar({ user: uid }: { user: string | undefined }) {
       </Link>
       {uid && uid != "_EXAMPLE" ? (
         <>
-          <Link className="navitem" href={"/dashboard"}>
+          <Link className="navitem md:text-base text-xs" href={"/dashboard"}>
             My freezer
           </Link>
           <form

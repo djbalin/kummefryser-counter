@@ -260,7 +260,16 @@ body {
   @apply text-lg xl:text-xl text-left flex-1 py-1 bg-inherit rounded-md border-2 border-orange-800 border-opacity-50 px-2;
 }
 .navitem {
-  @apply w-auto text-lg sm:text-xl text-center items-center p-1 font-normal hover:scale-110 hover:duration-150 hover:ease-in-out;
+  @apply w-auto text-sm sm:text-xl text-center items-center p-1 font-normal hover:scale-110 hover:duration-150 hover:ease-in-out;
+}
+
+input,
+select {
+  @apply bg-slate-500 bg-opacity-40 pl-2 rounded-lg;
+}
+
+label {
+  @apply block mb-1 sm:text-xl;
 }
 
 .path1 {

@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/app/ui/button";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { createItem } from "@/app/lib/actions";
@@ -15,13 +15,7 @@ const dropdownNumbers = Array(14)
 
 const invalidInputStyle = ["border-red-500", "border-2"];
 
-export function CreateForm({
-  categories,
-  handleAddNewCategory,
-}: {
-  categories: Category[];
-  handleAddNewCategory(categoryName: string, uid: string): Promise<void>;
-}) {
+export function CreateForm({ categories }: { categories: Category[] }) {
   const currentDate = new Date();
   // const [user, loading] = useAuthState(auth);
   let uid: string;
@@ -48,6 +42,27 @@ export function CreateForm({
     currentDate.toISOString().split("T")[0]
   );
   const [freezeDateIsSet, setFreezeDateIsSet] = useState(false);
+  const clickedCategoryButton = useRef<HTMLButtonElement | null>(null);
+
+  function resetForm() {
+    console.log("resetting form");
+
+    setInputName("");
+    setInputSize("");
+    setInputQuantity("");
+    setNewCategory("");
+    setCategoryHasBeenAdded(false);
+    setSelectedLifespanInteger("0");
+    setSelectedCategoryButton(null);
+    setSelectedLifespanQualifier("30");
+    // setCreatingItem(false);
+    setFreezeDate(currentDate.toISOString().split("T")[0]);
+    setFreezeDateIsSet(false);
+    formRef.current?.reset();
+    clickedCategoryButton.current?.classList.remove("bg-green-500");
+    clickedCategoryButton.current?.classList.add("bg-red-300");
+    clickedCategoryButton.current = null;
+  }
 
   function handleSelectLifespan(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
@@ -57,15 +72,18 @@ export function CreateForm({
   function handleSelectCategory(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
 
-    const clickedButton: HTMLElement = e.currentTarget;
+    clickedCategoryButton.current = e.target as HTMLButtonElement;
     if (selectedCategoryButton != null) {
       selectedCategoryButton.classList.remove("bg-green-500");
       selectedCategoryButton.classList.add("bg-red-300");
     }
-    clickedButton.classList.add("bg-green-500");
-    clickedButton.classList.remove("bg-red-300");
-    setSelectedCategoryButton(clickedButton);
+    clickedCategoryButton.current.classList.add("bg-green-500");
+    clickedCategoryButton.current.classList.remove("bg-red-300");
+    setSelectedCategoryButton(clickedCategoryButton.current);
   }
+
+  const newCategoryRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   async function handleClickNewCategory(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
@@ -73,11 +91,15 @@ export function CreateForm({
     // const parsed = trimmed.substring(0, 1).toUpperCase() + trimmed.substring(0);
     // if (!categories.includes(parsed)) {
     // }
-    categories.push({ id: generateId(10), name: newCategory });
-    if (categoryHasBeenAdded == false) {
-      setCategoryHasBeenAdded(true);
+    if (newCategory.trim().length == 0) {
+      newCategoryRef.current?.classList.add(...invalidInputStyle);
+    } else {
+      categories.push({ id: generateId(10), name: newCategory });
+      if (categoryHasBeenAdded == false) {
+        setCategoryHasBeenAdded(true);
+      }
+      setNewCategory("");
     }
-    setNewCategory("");
     // await handleAddNewCategory(newCategory, uid);
   }
 
@@ -125,10 +147,8 @@ export function CreateForm({
 
   function handleTypeNewCategory(e: React.ChangeEvent<HTMLInputElement>) {
     setNewCategory(e.target.value);
+    newCategoryRef.current?.classList.remove(...invalidInputStyle);
   }
-
-  const labelStyle = "block mb-1 text-xl";
-  const inputStyle = "bg-slate-500 bg-opacity-40 pl-2 rounded-lg";
 
   return (
     <>
@@ -142,38 +162,39 @@ export function CreateForm({
         <></>
       )}
       <form
-        action={async (e) => {
+        ref={formRef}
+        action={async (formData: FormData) => {
           if (!uid) {
             throw new Error("Error: no uid with which to create item");
           }
-          e.delete("daysweeksmonths");
-          e.delete("lifespan");
+          formData.delete("daysweeksmonths");
+          formData.delete("lifespan");
           const categoryTrimmedLower = selectedCategoryButton!.innerHTML
             .trim()
             .toLowerCase();
           const categoryParsed =
             categoryTrimmedLower.charAt(0).toUpperCase() +
             categoryTrimmedLower.substring(1);
-          e.append("category", categoryParsed);
-          e.set(
+          formData.append("category", categoryParsed);
+          formData.set(
             "lifespanInDays",
             (
               parseInt(selectedLifespanInteger) *
               parseInt(selectedLifespanQualifier)
             ).toString()
           );
-          e.append("_id", generateId(16));
-          await createItem(e, uid);
+          formData.append("_id", generateId(16));
+          await createItem(formData, uid);
+          setCreatingItem(false);
+          resetForm();
         }}
-        className=" min-w-[40%] gap-y-8 border-2 p-4 bg-slate-800 bg-opacity-40 rounded-lg"
+        className="w-[95%] max-w-[800px]  gap-y-8 border-2 p-4 bg-slate-800 bg-opacity-40 rounded-lg"
       >
         <div className="mb-4">
-          <label className={`${labelStyle}`} htmlFor="itemName">
-            Item name:
-          </label>
+          <label htmlFor="itemName">Item name:</label>
           <div className="">
             <input
-              className={`${inputStyle} h-10 w-full placeholder:text-xs`}
+              className={` h-10 w-full placeholder:text-xs`}
               placeholder="tomato sauce, dhal, rye bread ..."
               type="text"
               id="itemName"
@@ -187,12 +208,10 @@ export function CreateForm({
         </div>
 
         <div className="mb-4">
-          <label className={`${labelStyle}`} htmlFor="itemSize">
-            Size:
-          </label>
+          <label htmlFor="itemSize">Size:</label>
           <div className="">
             <input
-              className={`${inputStyle} h-10 w-full placeholder:text-xs`}
+              className={` h-10 w-full placeholder:text-xs`}
               placeholder="200 g, ca. 1 kg, 0.5 L ..."
               type="text"
               id="itemSize"
@@ -205,14 +224,14 @@ export function CreateForm({
           </div>
         </div>
 
-        <span className={`${labelStyle}`}>Category:</span>
+        <label>Category:</label>
         <div
           id="categoryMenu"
-          className="grid grid-cols-2 gap-x-2 gap-y-4 mb-8 "
+          className="md:grid lg:grid-cols-2 gap-x-2 gap-y-4 mb-8 "
         >
           <div
             id="categoriesContainer"
-            className="grid p-1 rounded-lg lg:grid-cols-3 grid-cols-2 gap-y-4"
+            className="grid sm:p-1 my-2 rounded-lg lg:grid-cols-3 grid-cols-3 gap-y-4 gap-x-2 sm:gap-x-8"
           >
             {categories.map((category) => {
               return (
@@ -224,7 +243,7 @@ export function CreateForm({
                     );
                     handleSelectCategory(e);
                   }}
-                  className="text-sm rounded-lg w-20 h-10 bg-red-300 bg-opacity-40 break-words"
+                  className="text-xs sm:text-sm rounded-lg max-w-[10rem] px-2 h-12 bg-red-300 bg-opacity-40 "
                 >
                   {category.name}
                 </button>
@@ -233,10 +252,11 @@ export function CreateForm({
           </div>
 
           <div className="flex flex-col">
-            <div className="flex gap-x-2">
+            <div className="flex w-full gap-x-2 flex-row ">
               <input
+                ref={newCategoryRef}
                 type="text"
-                className={`${inputStyle} w-48 h-10 text-lg placeholder:text-[1rem]`}
+                className={"placeholder:text-sm w-full max-w-sm"}
                 placeholder="New category"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   handleTypeNewCategory(e);
@@ -248,7 +268,7 @@ export function CreateForm({
                   // document;
                   handleClickNewCategory(e);
                 }}
-                className="flex mr-4 items-center justify-center rounded-lg w-16 h-10 bg-green-400 bg-opacity-50"
+                className="flex items-center justify-center rounded-lg  bg-green-400 bg-opacity-50"
               >
                 <PlusIcon width={40} />
               </button>
@@ -261,13 +281,16 @@ export function CreateForm({
           </div>
         </div>
 
-        <div id="dateContainer" className="flex justify-between mb-4">
-          <div className="flex h-min items-center gap-x-4">
-            <label className={`${labelStyle} flex`} htmlFor="freezeDate">
+        <div
+          id="dateContainer"
+          className="flex md:flex-row flex-col justify-between mb-4 gap-y-2"
+        >
+          <div className="flex justify-between max-w-xs    items-center gap-x-4">
+            <label className={` flex`} htmlFor="freezeDate">
               Freeze date:
             </label>
             <input
-              className={`${inputStyle} h-10 placeholder:text-xs`}
+              className={` h-10 text-xs sm:text-base`}
               type="date"
               id="freezeDate"
               name="freezeDate"
@@ -279,16 +302,14 @@ export function CreateForm({
               }}
             ></input>
           </div>
-          <div className="flex flex-col h-auto">
-            <div className="flex items-center justify-center gap-x-4">
-              <label className={`${labelStyle}`} htmlFor="lifespan">
-                Lifespan:
-              </label>
-              <div className="flex h-10 ">
+          <div className="flex flex-col  max-w-xs">
+            <div className="flex items-center justify-between h-14 gap-x-4">
+              <label htmlFor="lifespan">Lifespan:</label>
+              <div className="flex sm:flex-row flex-col gap-y-2 h-full ">
                 <select
                   id="lifespan"
                   name="lifespan"
-                  className={`${inputStyle} h-full`}
+                  className="h-full text-xs sm:text-base"
                   defaultValue=""
                   onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                     e.target.classList.remove(...invalidInputStyle);
@@ -309,7 +330,7 @@ export function CreateForm({
                 <select
                   id="daysweeksmonths"
                   name="daysweeksmonths"
-                  className={`${inputStyle} h-full ml-2`}
+                  className={` h-full ml-2 text-xs sm:text-base`}
                   value={selectedLifespanQualifier}
                   onChange={(e) => {
                     e.target.classList.remove(...invalidInputStyle);
@@ -332,28 +353,24 @@ export function CreateForm({
                 </select>
               </div>
             </div>
-            <span className="py-1 flex text-sm text-white text-opacity-70">
+            {/* <span className="py-1 flex text-sm text-white text-opacity-70">
               The item will expire:{" "}
-            </span>
+            </span> */}
           </div>
         </div>
-        <div className="block mb-4">
-          <label className={`${labelStyle}`} htmlFor="quantity">
-            Quantity:
-          </label>
-          <div className="">
-            <input
-              className={`${inputStyle} h-10 w-[50%] placeholder:text-md`}
-              placeholder="..."
-              type="text"
-              id="quantity"
-              name="quantity"
-              onChange={(e) => {
-                e.target.classList.remove(...invalidInputStyle);
-                setInputQuantity(e.target.value);
-              }}
-            ></input>
-          </div>
+        <div className="mb-4">
+          <label htmlFor="quantity">Quantity:</label>
+          <input
+            className={` h-10 w-full max-w-[300px] placeholder:text-md`}
+            placeholder="..."
+            type="text"
+            id="quantity"
+            name="quantity"
+            onChange={(e) => {
+              e.target.classList.remove(...invalidInputStyle);
+              setInputQuantity(e.target.value);
+            }}
+          />
         </div>
         {/* {loading ? (
         <Button

@@ -125,6 +125,8 @@ export async function getAllCategories(uid: string): Promise<Category[]> {
   try {
     // const uid = cookies().get("user_id")!.value;
 
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+
     const result = await getDocs(
       query(collection(db_firebase, "users", uid, "categories"))
     );

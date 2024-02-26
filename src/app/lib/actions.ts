@@ -45,11 +45,13 @@ export async function createItem(formData: FormData, uid: string) {
   }
   if (uid === "_EXAMPLE") {
     revalidatePath("/example");
-    redirect("/example");
+    // redirect("/example");
   } else {
     revalidatePath("/dashboard");
-    redirect("/dashboard");
+    // redirect("/dashboard");
   }
+  // revalidatePath("/create");
+  // redirect("/create");
 }
 
 export async function revalidateAndRedirectDashboard() {
