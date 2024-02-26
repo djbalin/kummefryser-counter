@@ -5,7 +5,6 @@ import {
 } from "@/app/lib/utils/types_schemas/typesAndSchemas";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import UpdateForm from "./UpdateForm";
-import { getCookie } from "cookies-next";
 
 export default function ExpandedFoodItem({
   foodItem,

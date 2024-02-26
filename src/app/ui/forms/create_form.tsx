@@ -8,11 +8,7 @@ import { generateId } from "../../lib/utils/tools";
 // import { useAuthState } from "react-firebase-hooks/auth";
 // import { auth } from "@/app/lib/firebase/firebase";
 import { getCookie } from "cookies-next";
-import {
-  Category,
-  FoodItemType,
-} from "@/app/lib/utils/types_schemas/typesAndSchemas";
-import { updateItem } from "@/app/lib/db/firebase";
+import { Category } from "@/app/lib/utils/types_schemas/typesAndSchemas";
 const dropdownNumbers = Array(14)
   .fill(0)
   .map((_, i) => i + 1);
