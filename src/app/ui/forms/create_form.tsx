@@ -45,8 +45,6 @@ export function CreateForm({ categories }: { categories: Category[] }) {
   const clickedCategoryButton = useRef<HTMLButtonElement | null>(null);
 
   function resetForm() {
-    console.log("resetting form");
-
     setInputName("");
     setInputSize("");
     setInputQuantity("");
@@ -55,7 +53,6 @@ export function CreateForm({ categories }: { categories: Category[] }) {
     setSelectedLifespanInteger("0");
     setSelectedCategoryButton(null);
     setSelectedLifespanQualifier("30");
-    // setCreatingItem(false);
     setFreezeDate(currentDate.toISOString().split("T")[0]);
     setFreezeDateIsSet(false);
     formRef.current?.reset();

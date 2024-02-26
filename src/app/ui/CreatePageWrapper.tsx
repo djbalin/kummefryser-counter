@@ -1,3 +1,4 @@
+"use server";
 import { CreateForm } from "./forms/create_form";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
