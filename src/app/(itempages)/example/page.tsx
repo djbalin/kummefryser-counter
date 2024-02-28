@@ -1,5 +1,6 @@
 "use server";
-import Dashboard from "../ui/Dashboard";
+
+import Dashboard from "@/app/ui/Dashboard";
 
 export default async function Page() {
   return <Dashboard isExample={true}></Dashboard>;

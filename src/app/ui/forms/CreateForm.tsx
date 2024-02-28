@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/app/ui/button";
+import { Button } from "@/app/ui/Button";
 import { useEffect, useRef, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
@@ -16,10 +16,8 @@ const dropdownNumbers = Array(14)
 
 const invalidInputStyle = ["border-red-500", "border-2"];
 
-// export function CreateForm({ categories }: { categories: Category[] }) {
 export function CreateForm() {
   const currentDate = new Date();
-  // const [user, loading] = useAuthState(auth);
   let uid: string;
   const user = getCookie("user_id");
   if (user) {
@@ -27,10 +25,9 @@ export function CreateForm() {
   } else {
     uid = "_EXAMPLE";
   }
-  // const uid = getCookie("user_id")?.valueOf();
 
   const [categories, setCategories] = useState<Category[] | null>(null);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [inputName, setInputName] = useState("");
   const [inputSize, setInputSize] = useState("");
@@ -68,9 +65,11 @@ export function CreateForm() {
   useEffect(() => {
     getAllCategories(uid).then((data) => {
       setCategories(data);
-      setLoading(false);
+      console.log("Isloading falase");
+
+      setIsLoading(false);
     });
-  }, []);
+  }, [uid]);
 
   function handleSelectLifespan(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
@@ -95,10 +94,6 @@ export function CreateForm() {
 
   async function handleClickNewCategory(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    // const trimmed = newCategory.trim();
-    // const parsed = trimmed.substring(0, 1).toUpperCase() + trimmed.substring(0);
-    // if (!categories.includes(parsed)) {
-    // }
     if (newCategory.trim().length == 0) {
       newCategoryRef.current?.classList.add(...invalidInputStyle);
     } else {
@@ -108,7 +103,6 @@ export function CreateForm() {
       }
       setNewCategory("");
     }
-    // await handleAddNewCategory(newCategory, uid);
   }
 
   function validateInputs(
@@ -171,6 +165,7 @@ export function CreateForm() {
       )}
       <form
         ref={formRef}
+        id="createform"
         action={async (formData: FormData) => {
           if (!uid) {
             throw new Error("Error: no uid with which to create item");
@@ -237,14 +232,14 @@ export function CreateForm() {
           id="categoryMenu"
           className="md:grid lg:grid-cols-2 gap-x-2 gap-y-4 mb-8 "
         >
-          <div
-            id="categoriesContainer"
-            className="grid sm:p-1 my-2 rounded-lg lg:grid-cols-3 grid-cols-3 gap-y-4 gap-x-2 sm:gap-x-8"
-          >
-            {isLoading ? (
-              <p>LOADING...</p>
-            ) : (
-              categories!.map((category) => {
+          {isLoading ? (
+            <SkeletonTextLoader lineCount={3} />
+          ) : (
+            <div
+              id="categoriesContainer"
+              className="grid sm:p-1 my-2 rounded-lg lg:grid-cols-3 grid-cols-3 gap-y-4 gap-x-2 sm:gap-x-8"
+            >
+              {categories!.map((category) => {
                 return (
                   <button
                     key={category.id}
@@ -259,10 +254,9 @@ export function CreateForm() {
                     {category.name}
                   </button>
                 );
-              })
-            )}
-          </div>
-
+              })}
+            </div>
+          )}
           <div className="flex flex-col">
             <div className="flex w-full gap-x-2 flex-row ">
               <input
@@ -277,7 +271,6 @@ export function CreateForm() {
               />
               <button
                 onClick={(e: React.MouseEvent<HTMLElement>) => {
-                  // document;
                   handleClickNewCategory(e);
                 }}
                 className="flex items-center justify-center rounded-lg  bg-green-400 bg-opacity-50"
@@ -384,20 +377,7 @@ export function CreateForm() {
             }}
           />
         </div>
-        {/* {loading ? (
-        <Button
-          className="bg-red-500"
-          disabled
-          color="red-500"
-          type="submit"
-          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-            validateInputs(e);
-          }}
-        >
-          Wait...
-        </Button>
-      ) : (
-      )} */}
+
         <Button
           type="submit"
           onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -413,3 +393,14 @@ export function CreateForm() {
     </>
   );
 }
+
+const SkeletonTextLoader = ({ lineCount }: { lineCount: number }) => (
+  <div className="space-y-2 pt-2 pr-2">
+    {[...Array(lineCount)].map((_, index) => (
+      <div
+        key={index}
+        className="h-4 bg-gray-600 rounded-lg animate-pulse"
+      ></div>
+    ))}
+  </div>
+);

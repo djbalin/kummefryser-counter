@@ -1,10 +1,7 @@
 "use client";
 // import { cookies } from "next/headers";
-import Navbar from "./navbar";
-import Image from "next/image";
-import topimg from "@/app/public/freezer2.webp";
-import Link from "next/link";
 import { getCookie } from "cookies-next";
+import Navbar from "./Navbar";
 
 export default function Header() {
   const user = getCookie("user_id");
@@ -12,11 +9,11 @@ export default function Header() {
   return (
     <header
       id="header"
-      className="flex flex-row h-16 items-center justify-around bg-slate-600 bg-opacity-50"
+      className="flex flex-row py-1 items-center justify-around bg-slate-600 bg-opacity-50"
     >
-      <Link href={"/"}>
+      {/* <Link href={"/"}>
         <Image src={topimg} className="w-16 h-16" alt={""}></Image>
-      </Link>
+      </Link> */}
       {user ? (
         <Navbar user={user.valueOf()}></Navbar>
       ) : (
