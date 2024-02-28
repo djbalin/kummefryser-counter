@@ -1,6 +1,6 @@
 "use server";
 import Link from "next/link";
-import { Button } from "@/app/ui/Buttonn";
+import { Button } from "@/app/ui/Button";
 // import { Suspense } from "react";
 import { CreateForm } from "@/app/ui/forms/CreateForm";
 
