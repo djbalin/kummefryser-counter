@@ -24,7 +24,6 @@ export default function FoodItem({
   function handleCloseExpanded() {
     setExpanded(false);
   }
-  console.log("render food item");
 
   return (
     <div

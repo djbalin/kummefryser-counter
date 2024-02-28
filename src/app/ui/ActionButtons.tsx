@@ -7,7 +7,7 @@ export default function ActionButtons() {
   return (
     <>
       <Link href={"/example"}>
-        <button className="bg-gradient-to-r  from-orange-400 to-orange-800 text-lg font-medium py-4 px-6 rounded-full text-center">
+        <button className="bg-gradient-to-r  from-orange-400 to-orange-800 text-xl font-medium py-4 px-8 rounded-full text-center">
           <span className="drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
             TRY EXAMPLE FREEZER
           </span>
@@ -15,7 +15,7 @@ export default function ActionButtons() {
       </Link>
       <button
         onClick={async () => await signInWithPopup(auth, provider)}
-        className="bg-gradient-to-r  from-lime-600 to-green-800 text-lg font-medium p-4 rounded-full text-center"
+        className="bg-gradient-to-r  from-lime-600 to-green-800 text-xl font-medium p-4 px-8 scale-110 rounded-full text-center"
       >
         <span className="drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
           CREATE YOUR OWN FREEZER
