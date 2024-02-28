@@ -316,8 +316,8 @@ label {
   opacity: 0;
   animation-name: fade-in;
   animation-timing-function: ease-in;
-  animation-duration: 1s;
-  animation-delay: 2s;
+  animation-duration: 1500ms;
+  animation-delay: 7000ms;
   animation-fill-mode: forwards;
   /* animation-timeline: scroll(); */
 }
@@ -338,7 +338,7 @@ li:first-child {
   animation-name: fade-in;
   animation-timing-function: ease-in;
   animation-duration: 1s;
-  animation-delay: 3s;
+  animation-delay: 7800ms;
   animation-fill-mode: forwards;
   /* background-color: aquamarine; */
 }
@@ -348,7 +348,7 @@ li:nth-child(2) {
   animation-name: fade-in;
   animation-timing-function: ease-in;
   animation-duration: 1s;
-  animation-delay: 4s;
+  animation-delay: 8200ms;
   animation-fill-mode: forwards;
 }
 
@@ -363,7 +363,7 @@ li:nth-child(2) {
 
 @keyframes come-from-right {
   from {
-    transform: translateX(800px);
+    transform: translateX(500px);
   }
   to {
     transform: translateX(0px);

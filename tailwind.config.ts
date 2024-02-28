@@ -14,30 +14,33 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       animation: {
-        typing: "typing 5s steps(40) 300ms forwards, blink .7s 10",
+        typing: "typing 4s steps(40) 500ms forwards, blink .6s 5 500ms",
+        typingDelayed:
+          "typing 4s steps(40) 3500ms forwards, blink .6s 7 3500ms",
       },
       keyframes: {
         typing: {
           "0%": {
             width: "0%",
             opacity: "1",
-            borderRightWidth: "2px",
+            // borderRightWidth: "2px",
             paddingRight: "4px",
           },
           "50%": {
-            borderRightWidth: "2px",
+            // borderRightWidth: "2px",
             width: "100%",
             opacity: "1",
           },
           "99%": {
             width: "100%",
             opacity: "1",
-            borderRightWidth: "2px",
+            // borderRightWidth: "2px",
           },
           "100%": {
             width: "100%",
             opacity: "1",
-            borderRightWidth: "0px",
+            borderColor: "transparent",
+            // borderRightWidth: "0px",
           },
         },
         blink: {
