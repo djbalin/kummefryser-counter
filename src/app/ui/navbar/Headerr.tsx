@@ -1,7 +1,7 @@
 "use client";
 // import { cookies } from "next/headers";
 import { getCookie } from "cookies-next";
-import Navbar from "./Navbar";
+import Navbar from "./Navbarr";
 
 export default function Header() {
   const user = getCookie("user_id");

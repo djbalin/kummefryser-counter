@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { handleSignIn } from "@/app/ui/navbar/Navbar";
+import { handleSignIn } from "@/app/ui/navbar/Navbarr";
 
 export default function HomepageWelcome() {
   return (
