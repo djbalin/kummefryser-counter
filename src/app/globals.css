@@ -12,6 +12,11 @@ html {
   --foreground-rgb: 200, 255, 255;
   --background-start-rgb: 100, 100, 100;
   --background-end-rgb: 255, 255, 255;
+  --background-gradient: linear-gradient(
+    180deg,
+    rgba(110, 21, 5, 1) 0%,
+    rgb(86, 49, 123) 100%
+  );
 }
 body {
   height: 100%;
@@ -20,6 +25,7 @@ body {
   /* background-color: #cccccc; */
   color: rgb(var(--foreground-rgb));
   /* color: black; */
+  /* background: var(--background-gradient); */
   background-color: black;
   /* background-color: rgba(254 226 226 0.2); */
   /* background: linear-gradient(
@@ -289,4 +295,13 @@ label {
 
 .labelStyle {
   @apply w-[25%] text-sm sm:text-base text-right pr-4 sm:pr-10;
+}
+
+.landing {
+  /* background: rgb(110, 21, 5); */
+  background: linear-gradient(
+    180deg,
+    rgba(110, 21, 5, 1) 0%,
+    rgb(86, 49, 123) 100%
+  );
 }

@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/app/ui/button";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { createItem } from "@/app/lib/actions";
@@ -9,13 +9,15 @@ import { generateId } from "../../lib/utils/tools";
 // import { auth } from "@/app/lib/firebase/firebase";
 import { getCookie } from "cookies-next";
 import { Category } from "@/app/lib/utils/types_schemas/typesAndSchemas";
+import { getAllCategories } from "@/app/lib/db/firebase";
 const dropdownNumbers = Array(14)
   .fill(0)
   .map((_, i) => i + 1);
 
 const invalidInputStyle = ["border-red-500", "border-2"];
 
-export function CreateForm({ categories }: { categories: Category[] }) {
+// export function CreateForm({ categories }: { categories: Category[] }) {
+export function CreateForm() {
   const currentDate = new Date();
   // const [user, loading] = useAuthState(auth);
   let uid: string;
@@ -26,6 +28,9 @@ export function CreateForm({ categories }: { categories: Category[] }) {
     uid = "_EXAMPLE";
   }
   // const uid = getCookie("user_id")?.valueOf();
+
+  const [categories, setCategories] = useState<Category[] | null>(null);
+  const [isLoading, setLoading] = useState(true);
 
   const [inputName, setInputName] = useState("");
   const [inputSize, setInputSize] = useState("");
@@ -60,6 +65,12 @@ export function CreateForm({ categories }: { categories: Category[] }) {
     clickedCategoryButton.current?.classList.add("bg-red-300");
     clickedCategoryButton.current = null;
   }
+  useEffect(() => {
+    getAllCategories(uid).then((data) => {
+      setCategories(data);
+      setLoading(false);
+    });
+  }, []);
 
   function handleSelectLifespan(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
@@ -91,7 +102,7 @@ export function CreateForm({ categories }: { categories: Category[] }) {
     if (newCategory.trim().length == 0) {
       newCategoryRef.current?.classList.add(...invalidInputStyle);
     } else {
-      categories.push({ id: generateId(10), name: newCategory });
+      categories!.push({ id: generateId(10), name: newCategory });
       if (categoryHasBeenAdded == false) {
         setCategoryHasBeenAdded(true);
       }
@@ -230,22 +241,26 @@ export function CreateForm({ categories }: { categories: Category[] }) {
             id="categoriesContainer"
             className="grid sm:p-1 my-2 rounded-lg lg:grid-cols-3 grid-cols-3 gap-y-4 gap-x-2 sm:gap-x-8"
           >
-            {categories.map((category) => {
-              return (
-                <button
-                  key={category.id}
-                  onClick={(e: React.MouseEvent<HTMLElement>) => {
-                    e.currentTarget.parentElement!.classList.remove(
-                      ...invalidInputStyle
-                    );
-                    handleSelectCategory(e);
-                  }}
-                  className="text-xs sm:text-sm rounded-lg max-w-[10rem] px-2 h-12 bg-red-300 bg-opacity-40 "
-                >
-                  {category.name}
-                </button>
-              );
-            })}
+            {isLoading ? (
+              <p>LOADING...</p>
+            ) : (
+              categories!.map((category) => {
+                return (
+                  <button
+                    key={category.id}
+                    onClick={(e: React.MouseEvent<HTMLElement>) => {
+                      e.currentTarget.parentElement!.classList.remove(
+                        ...invalidInputStyle
+                      );
+                      handleSelectCategory(e);
+                    }}
+                    className="text-xs sm:text-sm rounded-lg max-w-[10rem] px-2 h-12 bg-red-300 bg-opacity-40 "
+                  >
+                    {category.name}
+                  </button>
+                );
+              })
+            )}
           </div>
 
           <div className="flex flex-col">

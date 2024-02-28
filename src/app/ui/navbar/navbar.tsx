@@ -28,7 +28,7 @@ export default function Navbar({ user: uid }: { user: string | undefined }) {
   const [loggingOut, setLoggingOut] = useState<boolean>(false);
 
   return (
-    <nav className="flex flex-row text-center cursor-progress items-center justify-evenly w-full sm:w-[60%] h-full">
+    <nav className="flex flex-row text-center items-center justify-end gap-x-24 w-full sm:w-[60%] h-full">
       {loggingIn && (
         <div className="absolute top-0 left-0 text-3xl  min-w-[100%] min-h-screen bg-slate-800 bg-opacity-80">
           <span className="absolute top-[30%] items-center justify-center flex left-[40%] rounded-xl bg-slate-700 bg-opacity-90 px-4 w-72 h-24">

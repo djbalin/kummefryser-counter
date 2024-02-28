@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, ABeeZee } from "next/font/google";
 import "./globals.css";
 import { StrictMode } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import Header from "./ui/navbar/header";
 const inter = Inter({ subsets: ["latin"] });
+const abeezee = ABeeZee({ subsets: ["latin"], weight: ["400"] });
 export const metadata: Metadata = {
   title: "Kummefryser",
 };
@@ -19,7 +20,7 @@ export default function RootLayout({
   return (
     <StrictMode>
       <html lang="en" className="no-scrollbar">
-        <body className={`${inter.className} antialiased`}>
+        <body className={`${abeezee.className} antialiased`}>
           {/* <AuthContextProvider> */}
           {/* <Navbar user={user}></Navbar> */}
           {/* <Suspense fallback={<p>LOADING</p>}> */}

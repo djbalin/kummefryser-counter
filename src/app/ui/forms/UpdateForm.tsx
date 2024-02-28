@@ -18,6 +18,7 @@ import { useState } from "react";
 import { Button } from "../button";
 import { getCookie } from "cookies-next";
 import Modal from "../Modal";
+import { usePathname } from "next/navigation";
 
 export default function UpdateForm({
   foodItem,
@@ -29,13 +30,18 @@ export default function UpdateForm({
   allCategories: Category[];
 }) {
   const [updatingItem, setUpdatingItem] = useState(false);
+  const pathname = usePathname();
 
   async function handleUpdateItem(formData: FormData) {
     formData.append("_id", foodItem._id);
     if (!user) {
       throw new Error("Must be logged in to update item");
     }
-    await updateItem(foodItem._id, formData, user.valueOf());
+    if (pathname.endsWith("/example")) {
+      await updateItem(foodItem._id, formData, "_EXAMPLE");
+    } else {
+      await updateItem(foodItem._id, formData, user.valueOf());
+    }
     setUpdatingItem(false);
     handleCloseExpanded();
   }
