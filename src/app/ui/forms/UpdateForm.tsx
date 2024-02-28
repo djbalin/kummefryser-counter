@@ -15,7 +15,7 @@ import {
   ArrowPathIcon,
 } from "@heroicons/react/20/solid";
 import { useState } from "react";
-import { Button } from "../Button";
+import { Button } from "../Buttonn";
 import { getCookie } from "cookies-next";
 import Modal from "../Modal";
 import { usePathname } from "next/navigation";
