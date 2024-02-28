@@ -269,23 +269,18 @@ body {
   @apply w-auto md:text-lg text-base text-center items-center p-1 font-normal hover:scale-110 hover:duration-150 hover:ease-in-out;
 }
 
+#createform input,
+select {
+  padding-left: 0.5rem;
+}
+
 input,
 select {
-  @apply bg-slate-500 bg-opacity-40 pl-2 rounded-lg;
+  @apply bg-slate-500 bg-opacity-40  rounded-lg;
 }
 
 label {
   @apply block mb-1 sm:text-xl;
-}
-
-.path1 {
-  fill: red;
-}
-.path2 {
-  stroke: red;
-  stroke-width: 1.25px;
-  fill: none;
-  marker-end: url(#arrow);
 }
 
 .welcomeMessage {

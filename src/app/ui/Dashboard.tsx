@@ -5,7 +5,7 @@ import DashboardWelcome from "./DashboardWelcome";
 
 export default function Dashboard({ isExample }: { isExample: boolean }) {
   return (
-    <div className="flex flex-col overflow-auto sm:min-w-[95%] md:min-w-[90%] lg:min-w-[75%] items-center">
+    <div className="flex flex-col max-w-6xl mx-auto  items-center">
       <DashboardWelcome isExample={isExample}></DashboardWelcome>
       <CategoriesContextProvider>
         <Suspense fallback={<p>LOADING ITEMS</p>}>

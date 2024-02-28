@@ -1,8 +1,8 @@
 "use server";
 import Link from "next/link";
 import { Button } from "@/app/ui/button";
-import CreatePageWrapper from "../ui/CreatePageWrapper";
 import { Suspense } from "react";
+import CreatePageWrapper from "@/app/ui/CreatePageWrapper";
 
 export default async function CreatePage() {
   return (

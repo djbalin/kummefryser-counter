@@ -362,11 +362,11 @@ export default function UpdateForm({
             <div className="flex flex-col gap-y-2">
               <span className="">Quantity:</span>
 
-              <div className="flex flex-row">
+              <div className="flex flex-row items-center">
                 <input
                   id="itemQuantity"
                   name="itemQuantity"
-                  className="flex mr-2 w-12 h-12 text-center bg-orange-500 "
+                  className="flex mr-2 w-10 h-10 text-center bg-orange-500 "
                   type="text"
                   value={quantityValue}
                   onChange={(e) => setQuantityValue(e.target.value)}

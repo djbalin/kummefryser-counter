@@ -25,7 +25,7 @@ export default function RootLayout({
           {/* <Navbar user={user}></Navbar> */}
           {/* <Suspense fallback={<p>LOADING</p>}> */}
           {/* <Navbar></Navbar> */}
-          <Header></Header>
+          {/* <Header></Header> */}
           {/* </Suspense> */}
           {children}
           {/* </AuthContextProvider> */}

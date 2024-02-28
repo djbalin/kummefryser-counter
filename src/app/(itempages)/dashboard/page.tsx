@@ -1,4 +1,4 @@
-import Dashboard from "../ui/Dashboard";
+import Dashboard from "@/app/ui/Dashboard";
 
 // export default async function Page(response: NextResponse) {
 export default async function Page() {
