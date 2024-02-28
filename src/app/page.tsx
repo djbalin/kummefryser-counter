@@ -8,16 +8,16 @@ export default function Home() {
     <main className="landing min-h-full  sm:py-24 py-12 sm:px-8">
       <div className="w-full mx-auto flex flex-col justify-between max-w-7xl">
         <section className="items-center pt-8 justify-center flex flex-col text-center w-full">
-          <h1 className="text-6xl pb-24 text-[rgb(255,228,164)] tracking-normal font-extrabold">
+          <h1 className="text-6xl lg:text-8xl pb-24 lg:pb-32 text-[rgb(255,228,164)] tracking-normal font-extrabold">
             FREEZER TRACKER
           </h1>
-          <div className="flex pb-1 w-min">
-            <span className="animate-typing sm:text-lg md:text-2xl font-mono tracking-wider w-0 overflow-hidden whitespace-nowrap   border-r-2 border-r-transparent">
+          <div className="flex pb-1 lg:pb-3 w-min">
+            <span className="animate-typing sm:text-lg md:text-3xl font-mono tracking-wider w-0 overflow-hidden whitespace-nowrap   border-r-2 border-r-transparent">
               Your freezer, at your fingertips.
             </span>
           </div>
-          <div className="flex w-min">
-            <span className="animate-typingDelayed sm:text-lg md:text-2xl font-mono tracking-wider px-auto w-0 overflow-hidden whitespace-nowrap border-r-2 border-r-transparent">
+          <div className="flex w-min lg:pb-24">
+            <span className="animate-typingDelayed sm:text-lg md:text-3xl font-mono tracking-wider px-auto w-0 overflow-hidden whitespace-nowrap border-r-2 border-r-transparent">
               Never throw out food again!
             </span>
           </div>

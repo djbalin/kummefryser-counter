@@ -333,7 +333,7 @@ label {
   }
 }
 
-li:first-child {
+.landing li:first-child {
   opacity: 0;
   animation-name: fade-in;
   animation-timing-function: ease-in;
@@ -343,7 +343,7 @@ li:first-child {
   /* background-color: aquamarine; */
 }
 
-li:nth-child(2) {
+.landing li:nth-child(2) {
   opacity: 0;
   animation-name: fade-in;
   animation-timing-function: ease-in;
