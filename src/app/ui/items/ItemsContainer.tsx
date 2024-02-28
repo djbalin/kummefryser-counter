@@ -3,7 +3,7 @@ import {
   FoodItemType,
 } from "@/app/lib/utils/types_schemas/typesAndSchemas";
 // import CategoriesHolder from "./categories_holder";
-import ItemList from "./item_list";
+import ItemList from "./ItemList";
 import WipeDB from "../WIPEDB";
 import {
   EXAMPLE_getAllCategories,
@@ -12,7 +12,7 @@ import {
   getAllSorted,
 } from "@/app/lib/db/firebase";
 import Link from "next/link";
-import Categories from "./categories";
+import Categories from "./Categories";
 // import { unstable_noStore } from "next/cache";
 import { cookies } from "next/headers";
 

@@ -33,9 +33,6 @@ export default function Navbar({ user: uid }: { user: string | undefined }) {
       {loggingIn && (
         <div className="absolute top-0 left-0 text-3xl  min-w-[100%] min-h-screen bg-slate-800 bg-opacity-80">
           <Modal text={"Logging you in..."}></Modal>
-          {/* <span className="absolute top-[30%] items-center justify-center flex left-[40%] rounded-xl bg-slate-700 bg-opacity-90 px-4 w-72 h-24">
-            Logging you in...
-          </span> */}
         </div>
       )}
       {loggingOut && (

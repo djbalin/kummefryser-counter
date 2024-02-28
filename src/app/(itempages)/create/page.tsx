@@ -1,8 +1,8 @@
 "use server";
 import Link from "next/link";
-import { Button } from "@/app/ui/button";
-import { Suspense } from "react";
-import CreatePageWrapper from "@/app/ui/CreatePageWrapper";
+import { Button } from "@/app/ui/Button";
+// import { Suspense } from "react";
+import { CreateForm } from "@/app/ui/forms/CreateForm";
 
 export default async function CreatePage() {
   return (
@@ -10,9 +10,9 @@ export default async function CreatePage() {
       <Link href="/dashboard">
         <Button>Go back</Button>
       </Link>
-      <Suspense fallback={<p>Loading ...</p>}>
-        <CreatePageWrapper />
-      </Suspense>
+      {/* <Suspense fallback={<p>Loading ...</p>}> */}
+      <CreateForm />
+      {/* </Suspense> */}
     </div>
   );
 }

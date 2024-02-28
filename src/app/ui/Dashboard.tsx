@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import CategoriesContextProvider from "../contexts/categories-context";
-import ItemsContainer from "./items/items_container";
+import ItemsContainer from "./items/ItemsContainer";
 import DashboardWelcome from "./DashboardWelcome";
 
 export default function Dashboard({ isExample }: { isExample: boolean }) {

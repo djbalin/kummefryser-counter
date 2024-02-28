@@ -1,6 +1,6 @@
 "use client";
-import FoodItem from "./food_item";
-import ListHeader from "./list_header";
+import FoodItem from "./FoodItem";
+import ListHeader from "./ListHeader";
 import { useCategoryContext } from "../../contexts/categories-context";
 import {
   Category,

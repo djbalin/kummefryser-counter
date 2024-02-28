@@ -1,10 +1,7 @@
 "use client";
 // import { cookies } from "next/headers";
-import Navbar from "./navbar";
-import Image from "next/image";
-import topimg from "@/app/public/freezer2.webp";
-import Link from "next/link";
 import { getCookie } from "cookies-next";
+import Navbar from "./Navbar";
 
 export default function Header() {
   const user = getCookie("user_id");

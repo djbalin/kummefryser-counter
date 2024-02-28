@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/app/ui/button";
+import { Button } from "@/app/ui/Button";
 import { useEffect, useRef, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
@@ -16,10 +16,8 @@ const dropdownNumbers = Array(14)
 
 const invalidInputStyle = ["border-red-500", "border-2"];
 
-// export function CreateForm({ categories }: { categories: Category[] }) {
 export function CreateForm() {
   const currentDate = new Date();
-  // const [user, loading] = useAuthState(auth);
   let uid: string;
   const user = getCookie("user_id");
   if (user) {
@@ -27,7 +25,6 @@ export function CreateForm() {
   } else {
     uid = "_EXAMPLE";
   }
-  // const uid = getCookie("user_id")?.valueOf();
 
   const [categories, setCategories] = useState<Category[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +69,7 @@ export function CreateForm() {
 
       setIsLoading(false);
     });
-  }, []);
+  }, [uid]);
 
   function handleSelectLifespan(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
@@ -407,5 +404,3 @@ const SkeletonTextLoader = ({ lineCount }: { lineCount: number }) => (
     ))}
   </div>
 );
-
-export default SkeletonTextLoader;

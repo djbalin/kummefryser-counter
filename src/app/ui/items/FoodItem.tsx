@@ -10,7 +10,7 @@ import {
 } from "../../lib/utils/datehelper";
 import { PencilIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
-import ExpandedFoodItem from "../forms/expanded_item";
+import ExpandedFoodItem from "../forms/ExpandedItem";
 
 export default function FoodItem({
   foodItem,
