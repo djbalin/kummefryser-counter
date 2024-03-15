@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useCategoryContext } from "../../contexts/categories-context";
-import { Category } from "../../lib/utils/types_schemas/typesAndSchemas";
+import { Category } from "../../lib/utils/typesAndSchemas";
 
 export default function Categories({
   allCategories,

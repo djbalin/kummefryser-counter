@@ -2,10 +2,7 @@
 import FoodItem from "./FoodItem";
 import ListHeader from "./ListHeader";
 import { useCategoryContext } from "../../contexts/categories-context";
-import {
-  Category,
-  FoodItemType,
-} from "../../lib/utils/types_schemas/typesAndSchemas";
+import { Category, FoodItemType } from "../../lib/utils/typesAndSchemas";
 
 export default function ItemList({
   foodItemsParsed,

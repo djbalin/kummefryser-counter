@@ -8,7 +8,7 @@ import { generateId } from "../../lib/utils/tools";
 // import { useAuthState } from "react-firebase-hooks/auth";
 // import { auth } from "@/app/lib/firebase/firebase";
 import { getCookie } from "cookies-next";
-import { Category } from "@/app/lib/utils/types_schemas/typesAndSchemas";
+import { Category } from "@/app/lib/utils/typesAndSchemas";
 import { getAllCategories } from "@/app/lib/db/firebase";
 const dropdownNumbers = Array(14)
   .fill(0)
@@ -65,8 +65,6 @@ export function CreateForm() {
   useEffect(() => {
     getAllCategories(uid).then((data) => {
       setCategories(data);
-      console.log("Isloading falase");
-
       setIsLoading(false);
     });
   }, [uid]);

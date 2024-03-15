@@ -1,4 +1,4 @@
-import { FoodItemType } from "./utils/types_schemas/typesAndSchemas";
+import { FoodItemType } from "./utils/typesAndSchemas";
 import { addDaysToDate } from "./utils/datehelper";
 
 import { generateId } from "./utils/tools";

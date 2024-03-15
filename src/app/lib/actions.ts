@@ -1,6 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { FoodItemSchema } from "./utils/types_schemas/typesAndSchemas";
+import { FoodItemSchema } from "./utils/typesAndSchemas";
 import { addDaysToDate } from "./utils/datehelper";
 import { redirect } from "next/navigation";
 import { signOut } from "firebase/auth";

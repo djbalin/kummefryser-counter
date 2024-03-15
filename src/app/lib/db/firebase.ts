@@ -3,7 +3,7 @@ import {
   Category,
   FoodItemSchema,
   FoodItemType,
-} from "@/app/lib/utils/types_schemas/typesAndSchemas";
+} from "@/app/lib/utils/typesAndSchemas";
 import {
   collection,
   deleteDoc,
@@ -39,7 +39,7 @@ export async function addCategoryToDB(newCategory: string, uid: string) {
     const stringParsed =
       stringTrimmedLower.charAt(0).toUpperCase() +
       stringTrimmedLower.substring(1);
-    console.log(`Checking if category exists: ${stringParsed}`);
+    // console.log(`Checking if category exists: ${stringParsed}`);
     const ref = doc(db_firebase, "users", uid, "categories", stringParsed);
 
     const exists = (await getDoc(ref)).exists();
@@ -50,7 +50,7 @@ export async function addCategoryToDB(newCategory: string, uid: string) {
       );
       await setDoc(ref, { name: stringParsed, id: generateId(10) });
     } else {
-      console.log(`Category ${stringParsed} already exists, skipping`);
+      // console.log(`Category ${stringParsed} already exists, skipping`);
     }
   } catch (err) {
     console.error("Error trying to add category to database");
@@ -87,7 +87,6 @@ export async function updateItem(
         collection(db_firebase, `users/${uid}/items`),
         item._id
       );
-      console.log(docRef.id);
 
       await setDoc(docRef, item);
     } catch (error) {

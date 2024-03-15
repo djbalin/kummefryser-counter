@@ -1,8 +1,5 @@
 "use client";
-import {
-  Category,
-  FoodItemType,
-} from "@/app/lib/utils/types_schemas/typesAndSchemas";
+import { Category, FoodItemType } from "@/app/lib/utils/typesAndSchemas";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import UpdateForm from "./UpdateForm";
 

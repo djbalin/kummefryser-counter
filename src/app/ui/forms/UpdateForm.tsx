@@ -5,10 +5,7 @@ import {
   getDaysLeftUntilDate,
   formatDateToReadable,
 } from "@/app/lib/utils/datehelper";
-import {
-  Category,
-  FoodItemType,
-} from "@/app/lib/utils/types_schemas/typesAndSchemas";
+import { Category, FoodItemType } from "@/app/lib/utils/typesAndSchemas";
 import {
   PlusCircleIcon,
   MinusCircleIcon,

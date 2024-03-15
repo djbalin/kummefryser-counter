@@ -1,7 +1,4 @@
-import {
-  Category,
-  FoodItemType,
-} from "@/app/lib/utils/types_schemas/typesAndSchemas";
+import { Category, FoodItemType } from "@/app/lib/utils/typesAndSchemas";
 // import CategoriesHolder from "./categories_holder";
 import ItemList from "./ItemList";
 import WipeDB from "../WIPEDB";
