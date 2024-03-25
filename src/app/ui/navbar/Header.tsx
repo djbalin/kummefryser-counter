@@ -1,5 +1,4 @@
 "use client";
-// import { cookies } from "next/headers";
 import { getCookie } from "cookies-next";
 import Navbar from "./Navbar";
 
@@ -9,11 +8,8 @@ export default function Header() {
   return (
     <header
       id="header"
-      className="flex flex-row py-1 items-center justify-around bg-slate-600 bg-opacity-50"
+      className="flex sticky left-0 top-0 flex-row py-1 items-center justify-around bg-slate-600 bg-opacity-50"
     >
-      {/* <Link href={"/"}>
-        <Image src={topimg} className="w-16 h-16" alt={""}></Image>
-      </Link> */}
       {user ? (
         <Navbar user={user.valueOf()}></Navbar>
       ) : (

@@ -7,7 +7,6 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <Header></Header>
       {/* </Suspense> */}
       {children}
     </>

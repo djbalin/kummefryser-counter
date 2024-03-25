@@ -17,7 +17,7 @@ export default function Home() {
             </span>
           </div>
           <div className="flex w-min lg:pb-24">
-            <span className="animate-typingDelayed xxs:text-sm text-xs text-xs xs:text-base sm:text-lg md:text-3xl font-mono tracking-wider px-auto w-0 overflow-hidden whitespace-nowrap border-r-2 border-r-transparent">
+            <span className="animate-typingDelayed xxs:text-sm text-xs xs:text-base sm:text-lg md:text-3xl font-mono tracking-wider px-auto w-0 overflow-hidden whitespace-nowrap border-r-2 border-r-transparent">
               Never throw out food again!
             </span>
           </div>

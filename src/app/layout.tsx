@@ -4,6 +4,7 @@ import "./globals.css";
 import { StrictMode } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
+import Header from "./ui/navbar/Header";
 const abeezee = ABeeZee({ subsets: ["latin"], weight: ["400"] });
 export const metadata: Metadata = {
   title: "Kummefryser",
@@ -18,6 +19,8 @@ export default function RootLayout({
     <StrictMode>
       <html lang="en" className="no-scrollbar">
         <body className={`${abeezee.className} antialiased`}>
+          <Header />
+
           {children}
           <Analytics />
           <SpeedInsights />

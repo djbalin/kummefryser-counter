@@ -207,16 +207,6 @@ body {
   }
 }
 
-/* #header {
-  z-index: 0;
-  opacity: 0;
-} */
-
-/* #background > * {
-  filter: blur(0px);
-  -webkit-filter: blur(0px);
-} */
-
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
